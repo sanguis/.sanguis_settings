@@ -1,0 +1,30 @@
+[user]
+	name = Josh Beauregard
+	email = josh.beauregard@knectar.com
+[color]
+  ui = on
+[core]
+  whitespace= fix,-indent-with-non-tab,-indent-with-tab,trailing-space,cr-at-eol
+	excludesfile = ~/.gitignore
+[alias]
+  df = !git diff --no-prefix && git diff --staged --no-prefix
+  clear = reset --hard
+  st = status
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  co = checkout
+  con = checkout -b
+  ci = commit -am
+  br = branch
+  ls =  branch -a
+[mergetool]
+  keepBackup = FALSE
+[giggle]
+	main-window-maximized = true
+	main-window-geometry = 0x0+0+0
+	history-view-vpane-position = 444
+	file-view-vpane-position = 398
+	main-window-view = FileView
+	file-view-hpane-position = 387
+[push]
+	default = upstream
+
