@@ -1,4 +1,4 @@
-ettings
+"general vim rc ettings
 set term=xterm-color
 set smartcase " match 'word' case-insensitive and 'Word' case-sensitive
 set showmatch " shows matching parenthesis, bracket, or brace
