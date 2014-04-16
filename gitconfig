@@ -13,7 +13,8 @@
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   co = checkout
   con = checkout -b
-  ci = commit -am
+  ci = commit -a
+  cim = commit -am
   br = branch
   ls =  branch -a
 [mergetool]
