@@ -12,4 +12,4 @@ ln -s $SS/gitconfig $HOME/.gitconfig;
 # getting vim submodules
 cd .vim
 git submodule init
-git submodule update
+git submodule update --recursive
