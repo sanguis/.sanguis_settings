@@ -15,15 +15,6 @@ set noswapfile
 set ruler
 set wildmode=longest,list,full
 set wildmenu
-
-"snipmate remaping to work with youCompleteMe
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-j>"
-"save file as root
-cmap w!! %!sudo tee > /dev/null %
-
 :filetype indent on
 set expandtab
 set tabstop=2
@@ -31,6 +22,15 @@ set shiftwidth=2
 set autoindent
 set smartindent
 set isk-=_ "addes underscores as a word break
+
+"snipmate remaping to work with youCompleteMe
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+"save file as root
+cmap w!! %!sudo tee > /dev/null %
+
 au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 if has("autocmd")
 " Drupal *.module and *.install files.
