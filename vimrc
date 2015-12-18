@@ -1,4 +1,4 @@
-"general vim rc ettings
+call pathogen#infect() " turning on pathogin
 set term=xterm-color
 set smartcase " match 'word' case-insensitive and 'Word' case-sensitive
 set showmatch " shows matching parenthesis, bracket, or brace
@@ -17,13 +17,13 @@ set wildmode=longest,list,full
 set wildmenu
 
 "snipmate remaping to work with youCompleteMe
-imap <C-J> <esc>a<Plug>snipMateNextOrTrigger
-smap <C-J> <Plug>snipMateNextOrTrigger
-
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-j>"
 "save file as root
 cmap w!! %!sudo tee > /dev/null %
 
-call pathogen#infect() " turning on pathogin
 :filetype indent on
 set expandtab
 set tabstop=2
@@ -52,6 +52,7 @@ nnoremap ,m :w <BAR> !lessc % > %:t:r.css<CR><space>
     let g:syntastic_auto_loc_list=1
 
 nmap <F8> :TagbarToggle<CR>
+nmap <F7> :set filetype=ruby.eruby.chef<CR>
 
 "Powerline
 " set rtp+=/home/josh/.local/lib/python2.7/site-packages/powerline/bindings/vim
