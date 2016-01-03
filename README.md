@@ -1,2 +1,1 @@
-\h1 my standard settings
-For Vim tmux and git
+# my dotfiles and other basic settings
