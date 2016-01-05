@@ -1,8 +1,7 @@
-#! /bin/sh
+#!/bin/sh
 
-SS=$HOME/.sanguis_settings
 git submodule init
 
 function update_ss() {
-  git submodule update --recursive
+  git submodule update --recursive --init
 }
