@@ -3,6 +3,13 @@
 P=`pwd`
 
 source $P/update.sh
+if [ -e ~/.szhrc ] then
+  ZSHDATA=`cat ~/.zshrc`
+  mv $HOME/.zshrc $HOME/.zshrc_old
+  rm $HOME/.zshrc
+end
+
+echo $ZSHDATA >> $P/zshrc
 
 # create symlinks
 # todo: add ifs
