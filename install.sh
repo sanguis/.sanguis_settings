@@ -2,7 +2,7 @@
 
 P="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [[ -e ~/.szhrc ]] then
+if [[ -f "$HOME/.zshrc" ]]; then
   ZSHDATA=`cat ~/.zshrc`
   mv $HOME/.zshrc $HOME/.zshrc_old
   rm $HOME/.zshrc
@@ -22,7 +22,7 @@ ln -s $P/prezto $HOME/.zprezto
 update_ss
 setup prezto
 setopt EXTENDED_GLOB
-for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-done
+#for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+#  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+#done
 source $HOME/.zshrc
