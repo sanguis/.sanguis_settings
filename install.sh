@@ -1,15 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 P="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [ -e ~/.szhrc ]
-then
+if [[ -e ~/.szhrc ]] then
   ZSHDATA=`cat ~/.zshrc`
   mv $HOME/.zshrc $HOME/.zshrc_old
   rm $HOME/.zshrc
+  echo $ZSHDATA >> $P/zshrc
 fi
 
-echo $ZSHDATA >> $P/zshrc
 
 # create symlinks
 # todo: add ifs
