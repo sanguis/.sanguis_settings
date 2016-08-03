@@ -1,6 +1,6 @@
 [user]
 	name = Josh Beauregard
-	email = josh.beauregard@knectar.com
+	email = josh_beauregard@harvard.edu
 [color]
   ui = on
 [core]
@@ -11,6 +11,7 @@
   clear = reset --hard
   st = status
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  lga = log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   co = checkout
   con = checkout -b
   ci = commit -a
