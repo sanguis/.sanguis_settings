@@ -12,7 +12,6 @@ fi
 
 # create symlinks
 # todo: add ifs
-ln -s $P/vimrc $HOME/.vimrc
 ln -s $P/.vim $HOME/.vim
 ln -s $P/zshrc $HOME/.zshrc
 ln -s $P/tmux.conf $HOME/.tmux.conf
