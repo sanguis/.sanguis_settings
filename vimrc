@@ -21,7 +21,9 @@ set tabstop=2
 set shiftwidth=2
 set autoindent
 set smartindent
-set isk-=_ "addes underscores as a word break
+set isk-=_ "adds underscores as a word break
+" search for visualized text
+vnoremap // y/<C-R>"<CR>
 
 "snipmate remaping to work with youCompleteMe
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
