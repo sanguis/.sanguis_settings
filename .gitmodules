@@ -4,6 +4,3 @@
 [submodule "prezto"]
 	path = prezto
 	url = git@github.com:sanguis/prezto.git
-[submodule "tmux-colors-solarized"]
-	path = tmux-colors-solarized
-	url = https://github.com/seebi/tmux-colors-solarized.git
