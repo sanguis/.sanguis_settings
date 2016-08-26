@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-
-P="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+P=~/.sanguis_settings
+git clone https://github.com/sanguis/.sanguis_settings.git $P
+cd $P
 
 if [[ -f "$HOME/.zshrc" ]]; then
   ZSHDATA=`cat ~/.zshrc`
