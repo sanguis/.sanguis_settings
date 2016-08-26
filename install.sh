@@ -1,13 +1,21 @@
 #!/usr/bin/env bash
 P=~/.sanguis_settings
-git clone --recursive https://github.com/sanguis/.sanguis_settings.git $P
-cd $P
 
+if [ ! -f $P ]
+then
+  git clone --recursive https://github.com/sanguis/.sanguis_settings.git $P
+  cd $P
+else
+  cd $P
+  git pull
+  git submodule --init --recursive
+fi
+  
 if [[ -f "$HOME/.zshrc" ]]; then
   ZSHDATA=`cat ~/.zshrc`
   mv $HOME/.zshrc $HOME/.zshrc_old
   rm $HOME/.zshrc
-  echo $ZSHDATA >> $P/zshrc
+echo $ZSHDATA >> $P/zshrc
 fi
 
 
