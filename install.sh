@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 P=~/.sanguis_settings
-git clone https://github.com/sanguis/.sanguis_settings.git $P
+git clone --recursive https://github.com/sanguis/.sanguis_settings.git $P
 cd $P
 
 if [[ -f "$HOME/.zshrc" ]]; then
