@@ -3,9 +3,12 @@
 	email = Josh.Beauregard@LibertyMutual.com
 [color]
   ui = on
+  interactive= true
 [core]
-  whitespace= fix,-indent-with-non-tab,-indent-with-tab,trailing-space,cr-at-eol
+  whitespace= fix,-indent-with-non-tab,-indent-with-tab,trailing-space
 	excludesfile = ~/.gitignore
+  autocrlf=input
+
 [alias]
   df = !git diff --no-prefix && git diff --staged --no-prefix
   clear = reset --hard
@@ -20,13 +23,8 @@
   ls =  branch -a
 [mergetool]
   keepBackup = FALSE
-[giggle]
-	main-window-maximized = true
-	main-window-geometry = 0x0+0+0
-	history-view-vpane-position = 444
-	file-view-vpane-position = 398
-	main-window-view = FileView
-	file-view-hpane-position = 387
 [push]
 	default = upstream
-
+[apply]
+  ignorewhitespace = change
+  whitespace = nowarn
