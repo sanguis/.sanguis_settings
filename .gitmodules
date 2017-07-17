@@ -3,4 +3,4 @@
 	url = https://github.com/sanguis/.vim.git
 [submodule "prezto"]
 	path = prezto
-	url = https///github.com/sanguis/prezto.git
+  url  = https://github.com/sanguis/prezto.git
