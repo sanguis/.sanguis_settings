@@ -4,3 +4,6 @@
 [submodule "prezto"]
 	path = prezto
   url  = https://github.com/sanguis/prezto.git
+[submodule "vim"]
+	path = vim
+	url = https://github.com/sanguis/.vim.git
