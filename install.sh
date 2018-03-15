@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-P=~/.sanguis_settings
+P=$HOME/.sanguis_settings
 
 if [ ! -f $P ]
 then
@@ -20,12 +20,20 @@ fi
 
 
 # create symlinks
-# todo: add ifs
-ln -s $P/.vim $HOME/.vim
-ln -s $P/zshrc $HOME/.zshrc
-ln -s $P/tmux.conf $HOME/.tmux.conf
-ln -s $P/gitconfig $HOME/.gitconfig
-ln -s $P/prezto $HOME/.zprezto
+
+declare -A links
+
+links["vim"]=$HOME/.vim
+links["zshrc"]=$HOME/.zshrc
+links["tmux.conf"]=$HOME/.tmux.conf
+links["gitconfig"]=$HOME/.gitconfig
+links["prezto"]=$HOME/.zprezto
+
+for key in ${links[@]}; do
+  if [[ ! -f ${links[${key}]} ]]; then
+    ln -s $P/${key} ${links[${key}]}
+  fi
+done
 
 update_ss
 setup prezto
