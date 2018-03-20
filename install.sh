@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 P=$HOME/.sanguis_settings
 
+source update.sh
 if [ ! -d $P ]
 then
   git clone --recursive https://github.com/sanguis/.sanguis_settings.git $P
   cd $P
 else
-  cd $P
-  git pull
-  git submodule --init --recursive
+ update_ss
 fi
+
   
 if [ -f "$HOME/.zshrc" ]; then
   ZSHDATA=`cat ~/.zshrc`
@@ -35,7 +35,6 @@ for key in ${links[@]}; do
   fi
 done
 
-source update.sh
 #setup prezto
 #setopt EXTENDED_GLOB
 #for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do

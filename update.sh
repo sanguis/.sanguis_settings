@@ -1,7 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-git submodule init
+if [ -z $P ]; then
+  P=$HOME/.sanguis_settings
+fi
 
 function update_ss() {
-  git submodule update --recursive --init
+  cd $P
+  git pull
+  git submodule update --init --recursive
 }
