@@ -7,3 +7,6 @@
 [submodule "vim"]
 	path = vim
 	url = https://github.com/sanguis/.vim.git
+[submodule "fonts"]
+	path = fonts
+	url = https://github.com/powerline/fonts.git

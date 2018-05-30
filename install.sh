@@ -10,6 +10,8 @@ else
  update_ss
 fi
 
+## install powerline fonts
+bash ./fonts/install.sh
   
 if [ -f "$HOME/.zshrc" ]; then
   echo "backing up zshrc"
