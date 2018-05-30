@@ -12,6 +12,7 @@ fi
 
   
 if [ -f "$HOME/.zshrc" ]; then
+  echo "backing up zshrc"
   ZSHDATA=`cat ~/.zshrc`
   mv $HOME/.zshrc $HOME/.zshrc_old
   rm $HOME/.zshrc
@@ -29,10 +30,12 @@ links["tmux.conf"]=$HOME/.tmux.conf
 links["gitconfig"]=$HOME/.gitconfig
 links["prezto"]=$HOME/.zprezto
 
-for key in ${links[@]}; do
-  if [ ! -f ${links[${key}]} ]; then
-    ln -s $P/${key} ${links[${key}]}
+for k in ${!links[@]}; do
+  if [ ! -f ${links[${k}]} ]; then
+    echo "ln -s $P/${k} ${links[${k}]}"
+    ln -s $P/${k} ${links[${k}]}
   fi
+    # ls ${links[${k}]}
 done
 
 #setup prezto
