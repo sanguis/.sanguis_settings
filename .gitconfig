@@ -1,0 +1,30 @@
+[user]
+	name = Beauregard, Josh
+	email = sanguis@users.noreply.github.com
+[color]
+  ui = on
+  interactive= true
+[core]
+  whitespace= fix,-indent-with-non-tab,-indent-with-tab,trailing-space
+	excludesfile = ~/.gitignore
+  autocrlf=input
+
+[alias]
+  df = !git diff --no-prefix && git diff --staged --no-prefix
+  clear = reset --hard
+  st = status
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  lga = log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  co = checkout
+  con = checkout -b
+  ci = commit -a
+  cim = commit -am
+  br = branch
+  ls =  branch -a
+[mergetool]
+  keepBackup = FALSE
+[push]
+	default = upstream
+[apply]
+  ignorewhitespace = change
+  whitespace = nowarn
