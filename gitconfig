@@ -1,6 +1,6 @@
 [user]
 	name = Beauregard, Josh
-	email = sanguis@users.noreply.github.com
+	email = joshua_beauregard@bose.com
 [color]
   ui = on
   interactive= true
@@ -21,6 +21,7 @@
   cim = commit -am
   br = branch
   ls =  branch -a
+  goingon = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 [mergetool]
   keepBackup = FALSE
 [push]
@@ -28,3 +29,8 @@
 [apply]
   ignorewhitespace = change
   whitespace = nowarn
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
