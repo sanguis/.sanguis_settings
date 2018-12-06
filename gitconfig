@@ -1,6 +1,7 @@
 [user]
 	name = Beauregard, Josh
 	email = joshua_beauregard@bose.com
+	signingkey = 082A7E51F3D93757
 [color]
   ui = on
   interactive= true

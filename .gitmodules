@@ -1,12 +1,12 @@
 [submodule ".vim"]
 	path = .vim
 	url = https://github.com/sanguis/.vim.git
-[submodule "prezto"]
-	path = prezto
-  url  = https://github.com/sanguis/prezto.git
 [submodule "vim"]
 	path = vim
 	url = https://github.com/sanguis/.vim.git
 [submodule "fonts"]
 	path = fonts
 	url = https://github.com/powerline/fonts.git
+[submodule "oh-my-zsh"]
+	path = oh-my-zsh
+	url = git@github.com:robbyrussell/oh-my-zsh.git
