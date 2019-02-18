@@ -12,6 +12,7 @@ fi
 
 ## install powerline fonts
 bash ./fonts/install.sh
+pip install powerline-status
   
 if [ -f "$HOME/.zshrc" ]; then
   echo "backing up zshrc"
