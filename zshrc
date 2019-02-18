@@ -14,9 +14,10 @@ ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 
 # Tumx settings see ./oh-my-zsh/plugins/tmux/README.md
-ZSH_TMUX_AUTOCONNECT="true"
-ZSH_TMUX_AUTOQUIT="true" 
-ZSH_TMUX_ITERM2="true"
+# ZSH_TMUX_AUTOSTART_ONCE="true"
+# ZSH_TMUX_AUTOCONNECT="true"
+# ZSH_TMUX_AUTOQUIT="true" 
+# ZSH_TMUX_ITERM2="true"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -76,8 +77,33 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 # EOF oh-my-zsh settings
-export PATH=$PATH:~/.composer/vendor/bin
+#
+export PATH=$PATH:~/.composer/vendor/bin:$HOME/Library/Python/2.7/bin
+
+
+if ([[ "$TERM_PROGRAM" = 'iTerm.app' ]]); then
+  _tmux_iterm_integration='-CC'
+fi
+
+
+if [[ -z "$TMUX" && -z "$EMACS" && -z "$VIM" ]]
+then
+  tmux start-server
+
+  # Create a  session if no session has been defined in tmux.conf.
+  if ! tmux has-session 2> /dev/null; then
+    tmux_session="JOsh-World"
+    tmux \
+      new-session -d -s "$tmux_session" \; \
+      set-option -t "$tmux_session" destroy-unattached off &> /dev/null
+  fi
+
+  # Attach to the 'prezto' session or to the last session used.
+  exec tmux  attach-session
+fi
+
 # aliases
+alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias vi="vim -g --servername VIM4"
 export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
@@ -93,3 +119,6 @@ export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to P
 if [[ -s "$HOME/.zshrc_user" ]]; then
   source "$HOME/.zshrc_user"
 fi
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
