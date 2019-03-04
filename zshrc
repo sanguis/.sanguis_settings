@@ -105,6 +105,7 @@ then
 fi
 
 # aliases
+alias got="git"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
