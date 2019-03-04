@@ -16,7 +16,7 @@ COMPLETION_WAITING_DOTS="true"
 # Tumx settings see ./oh-my-zsh/plugins/tmux/README.md
 # ZSH_TMUX_AUTOSTART_ONCE="true"
 # ZSH_TMUX_AUTOCONNECT="true"
-# ZSH_TMUX_AUTOQUIT="true" 
+# ZSH_TMUX_AUTOQUIT="true"
 # ZSH_TMUX_ITERM2="true"
 
 # Would you like to use another custom folder than $ZSH/custom?
@@ -30,6 +30,7 @@ COMPLETION_WAITING_DOTS="true"
 
 plugins=(
   brew
+  ansible
   git
   branch
   aws
@@ -51,7 +52,8 @@ plugins=(
   pip
   sudo
   terraform
-  thefuck
+  rsync
+  colored-man-pages
   vi-mode
 )
 
@@ -104,6 +106,8 @@ fi
 
 # aliases
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
+alias tvs="tmux split-window -vc $PWD"
+alias tsp="tmux split-window -c $PWD"
 alias vi="vim -g --servername VIM4"
 export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
@@ -121,4 +125,3 @@ if [[ -s "$HOME/.zshrc_user" ]]; then
 fi
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-

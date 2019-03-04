@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 P=$HOME/.sanguis_settings
+OS=$(uname)
+
+if [ OS = "Darwin" ]
+then
+  source mac.sh
+fi
+
 
 source update.sh
 if [ ! -d $P ]
@@ -13,7 +20,7 @@ fi
 ## install powerline fonts
 bash ./fonts/install.sh
 pip install powerline-status
-  
+
 if [ -f "$HOME/.zshrc" ]; then
   echo "backing up zshrc"
   ZSHDATA=`cat ~/.zshrc`
