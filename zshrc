@@ -114,6 +114,12 @@ export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
+#functions
+function docker-kill-all() {
+  docker stop $(docker ps -a -q)
+  docker rm $(docker ps -a -q)
+}
+
 
 # manually setting rvm requirements
 #export GEM_HOME=$HOME/.gem
