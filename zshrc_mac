@@ -1,0 +1,10 @@
+# vim: set ft=zsh
+
+#syntax hilight in less
+if [[ -x /usr/local/bin/src-hilite-lesspipe.sh ]];
+then
+  export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
+else
+  echo "source-highlight not installed or executable."
+  echo "brew install source-highlight; to install"
+fi
