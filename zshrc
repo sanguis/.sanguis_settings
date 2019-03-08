@@ -1,4 +1,4 @@
-
+# vim: set ft=zsh
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.sanguis_settings/oh-my-zsh
 
@@ -109,7 +109,9 @@ alias got="git"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
-alias vi="vim -g --servername VIM4"
+alias vi="vim -g --servername VIM4" #open vi in gvim
+
+# common editor settings
 export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
@@ -125,6 +127,13 @@ function docker-kill-all() {
 #export GEM_HOME=$HOME/.gem
 #export GEM_PATH=$HOME/.gem
 #
+# per os settings.
+
+# mac osX
+if [[ -x /usr/bin/xcode-select ]]
+then
+  source $HOME/.sanguis_settings/zshrc_mac
+fi
 # include local overrides
 
 if [[ -s "$HOME/.zshrc_user" ]]; then
