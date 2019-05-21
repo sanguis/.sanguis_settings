@@ -104,6 +104,8 @@ then
   exec tmux  attach-session
 fi
 
+# history -  ignore searched for duplicates
+export HISTCONTROL=ignoreboth:erasedups
 # aliases
 alias got="git"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
@@ -122,7 +124,13 @@ function docker-kill-all() {
   docker rm $(docker ps -a -q)
 }
 
-
+# get ready for helm charting
+function hemp_prep() {
+ export TILLER_NAMESPACE=tiller
+ tiller -listen=localhost:44134 -storage=secret -logtostderr &
+ export HELM_HOST=:44134
+ helm init --client-only
+}
 # manually setting rvm requirements
 #export GEM_HOME=$HOME/.gem
 #export GEM_PATH=$HOME/.gem
