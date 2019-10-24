@@ -55,6 +55,9 @@ plugins=(
   rsync
   colored-man-pages
   vi-mode
+  fancy-ctrl-z
+  helm
+  kubectl
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -112,6 +115,8 @@ alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
 alias vi="vim -g --servername VIM4" #open vi in gvim
+alias aws-id="aws sts get-caller-identity"
+alias k8s="kubectl"
 
 # common editor settings
 export EDITOR=/usr/bin/vim
@@ -125,11 +130,11 @@ function docker-kill-all() {
 }
 
 # get ready for helm charting
-function hemp_prep() {
+function helm-prep() {
  export TILLER_NAMESPACE=tiller
  tiller -listen=localhost:44134 -storage=secret -logtostderr &
  export HELM_HOST=:44134
- helm init --client-only
+ helm init --client-only --upgrade
 }
 # manually setting rvm requirements
 #export GEM_HOME=$HOME/.gem
