@@ -84,6 +84,7 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # EOF oh-my-zsh settings
 #
 export PATH=$PATH:~/.composer/vendor/bin:$HOME/Library/Python/2.7/bin
+export PATH=$PATH:/usr/local/bin
 
 
 if ([[ "$TERM_PROGRAM" = 'iTerm.app' ]]); then
