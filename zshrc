@@ -2,9 +2,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.sanguis_settings/oh-my-zsh
 
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="agnoster"
-
 export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line to enable command auto-correction.
@@ -20,13 +17,16 @@ COMPLETION_WAITING_DOTS="true"
 # ZSH_TMUX_ITERM2="true"
 
 # Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+export ZSH_CUSTOM=$HOME/.sanguis_settings/zsh-custom
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="spaceship"
 
 plugins=(
   brew
