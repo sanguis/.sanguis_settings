@@ -1,0 +1,1 @@
+/Users/jb49734/.sanguis_settings/zsh-custom/themes/spaceship-prompt/spaceship.zsh-theme
