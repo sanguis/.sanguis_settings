@@ -117,7 +117,6 @@ alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
 alias vi="vim -g --servername VIM4" #open vi in gvim
 alias aws-id="aws sts get-caller-identity"
-alias k8s="kubectl"
 
 # common editor settings
 export EDITOR=/usr/bin/vim
@@ -130,6 +129,7 @@ function docker-kill-all() {
   docker rm $(docker ps -a -q)
 }
 
+# BOF Kubernetes resources
 # get ready for helm charting
 function helm-prep() {
  export TILLER_NAMESPACE=tiller
@@ -137,6 +137,10 @@ function helm-prep() {
  export HELM_HOST=:44134
  helm init --client-only --upgrade
 }
+
+source <(kubectl completion zsh)
+alias k8s-show-ns=" kubectl api-resources --verbs=list --namespaced -o name  | xargs -n 1 kubectl get --show-kind --ignore-not-found  -n"
+complete -F __start_kubectl k8s
 # manually setting rvm requirements
 #export GEM_HOME=$HOME/.gem
 #export GEM_PATH=$HOME/.gem
