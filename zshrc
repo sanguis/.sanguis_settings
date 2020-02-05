@@ -141,6 +141,19 @@ function helm-prep() {
 source <(kubectl completion zsh)
 alias k8s-show-ns=" kubectl api-resources --verbs=list --namespaced -o name  | xargs -n 1 kubectl get --show-kind --ignore-not-found  -n"
 complete -F __start_kubectl k8s
+
+function k8s-ns() {
+  echo "
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: $1
+  name: $1
+" > $1.ns.yaml
+}
+
 # manually setting rvm requirements
 #export GEM_HOME=$HOME/.gem
 #export GEM_PATH=$HOME/.gem
