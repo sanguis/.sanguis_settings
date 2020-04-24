@@ -28,6 +28,9 @@ export ZSH_CUSTOM=$HOME/.sanguis_settings/zsh-custom
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="spaceship"
 
+#Spaceship theme options.
+SPACESHIP_KUBECTL_SHOW=true
+
 plugins=(
   brew
   ansible
@@ -172,3 +175,7 @@ if [[ -s "$HOME/.zshrc_user" ]]; then
 fi
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# Python settings
+# maing brew installed python3 default.
+export PATH=/usr/local/opt/python/libexec/bin:$PATH
