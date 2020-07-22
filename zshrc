@@ -4,6 +4,9 @@ export ZSH=$HOME/.sanguis_settings/oh-my-zsh
 
 export UPDATE_ZSH_DAYS=13
 
+# enable auto-completeing
+autoload bashcompinit && bashcompinit
+
 # Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
 
@@ -131,6 +134,9 @@ function docker-kill-all() {
   docker stop $(docker ps -a -q)
   docker rm $(docker ps -a -q)
 }
+
+# aws autocomplete
+complete -C '/usr/local/bin/aws_completer' aws
 
 # BOF Kubernetes resources
 # get ready for helm charting
