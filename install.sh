@@ -19,7 +19,8 @@ fi
 
 ## install powerline fonts
 bash ./fonts/install.sh
-pip install powerline-status
+
+pip3 install powerline-status
 
 if [ -f "$HOME/.zshrc" ]; then
   echo "backing up zshrc"
@@ -32,13 +33,8 @@ fi
 
 # create symlinks
 
-declare -A links
 
-links["vim"]=$HOME/.vim
-links["zshrc"]=$HOME/.zshrc
-links["tmux.conf"]=$HOME/.tmux.conf
-links["gitconfig"]=$HOME/.gitconfig
-links["prezto"]=$HOME/.zprezto
+source $P/links.sh
 
 for k in ${!links[@]}; do
   if [ ! -f ${links[${k}]} ]; then
@@ -48,9 +44,4 @@ for k in ${!links[@]}; do
     # ls ${links[${k}]}
 done
 
-#setup prezto
-#setopt EXTENDED_GLOB
-#for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-#  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-#done
 source $HOME/.zshrc

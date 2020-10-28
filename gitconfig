@@ -1,6 +1,6 @@
 [user]
 	name = Beauregard, Josh
-	email = joshua_beauregard@bose.com
+	email = jbeauregard@maark.com
 	signingkey = 082A7E51F3D93757
 [color]
   ui = on
@@ -37,3 +37,7 @@
 	process = git-lfs filter-process
 [merge]
 	tool = gvimdiff
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
