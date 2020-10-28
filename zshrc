@@ -33,6 +33,7 @@ ZSH_THEME="spaceship"
 
 #Spaceship theme options.
 SPACESHIP_KUBECTL_SHOW=true
+SPACESHIP_TERRAFORM_SHOW=true
 
 plugins=(
   brew
@@ -47,8 +48,7 @@ plugins=(
   docker-compose
   git-auto-fetch
   git-extras
-  github
-  go
+  #github
   golang
   helm
   history
@@ -64,8 +64,9 @@ plugins=(
   fancy-ctrl-z
   helm
   kubectl
+  minikube
 )
-
+ZSH_DISABLE_COMPFIX=true
 source $ZSH/oh-my-zsh.sh
 # User configuration
 
@@ -124,10 +125,11 @@ alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
 alias vi="vim -g --servername VIM4" #open vi in gvim
 alias aws-id="aws sts get-caller-identity"
+alias sshconfig="vi $HOME/.ssh/config"
 
 # common editor settings
-export EDITOR=/usr/bin/vim
-export VISUAL=/usr/bin/vim
+export EDITOR=/usr/local/bin/vim
+export VISUAL=/usr/local/bin/vim
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
 #functions
@@ -143,13 +145,6 @@ alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
 
 # BOF Kubernetes resources
-# get ready for helm charting
-function helm-prep() {
- export TILLER_NAMESPACE=tiller
- tiller -listen=localhost:44134 -storage=secret -logtostderr &
- export HELM_HOST=:44134
- helm init --client-only --upgrade
-}
 
 source <(kubectl completion zsh)
 alias k8s-show-ns=" kubectl api-resources --verbs=list --namespaced -o name  | xargs -n 1 kubectl get --show-kind --ignore-not-found  -n"
@@ -165,6 +160,15 @@ metadata:
     name: $1
   name: $1
 " > $1.ns.yaml
+}
+
+function new-ssh-config-entry() {
+  echo "
+Host $1
+  HostName $3
+  User $2
+
+  " >> $HOME/.ssh/config
 }
 
 # manually setting rvm requirements
@@ -190,3 +194,7 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # maing brew installed python3 default.
 export PATH=/usr/local/opt/python/libexec/bin:$PATH
 # vim: set ft=zsh
+export PATH="/usr/local/opt/node@12/bin:$PATH"
+export AWS_PAGER=""
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/kustomize kustomize
