@@ -123,7 +123,7 @@ alias got="git"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
-alias vi="vim -g --servername VIM4" #open vi in gvim
+alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias aws-id="aws sts get-caller-identity"
 alias sshconfig="vi $HOME/.ssh/config"
 
@@ -132,7 +132,22 @@ export EDITOR=/usr/local/bin/vim
 export VISUAL=/usr/local/bin/vim
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
-#functions
+# edit this file.
+zshrc_edit() {
+  ZSHRC=$HOME/.sanguis_settings/zshrc
+  vim $ZSHRC
+  git -C $HOME/.sanguis_settings commit $ZSHRC
+  source $ZSHRC
+  # function_body
+}
+
+# commit and push in one function.
+cimpush() {
+  git commit --all --message "$1"
+  git push
+}
+
+# docker functions
 function docker-kill-all() {
   docker stop $(docker ps -a -q)
   docker rm $(docker ps -a -q)
