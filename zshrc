@@ -124,7 +124,6 @@ alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
-alias aws-id="aws sts get-caller-identity"
 alias sshconfig="vi $HOME/.ssh/config"
 
 # common editor settings
@@ -155,9 +154,15 @@ function docker-kill-all() {
 
 # AWS stuff
 complete -C '/usr/local/bin/aws_completer' aws
+alias aws-id="aws sts get-caller-identity"
 alias aws_region_eu1="export AWS_DEFAULT_REGION=eu-west-1"
 alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
+
+# upodate kubeconfig with new cluster
+eks_config() {
+aws eks update-kubeconfig --name $1 --alias $1
+}
 
 # BOF Kubernetes resources
 
