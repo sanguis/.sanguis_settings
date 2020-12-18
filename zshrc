@@ -197,16 +197,6 @@ Host $1
 #
 # per os settings.
 
-# mac osX
-if [[ -x /usr/bin/xcode-select ]]
-then
-  source $HOME/.sanguis_settings/zshrc_mac
-fi
-# include local overrides
-
-if [[ -s "$HOME/.zshrc_user" ]]; then
-  source "$HOME/.zshrc_user"
-fi
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
@@ -218,3 +208,16 @@ export PATH="/usr/local/opt/node@12/bin:$PATH"
 export AWS_PAGER=""
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/kustomize kustomize
+
+
+### Loal overrises this should always be at the bottom of the rcfile
+# mac osX
+if [[ -x /usr/bin/xcode-select ]]
+then
+  source $HOME/.sanguis_settings/zshrc_mac
+fi
+# include local overrides
+
+if [[ -s "$HOME/.zshrc_user" ]]; then
+  source "$HOME/.zshrc_user"
+fi
