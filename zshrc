@@ -223,7 +223,7 @@ if [[ -s "$HOME/.zshrc_user" ]]; then
 fi
 
 # Homebrew install path locations
-if [[ -x $PATH/brew ]]
+if ! command -v brew help &> /dev/null
 then
   export PATH="/usr/local/opt/openjdk@11/bin:$PATH"
   export GROOVY_HOME=/usr/local/opt/groovy/libexec
