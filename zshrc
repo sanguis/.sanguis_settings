@@ -159,6 +159,13 @@ alias aws_region_eu1="export AWS_DEFAULT_REGION=eu-west-1"
 alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
 
+aws-profile() {
+  export AWS_DEFAULT_PROFILE=$1
+  export AWS_PROFILE=$1
+  echo "switching aws profile to $1"
+  aws-id
+}
+
 # upodate kubeconfig with new cluster
 eks_config() {
 aws eks update-kubeconfig --name $1 --alias $1
