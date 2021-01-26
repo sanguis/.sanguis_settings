@@ -160,12 +160,14 @@ alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
 
 aws-profile() {
+  #echo "switching aws profile to $1"
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
-  echo "switching aws profile to $1"
-  aws-id
+  #aws-id
 }
 
+# Terraform stuff
+alias tf-log-debug="export TF_LOG=DEBUG && export TF_LOG_PATH=/tmp/tf_debug.log"
 # upodate kubeconfig with new cluster
 eks_config() {
 aws eks update-kubeconfig --name $1 --alias $1
