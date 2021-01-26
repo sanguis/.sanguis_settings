@@ -167,7 +167,7 @@ aws-profile() {
 }
 
 # Terraform stuff
-alias tf-log-debug="export TF_LOG=DEBUG && export TF_LOG_PATH=/tmp/tf_debug.log"
+alias tf-log-debug="export TF_LOG=TRACE && export TF_LOG_PATH=/tmp/tf_debug.log"
 # upodate kubeconfig with new cluster
 eks_config() {
 aws eks update-kubeconfig --name $1 --alias $1
