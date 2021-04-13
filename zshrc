@@ -140,13 +140,20 @@ zshrc_edit() {
   # function_body
 }
 
+## GIT Functions
 # commit and push in one function.
 cimpush() {
   git commit --all --message "$1"
   git push
 }
 
-# docker functions
+# commit with manual message and push
+cipush() {
+  git commit --all
+  git push
+}
+
+## docker functions
 function docker-kill-all() {
   docker stop $(docker ps -a -q)
   docker rm $(docker ps -a -q)
