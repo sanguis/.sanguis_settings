@@ -131,13 +131,19 @@ export EDITOR=/usr/local/bin/vim
 export VISUAL=/usr/local/bin/vim
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
-# edit this file.
+# edit and commit changed to zshrc (this file).
 zshrc_edit() {
   ZSHRC=$HOME/.sanguis_settings/zshrc
   vim $ZSHRC
   git -C $HOME/.sanguis_settings commit $ZSHRC
   source $ZSHRC
-  # function_body
+}
+
+# edit and commit changed to vimrc
+zshrc_edit() {
+  VIMRC=$HOME/.sanguis_settings/vim/vimrc
+  vim $VIMRC
+  git -C $HOME/.sanguis_settings/vim commit $VIMRC
 }
 
 ## GIT Functions
