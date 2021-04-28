@@ -159,7 +159,7 @@ cipush() {
   git push
 }
 
-alias synfix='cimpush "Syantax Fix"
+alias synfix='cimpush "Syantax Fix"'
 
 ## docker functions
 function docker-kill-all() {
