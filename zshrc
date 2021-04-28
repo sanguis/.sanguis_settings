@@ -140,7 +140,7 @@ zshrc_edit() {
 }
 
 # edit and commit changed to vimrc
-zshrc_edit() {
+vimrc_edit() {
   VIMRC=$HOME/.sanguis_settings/vim/vimrc
   vim $VIMRC
   git -C $HOME/.sanguis_settings/vim commit $VIMRC
@@ -158,6 +158,8 @@ cipush() {
   git commit --all
   git push
 }
+
+alias synfix='cimpush "Syantax Fix"
 
 ## docker functions
 function docker-kill-all() {
