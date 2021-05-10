@@ -1,3 +1,15 @@
+# autoload stuff
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+fpath+=~/.zfunc
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle :compinstall filename '/Users/joshbeauregard/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
 # vim: set ft=zsh
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.sanguis_settings/oh-my-zsh
