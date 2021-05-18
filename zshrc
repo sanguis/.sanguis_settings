@@ -162,6 +162,12 @@ cipush() {
 
 alias synfix='cimpush "Syntax Fix"'
 
+newgit () {
+  mkdir %1
+  cd %1
+  git init
+}
+
 ## docker functions
 function docker-kill-all() {
   docker stop $(docker ps -a -q)
