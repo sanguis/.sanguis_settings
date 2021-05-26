@@ -118,6 +118,16 @@ fi
 
 # history -  ignore searched for duplicates
 export HISTCONTROL=ignoreboth:erasedups
+
+# generic file edit pattern
+_edit() {
+PATH=$1
+FILE=$2
+
+vim $PATH/$FILE
+git -C $PATH commit $FILE
+}
+
 # aliases
 alias tf="terraform"
 alias got="git"
@@ -125,27 +135,14 @@ alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
-alias sshconfig="vi $HOME/.ssh/config"
+alias sshconfig_edit="_edit $HOME/.ssh_config config"
+alias vimrc__edit="_edit $HOME/.sanguis_settings/vim vimrc"
+alias zshrc_edit='_edit $HOME/.sanguis_settings zshrc $$ source $HOME/.sanguis_settings/zshrc'
 
 # common editor settings
 export EDITOR=/usr/local/bin/vim
 export VISUAL=/usr/local/bin/vim
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
-
-# edit and commit changed to zshrc (this file).
-zshrc_edit() {
-  ZSHRC=$HOME/.sanguis_settings/zshrc
-  vim $ZSHRC
-  git -C $HOME/.sanguis_settings commit $ZSHRC
-  source $ZSHRC
-}
-
-# edit and commit changed to vimrc
-vimrc_edit() {
-  VIMRC=$HOME/.sanguis_settings/vim/vimrc
-  vim $VIMRC
-  git -C $HOME/.sanguis_settings/vim commit $VIMRC
-}
 
 ## GIT Functions
 # commit and push in one function.
