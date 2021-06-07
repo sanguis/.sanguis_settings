@@ -30,7 +30,20 @@ if [ -f "$HOME/.zshrc" ]; then
 echo $ZSHDATA >> $P/zshrc
 fi
 
+# setup sshconfig to be symbolic link and kept onter version control
+SSHCONF=$GOME/.sshconfig
+if [[ ! -d $SSHCONF ]]; then
+  CUR=$(pwd)
+  mkdir $SSHCONF
+  cd $SSHCONF
+  echo "creating sshconf git repo and adding symbolic link"
+  git init
+  touch config
+  git add config
+  git commit config --message "Adding empty config file"
+  cd $CUR
 
+fi
 # create symlinks
 
 
