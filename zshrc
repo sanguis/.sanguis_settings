@@ -31,41 +31,39 @@ export ZSH_CUSTOM=$HOME/.sanguis_settings/zsh-custom
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="spaceship"
 
+
 #Spaceship theme options.
 SPACESHIP_KUBECTL_SHOW=true
 SPACESHIP_TERRAFORM_SHOW=true
 
 plugins=(
-  brew
   ansible
-  git
-  branch
   aws
+  branch
+  brew
+  colored-man-pages
   colorize
   compleat
   cp
   docker
   docker-compose
   dotenv
+  fancy-ctrl-z
+  git
   git-auto-fetch
   git-extras
-  #github
   golang
   helm
   history
   iterm2
   kubectl
   man
+  minikube
   pip
+  rsync
   sudo
   terraform
-  rsync
-  colored-man-pages
   vi-mode
-  fancy-ctrl-z
-  helm
-  kubectl
-  minikube
 )
 ZSH_DISABLE_COMPFIX=true
 source $ZSH/oh-my-zsh.sh
