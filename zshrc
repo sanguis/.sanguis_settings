@@ -167,7 +167,12 @@ cimpush() {
 # commit with manual message and push
 cipush() {
   git commit --all
-  git push
+  if [[ $? != 0 ]]; then
+    echo "git commit failed not pushing"
+    exit 1
+  else
+    git push
+  fi
 }
 
 alias synfix='cimpush "Syntax Fix"'
