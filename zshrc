@@ -134,8 +134,6 @@ alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias sshconfig_edit="f_edit $HOME/.ssh_config config"
-#alias vimrc_edit="f_edit $HOME/.sanguis_settings/vim vimrc"
-#alias zshrc_edit="f_edit $HOME/.sanguis_settings zshrc && source $HOME/.sanguis_settings/zshrc"
 
 # common editor settings
 export EDITOR=/usr/local/bin/vim
@@ -155,6 +153,7 @@ vimrc_edit() {
   VIMRC=$HOME/.sanguis_settings/vim/vimrc
   vim $VIMRC
   git -C $HOME/.sanguis_settings/vim commit $VIMRC
+  vim +PluginInstall +PluginUpdate +qall
 }
 
 ## GIT Functions
