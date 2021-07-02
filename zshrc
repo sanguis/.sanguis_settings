@@ -134,6 +134,7 @@ alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias sshconfig_edit="f_edit $HOME/.ssh_config config"
+alias gmain="git checkout main && git pull"
 
 # common editor settings
 export EDITOR=/usr/local/bin/vim
@@ -176,6 +177,8 @@ cipush() {
 
 alias synfix='cimpush "Syntax Fix"'
 
+  # function_body
+}
 newgit () {
   mkdir $1
   cd $1
