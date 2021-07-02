@@ -177,8 +177,6 @@ cipush() {
 
 alias synfix='cimpush "Syntax Fix"'
 
-  # function_body
-}
 newgit () {
   mkdir $1
   cd $1
