@@ -143,9 +143,11 @@ export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to P
 
 # edit and commit changed to zshrc (this file).
 zshrc_edit() {
-  ZSHRC=$HOME/.sanguis_settings/zshrc
+  REPO=$HOME/.sanguis_settings
+  ZSHRC=$REPO/zshrc
   vim $ZSHRC
-  git -C $HOME/.sanguis_settings commit $ZSHRC
+  git -C $REPO commit $ZSHRC
+  [ -z $?] && git push || echo "no commit. no push"
   source $ZSHRC
 }
 
@@ -207,7 +209,7 @@ aws-profile() {
 alias tf-log-debug="export TF_LOG=TRACE && export TF_LOG_PATH=/tmp/tf_debug.log"
 # upodate kubeconfig with new cluster
 eks_config() {
-aws eks update-kubeconfig --name $1 --alias $1
+  aws eks update-kubeconfig --name $1 --alias $1
 }
 
 # BOF Kubernetes resources
@@ -215,6 +217,9 @@ aws eks update-kubeconfig --name $1 --alias $1
 source <(kubectl completion zsh)
 alias k8s-show-ns=" kubectl api-resources --verbs=list --namespaced -o name  | xargs -n 1 kubectl get --show-kind --ignore-not-found  -n"
 complete -F __start_kubectl k8s
+
+alias kns="kubens"
+alias ktx="kubectx"
 
 function k8s-ns() {
   echo "
