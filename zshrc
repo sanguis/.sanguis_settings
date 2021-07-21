@@ -119,11 +119,12 @@ export HISTCONTROL=ignoreboth:erasedups
 
 # generic file edit pattern
 f_edit() {
-  PATH=$1
-  FILE=$2
+  FULL_PATH=$(realpath $1)
+  FILE=$(basename $FULL_PATH)
+  DIRECTORY=$(dirname $FULL_PATH)
 
-  vim $PATH/$FILE
-  git -C $PATH commit $FILE
+  vim $FULL_PATH
+  git -C $DIRECTORY commit $FILE
 }
 
 # aliases
