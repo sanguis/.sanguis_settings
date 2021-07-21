@@ -130,11 +130,12 @@ f_edit() {
 # aliases
 alias tf="terraform"
 alias got="git"
+alias dicker="docker"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
-alias sshconfig_edit="f_edit $HOME/.ssh_config config"
+alias sshconfig_edit="f_edit $HOME/.ssh_config/config"
 alias gmain="git checkout main && git pull"
 
 # common editor settings
