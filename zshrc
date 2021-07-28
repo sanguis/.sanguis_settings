@@ -137,6 +137,7 @@ alias tsp="tmux split-window -c $PWD"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias sshconfig_edit="f_edit $HOME/.ssh_config/config"
 alias gmain="git checkout main && git pull"
+alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
 
 # common editor settings
 export EDITOR=/usr/local/bin/vim
