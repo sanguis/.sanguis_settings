@@ -150,7 +150,7 @@ zshrc_edit() {
   ZSHRC=$REPO/zshrc
   vim $ZSHRC
   git -C $REPO commit $ZSHRC
-  [ -z $?] && git push || echo "no commit. no push"
+  [ -z $? ] && git push || echo "no commit. no push"
   source $ZSHRC
 }
 
@@ -263,8 +263,17 @@ export AWS_PAGER=""
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/kustomize kustomize
 
+# Jenkins functions
 
-### Loal overrises this should always be at the bottom of the rcfile
+function jen-lib-var() {
+  echo $1 > $1.txt
+  echo "#!/usr/bin/env groovy" >> $1.groovy
+  echo "def call(Map params = [:]) {" >> $1.groovy
+  echo "}" >> $1.groovy
+  vi -O $1.txt $1.groovy
+
+}
+### Local overrides this should always be at the bottom of the rcfile
 # mac osX
 if [[ -x /usr/bin/xcode-select ]]
 then
@@ -282,3 +291,9 @@ then
   export PATH="/usr/local/opt/openjdk@11/bin:$PATH"
   export GROOVY_HOME=/usr/local/opt/groovy/libexec
 fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/private/tmp/google-cloud-sdk/path.zsh.inc' ]; then . '/private/tmp/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/private/tmp/google-cloud-sdk/completion.zsh.inc' ]; then . '/private/tmp/google-cloud-sdk/completion.zsh.inc'; fi
