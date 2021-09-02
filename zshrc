@@ -270,6 +270,7 @@ function jen-lib-var() {
   echo "#!/usr/bin/env groovy" >> $1.groovy
   echo "def call(Map params = [:]) {" >> $1.groovy
   echo "}" >> $1.groovy
+  git add $1.txt $1.groovy
   vi -O $1.txt $1.groovy
 
 }
