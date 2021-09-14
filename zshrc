@@ -128,15 +128,16 @@ f_edit() {
 }
 
 # aliases
+## spelling mistakes
 alias tf="terraform"
 alias got="git"
 alias dicker="docker"
+
+## App aliases
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
-alias tvs="tmux split-window -vc $PWD"
-alias tsp="tmux split-window -c $PWD"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias sshconfig_edit="f_edit $HOME/.ssh_config/config"
-alias tmuxconfig_edit="f_edit $HOME/.sanguis_settings/tmux.conf"
+alias tmuxconfig_edit="f_edit $HOME/.sanguis_settings/tmux.conf && tmux source-file ~/.tmux.conf"
 alias gmain="git checkout main && git pull"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
 
