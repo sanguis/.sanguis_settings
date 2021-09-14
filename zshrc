@@ -30,7 +30,8 @@ export ZSH_CUSTOM=$HOME/.sanguis_settings/zsh-custom
 
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="spaceship"
-
+VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+VI_MODE_SET_CURSOR=true
 
 #Spaceship theme options.
 SPACESHIP_KUBECTL_SHOW=true
@@ -61,7 +62,6 @@ plugins=(
   minikube
   pip
   rsync
-  sudo
   terraform
   vi-mode
 )
@@ -136,6 +136,7 @@ alias tvs="tmux split-window -vc $PWD"
 alias tsp="tmux split-window -c $PWD"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias sshconfig_edit="f_edit $HOME/.ssh_config/config"
+alias tmuxconfig_edit="f_edit $HOME/.sanguis_settings/tmux.conf"
 alias gmain="git checkout main && git pull"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
 
