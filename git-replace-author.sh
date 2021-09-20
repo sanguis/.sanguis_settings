@@ -6,7 +6,7 @@
 usage () {
   local usage="Invalid input Please use the correct inputs
 
-  git-replace-author <old_email> <new_email> <new_name>
+  git-replace-author <old_email> <new_email> \"<new_name>\"
 
   OLD_EMAIL     The email address to be replaced in the commits
   NEW_EMAIL     The new author email address to be used in the commit matching OLD_EMAIL
