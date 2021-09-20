@@ -33,9 +33,11 @@ ZSH_THEME="spaceship"
 VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 VI_MODE_SET_CURSOR=true
 
-#Spaceship theme options.
+#Spaceship theme options. (https://github.com/spaceship-prompt/spaceship-prompt/blob/master/docs/options.md)
 SPACESHIP_KUBECTL_SHOW=true
 SPACESHIP_TERRAFORM_SHOW=true
+SPACESHIP_AWS_REGION_SHOW=true
+SPACESHIP_AWS_PREFIX=""
 
 plugins=(
   ansible
