@@ -1,5 +1,20 @@
 # vim: set ft=zsh
 
+#include gnu utils over standard macos,
+# array equal executable to test => path
+declare -A gpaths
+
+gpaths[gsed]="/usr/local/opt/gnu-sed/libexec/gnubin"
+
+for t in ${gpaths[@]}; do
+  export PATH="${gpaths[${t}]}:$PATH"
+done
+
+# Use gnu utls if installed
+if [[ -d /usr/local/opt/coreutils/libexec/gnubin ]]; then
+  export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+fi
+
 #syntax hilight in less
 if [[ -x /usr/local/bin/src-hilite-lesspipe.sh ]];
 then
