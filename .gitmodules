@@ -1,6 +1,3 @@
-[submodule ".vim"]
-	path = .vim
-	url = https://github.com/sanguis/.vim.git
 [submodule "vim"]
 	path = vim
 	url = https://github.com/sanguis/.vim.git
