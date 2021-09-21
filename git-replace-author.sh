@@ -19,7 +19,7 @@ if [[ $#  -ne 3 ]]; then
   usage
   exit 1
 fi
-git filter-branch --env-filter '
+git filter-branch --force --env-filter '
 if test "$GIT_AUTHOR_EMAIL" = "$1"
 then
   GIT_AUTHOR_EMAIL="$2"
@@ -30,4 +30,4 @@ then
     GIT_COMMITTER_EMAIL="$2"
     GIT_COMMITTER_NAME="$3"
   fi
-  ' -- --all --force
+  ' -- --all

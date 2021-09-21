@@ -19,7 +19,6 @@ function set_git() {
 function set_git_dirs() {
 local dirs=$(git config --file .gitmodules --get-regexp path | awk '{ print $2 }')
 for d in ${dirs}; do
-
   set_git $d
 done
 }

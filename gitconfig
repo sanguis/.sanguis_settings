@@ -9,7 +9,7 @@
   whitespace= fix,-indent-with-non-tab,-indent-with-tab,trailing-space
 	excludesfile = ~/.gitignore
   autocrlf=input
-	pager = 
+	pager = less -XF
 
 [alias]
   df = !git diff --no-prefix && git diff --staged --no-prefix
