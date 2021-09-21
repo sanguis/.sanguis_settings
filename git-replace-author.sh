@@ -30,4 +30,4 @@ then
     GIT_COMMITTER_EMAIL="$2"
     GIT_COMMITTER_NAME="$3"
   fi
-  ' -- --all
+  ' -- --all --force
