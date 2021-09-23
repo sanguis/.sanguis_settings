@@ -205,12 +205,16 @@ alias aws_region_eu1="export AWS_DEFAULT_REGION=eu-west-1"
 alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
 
-aws-profile() {
+function aws-profile {
   #echo "switching aws profile to $1"
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
   #aws-id
 }
+function _aws_profile {
+  compadd $(aws configure list-profiles)
+}
+compdef _aws_profile aws_profile
 
 # Terraform stuff
 alias tf-log-debug="export TF_LOG=TRACE && export TF_LOG_PATH=/tmp/tf_debug.log"
@@ -280,7 +284,7 @@ function jen-lib-var() {
 }
 ### Local overrides this should always be at the bottom of the rcfile
 # mac osX
-if [[ -x /usr/bin/xcode-select ]]
+if [[ $(uname) == "Darwin" ]]
 then
   source $HOME/.sanguis_settings/zshrc_mac
 fi
