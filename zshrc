@@ -1,5 +1,6 @@
 # vim: set ft=zsh
 # Path to your oh-my-zsh installation.
+export DOTFILEDIR=$(realpath)
 export ZSH=$HOME/.sanguis_settings/oh-my-zsh
 
 export UPDATE_ZSH_DAYS=13
@@ -282,6 +283,8 @@ function jen-lib-var() {
   vi -O $1.txt $1.groovy
 
 }
+# Other functions
+source $ZSH_CUSTOM/snippets/*.zsh
 ### Local overrides this should always be at the bottom of the rcfile
 # mac osX
 if [[ $(uname) == "Darwin" ]]
