@@ -1,6 +1,6 @@
 # vim: set ft=zsh
 # Path to your oh-my-zsh installation.
-export DOTFILEDIR=$(realpath)
+# export DOTFILEDIR=$(realpath)
 export ZSH=$HOME/.sanguis_settings/oh-my-zsh
 
 export UPDATE_ZSH_DAYS=13
