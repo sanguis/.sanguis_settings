@@ -2,21 +2,15 @@
 P=$HOME/.sanguis_settings
 OS=$(uname)
 
-if [ OS = "Darwin" ]
-then
-  source mac.sh
-fi
-
-
-source update.sh
 if [ ! -d $P ]
 then
   git clone --recursive https://github.com/sanguis/.sanguis_settings.git $P
   cd $P
-else
- update_ss
 fi
 
+[[ OS = "Darwin" ]] && source $P/mac.sh
+
+source update.sh $Pw
 ## install powerline fonts
 bash ./fonts/install.sh
 
@@ -46,15 +40,15 @@ if [[ ! -d $SSHCONF ]]; then
 fi
 # create symlinks
 
-
 source $P/links.sh
 
-for k in ${!links[@]}; do
-  if [ ! -f ${links[${k}]} ]; then
-    echo "ln -s $P/${k} ${links[${k}]}"
-    ln -s $P/${k} ${links[${k}]}
-  fi
-    # ls ${links[${k}]}
-done
+function links() {
+  for k in $(links[@]); do
+    [[ -f $(links[${k}]) ]] && return
+    [[ $DEBUG ]] && echo "ln -s $P/${k} ${links[${k}]}"
+    ln -s $P/${k} $(links[${k}])
+  done
+}
+links
 
 source $HOME/.zshrc

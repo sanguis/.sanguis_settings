@@ -1,8 +1,6 @@
 #!/usr/bin/env zsh
 
-if [ -z $P ]; then
-  P=$HOME/.sanguis_settings
-fi
+[[ -z $1 ]] || P=$HOME/.sanguis_settings && P=$1
 
 function update_ss() {
   cd $P
@@ -22,4 +20,6 @@ for d in ${dirs}; do
   set_git $d
 done
 }
+
+update_ss
 set_git_dirs
