@@ -122,6 +122,7 @@ alias got="git"
 alias dicker="docker"
 
 ## App aliases
+alias mk="minikube"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias zsh_reload="source $HOME/.zshrc"
