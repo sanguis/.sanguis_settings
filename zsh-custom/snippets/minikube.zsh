@@ -8,3 +8,9 @@ minikube_as_docker () {
   eval $(minikube docker-env)
   return 0
 }
+
+unset_minkube_as_docker() {
+  unset DOCKER_CERT_PATH
+  unset DOCKER_HOST
+  unset DOCKER_TLS_VERIFY
+}
