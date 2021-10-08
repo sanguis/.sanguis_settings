@@ -70,28 +70,13 @@ plugins=(
 )
 ZSH_DISABLE_COMPFIX=true
 source $ZSH/oh-my-zsh.sh
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
 
 
-# ssh
+# set vi as the default cli editor
+export EDITOR=/usr/local/bin/vim
+export VISUAL=/usr/local/bin/vim
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-#
-# EOF oh-my-zsh settings
-#
 export PATH=$PATH:~/.composer/vendor/bin:$HOME/Library/Python/2.7/bin
 export PATH=$PATH:/usr/local/bin
 
@@ -139,14 +124,11 @@ alias dicker="docker"
 ## App aliases
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
+alias zsh_reload="source $HOME/.zshrc"
 alias sshconfig_edit="f_edit $HOME/.ssh_config/config"
 alias tmuxconfig_edit="f_edit $HOME/.sanguis_settings/tmux.conf && tmux source-file ~/.tmux.conf"
 alias gmain="git checkout main && git pull"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
-
-# common editor settings
-export EDITOR=/usr/local/bin/vim
-export VISUAL=/usr/local/bin/vim
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
 # edit and commit changed to zshrc (this file).
@@ -159,13 +141,8 @@ zshrc_edit() {
   source $ZSHRC
 }
 
-# edit and commit changed to vimrc
-vimrc_edit() {
-  VIMRC=$HOME/.sanguis_settings/vim/vimrc
-  vim $VIMRC
-  git -C $HOME/.sanguis_settings/vim commit $VIMRC
-  vim +PluginInstall +PluginUpdate +qall
-}
+# Vim functions
+source $HOME/.vim/vim-shell-utils.zsh
 
 ## GIT Functions
 # commit and push in one function.
@@ -206,20 +183,27 @@ alias aws_region_eu1="export AWS_DEFAULT_REGION=eu-west-1"
 alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
 
-function aws-profile {
+aws-profile() {
   #echo "switching aws profile to $1"
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
   #aws-id
 }
-function _aws_profile {
+aws_profile() {
   compadd $(aws configure list-profiles)
 }
 compdef _aws_profile aws_profile
 
 # Terraform stuff
-alias tf-log-debug="export TF_LOG=TRACE && export TF_LOG_PATH=/tmp/tf_debug.log"
-# upodate kubeconfig with new cluster
+tf-log-debug() {
+[[ -z $1 ]] && LEVEL=TRACE
+export TF_LOG=$LEVEL
+export TF_LOG_PATH=/tmp/tf_debug.log
+echo -e  "\033[32;1m[INFO]\033[0m Terraform log level set to debug.  Log output at $TF_LOG_PATH"
+}
+alias tf-log-tail="tail -f $TF_LOG_PATH"
+
+# update kubeconfig with new cluster
 eks_config() {
   aws eks update-kubeconfig --name $1 --alias $1
 }
