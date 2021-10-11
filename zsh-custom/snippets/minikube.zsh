@@ -9,7 +9,7 @@ minikube_as_docker () {
   return 0
 }
 
-minkube_unset_as_docker() {
+minikube_unset_as_docker () {
   unset DOCKER_CERT_PATH
   unset DOCKER_HOST
   unset DOCKER_TLS_VERIFY
