@@ -157,7 +157,7 @@ cipush() {
   git commit --all
   if [[ $? != 0 ]]; then
     echo "git commit failed not pushing"
-    exit 1
+    return 1
   else
     git push
   fi
