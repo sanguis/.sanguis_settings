@@ -1,4 +1,4 @@
-# vim: set ft=zsh
+# vim: set ft=zsh.sh
 # Path to your oh-my-zsh installation.
 # export DOTFILEDIR=$(realpath)
 export ZSH=$HOME/.sanguis_settings/oh-my-zsh
@@ -107,6 +107,33 @@ export HISTCONTROL=ignoreboth:erasedups
 
 # generic file edit pattern
 f_edit() {
+
+local usage="Usage :  f_edit  [options] [--] {files to edit}
+
+    Options:
+    -r|reload     Relaod zshrc after editing
+    -h|help       Display this message
+"
+
+#-----------------------------------------------------------------------
+#  Handle command line arguments
+#-----------------------------------------------------------------------
+
+while getopts ":rh" opt
+do
+  case $opt in
+
+  h|help     )  echo ${usage}; exit 0   ;;
+
+  r|reload   ) local reload=true ;;
+
+  * )  echo -e "\n  Option does not exist : $OPTARG\n"
+      echo ${usage}; exit 1   ;;
+
+  esac    # --- end of case ---
+done
+shift $(($OPTIND-1))
+
   FULL_PATH=$(realpath $1)
   FILE=$(basename $FULL_PATH)
   DIRECTORY=$(dirname $FULL_PATH)
@@ -114,6 +141,7 @@ f_edit() {
   vim $FULL_PATH
   git -C $DIRECTORY add $FILE
   git -C $DIRECTORY commit $FILE
+  [[ ${reload} ]] && source $HOME/.zshrc
 }
 
 # aliases
