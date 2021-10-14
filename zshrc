@@ -112,6 +112,7 @@ f_edit() {
   DIRECTORY=$(dirname $FULL_PATH)
 
   vim $FULL_PATH
+  git -C $DIRECTORY add $FILE
   git -C $DIRECTORY commit $FILE
 }
 
