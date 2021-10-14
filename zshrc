@@ -108,40 +108,38 @@ export HISTCONTROL=ignoreboth:erasedups
 # generic file edit pattern
 f_edit() {
 
-local usage="Usage :  f_edit  [options] [--] {files to edit}
+_USAGE="Usage :  f_edit  [options] [--] {files to edit}
 
     Options:
     -r|reload     Relaod zshrc after editing
     -h|help       Display this message
 "
 
-#-----------------------------------------------------------------------
-#  Handle command line arguments
-#-----------------------------------------------------------------------
-
 while getopts ":rh" opt
 do
   case $opt in
 
-  h|help     )  echo ${usage}; exit 0   ;;
+  h|help     )  echo $_USAGE; return 0   ;;
 
-  r|reload   ) local reload=true ;;
+  r|reload   ) _RELAOD=true ;;
 
-  * )  echo -e "\n  Option does not exist : $OPTARG\n"
-      echo ${usage}; exit 1   ;;
+  * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+      echo ${usage}; return 1   ;;
 
   esac    # --- end of case ---
 done
 shift $(($OPTIND-1))
+[[ -z $1 ]] && echo $_USAGE && return 1
 
   FULL_PATH=$(realpath $1)
   FILE=$(basename $FULL_PATH)
-  DIRECTORY=$(dirname $FULL_PATH)
+  DIRECTORac    # --- end of case ---
+  Examples:=$(dirname $FULL_PATH)
 
   vim $FULL_PATH
   git -C $DIRECTORY add $FILE
   git -C $DIRECTORY commit $FILE
-  [[ ${reload} ]] && source $HOME/.zshrc
+  [[ $_RELOAD ]] && source $HOME/.zshrc
 }
 
 # aliases
@@ -154,7 +152,7 @@ alias dicker="docker"
 alias mk="minikube"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
-alias zsh_reload="source $HOME/.zshrc"
+alias reload_zsh="source $HOME/.zshrc"
 alias sshconfig_edit="f_edit $HOME/.ssh_config/config"
 alias tmuxconfig_edit="f_edit $HOME/.sanguis_settings/tmux.conf && tmux source-file ~/.tmux.conf"
 alias gmain="git checkout main && git pull"
