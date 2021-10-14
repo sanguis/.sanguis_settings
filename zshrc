@@ -133,13 +133,13 @@ shift $(($OPTIND-1))
 
   FULL_PATH=$(realpath $1)
   FILE=$(basename $FULL_PATH)
-  DIRECTORac    # --- end of case ---
-  Examples:=$(dirname $FULL_PATH)
+  DIRECTORY=$(dirname $FULL_PATH)
 
   vim $FULL_PATH
   git -C $DIRECTORY add $FILE
   git -C $DIRECTORY commit $FILE
-  [[ $_RELOAD ]] && source $HOME/.zshrc
+  [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $HOME/.zshrc
+  return 0
 }
 
 # aliases
