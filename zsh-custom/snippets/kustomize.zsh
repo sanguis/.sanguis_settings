@@ -32,7 +32,7 @@ do
   [[ -z $1 ]] && echo $_USAGE && return 1
   [[ -z $2 ]] && echo $_USAGE && return 1
   [[ -f $1/kustomzation.yaml ]] && echo -e "\033[31;1m[ERROR]\033[0m patch directory already exists." && return 1
-  base_path= realpath  --relative-to=$2
+  base_path= realpath --relative-to=$1 $2
   mkdir $1
   echo "
   apiVersion: kustomize.config.k8s.io/v1beta1
