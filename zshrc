@@ -43,6 +43,7 @@ SPACESHIP_AWS_REGION_SHOW=true
 SPACESHIP_AWS_PREFIX=" "
 
 plugins=(
+  os
   ansible
   aws
   branch
