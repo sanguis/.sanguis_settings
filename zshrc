@@ -1,6 +1,8 @@
 # vim: set ft=zsh.sh
 # Path to your oh-my-zsh installation.
 # export DOTFILEDIR=$(realpath)
+
+[[ $PROFILE ]] && echo -e "\033[32;1m[INFO]\033[0m Profileing On" && zmodload zsh/zprof
 export ZSH=$HOME/.sanguis_settings/oh-my-zsh
 
 export UPDATE_ZSH_DAYS=13
@@ -151,6 +153,7 @@ alias mk="minikube"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias reload_zsh="source $HOME/.zshrc"
+alias profile_zsh="$PROFILE=true source $HOME/.zshrc"
 alias sshconfig_edit="f_edit $HOME/.ssh_config/config"
 alias tmuxconfig_edit="f_edit $HOME/.sanguis_settings/tmux.conf && tmux source-file ~/.tmux.conf"
 alias gmain="git checkout main && git pull"
