@@ -98,38 +98,36 @@ then
       set-option -t "$tmux_session" destroy-unattached off &> /dev/null
   fi
 
-  # Attach to the 'prezto' session or to the last session used.
+  # Attach to the Last section used
   exec tmux  attach-session
 fi
 
 # history -  ignore searched for duplicates
 export HISTCONTROL=ignoreboth:erasedups
-
 # generic file edit pattern
 f_edit() {
 
-_USAGE="Usage :  f_edit  [options] [--] {files to edit}
+  _USAGE="Usage :  f_edit  [options] [--] {files to edit}
 
-    Options:
-    -r|reload     Relaod zshrc after editing
-    -h|help       Display this message
+Options:
+-r|reload     Relaod zshrc after editing
+-h|help       Display this message
 "
 
-while getopts ":rh" opt
-do
-  case $opt in
+  while getopts 'hr' opt
+  do
+    case $opt in
+      h|help     )  echo $_USAGE; return 0   ;;
 
-  h|help     )  echo $_USAGE; return 0   ;;
+      r|reload   ) _RELAOD=true ;;
 
-  r|reload   ) _RELAOD=true ;;
+      * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo "$_USAGE"; return 1   ;;
 
-  * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
-      echo ${usage}; return 1   ;;
-
-  esac    # --- end of case ---
-done
-shift $(($OPTIND-1))
-[[ -z $1 ]] && echo $_USAGE && return 1
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+ [[ -z $1 ]] && echo $_USAGE && return 1
 
   FULL_PATH=$(realpath $1)
   FILE=$(basename $FULL_PATH)
@@ -138,8 +136,8 @@ shift $(($OPTIND-1))
   vim $FULL_PATH
   git -C $DIRECTORY add $FILE
   git -C $DIRECTORY commit $FILE
-  [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $HOME/.zshrc
-  return 0
+#  [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $HOME/.zshrc
+#  return 0
 }
 
 # aliases
