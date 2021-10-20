@@ -138,7 +138,7 @@ Options:
   vim $FULL_PATH
   git -C $DIRECTORY add $FILE
   git -C $DIRECTORY commit $FILE
-#  [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $HOME/.zshrc
+  [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $HOME/.zshrc
 #  return 0
 }
 
