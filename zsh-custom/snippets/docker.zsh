@@ -20,7 +20,7 @@ docker_run() {
       s|ssh     ) SSH="--volume $HOME/.ssh:/root/.ssh"  ;;
 
       * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
-        echo "${_USAGE}"; return 1   ;;
+        echo "${_USAGE}"; return 2   ;;
 
     esac
   done
@@ -29,7 +29,8 @@ docker_run() {
 
   local IMAGE=$1
 
-  shift $(($OPTIND-1))
+  shift
+
   local COMMAND=$@
 
   local run_command="docker run --rm -it --volume $DIR:$DIR $DOCKER $SSH  -w $DIR ${IMAGE} ${COMMAND}"
