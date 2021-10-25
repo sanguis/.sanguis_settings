@@ -1,3 +1,4 @@
+#!/bin/zsh
 # use minikube for docker
 minikube_as_docker () {
   [[ -x minikube ]] && [[ ${DEBUG} ]] && echo -e "\033[34;1m[DEBUG]\033[0m Minikube not found" && return 1
