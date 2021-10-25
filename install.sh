@@ -39,7 +39,7 @@ if [[ ! -d $LOCAL_CONFIGS ]]; then
   CUR=$(pwd)
   mkdir "$LOCAL_CONFIGS"
   cd "$LOCAL_CONFIGS" || exit 1
-  echo "creating local configs git repo and adding symbolic links"
+  echo "creating local con figs git repo and adding symbolic links"
   git init
   links "${1[@]}"
   git add config
@@ -54,7 +54,7 @@ local_configs "${local_config_files[@]}"
 
 source $P/links.sh
 
-function links() {
+links() {
   for k in $(links[@]); do
     [[ -f $(links[${k}]) ]] && return
     [[ $DEBUG ]] && echo "ln -s $P/${k} ${links[${k}]}"
