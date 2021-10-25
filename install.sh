@@ -2,15 +2,15 @@
 P=$HOME/.sanguis_settings
 OS=$(uname)
 
-if [ ! -d $P ]
+if [[ ! -d $P ]]
 then
-  git clone --recursive https://github.com/sanguis/.sanguis_settings.git $P
-  cd $P
+  git clone --recursive https://github.com/sanguis/.sanguis_settings.git "$P"
+  cd "$P" || exit 1
 fi
 
-[[ OS = "Darwin" ]] && source $P/mac.sh
+[[ $OS == "Darwin" ]] && source "$P/mac.sh"
 
-source update.sh $Pw
+source update.sh "$P"
 ## install powerline fonts
 bash ./fonts/install.sh
 
@@ -24,20 +24,32 @@ if [ -f "$HOME/.zshrc" ]; then
 echo $ZSHDATA >> $P/zshrc
 fi
 
-# setup sshconfig to be symbolic link and kept onter version control
-SSHCONF=$GOME/.sshconfig
-if [[ ! -d $SSHCONF ]]; then
+# setup localfiles to be symbolic links and kept in local version control
+# ~/.zshrc_user
+# ~/.ssh/config
+# TODO ~/.gitconfig
+
+declare -A local_config_files
+local_config_files['ssh_config']=$HOME/.ssh/config
+local_config_files['zshrc_user']=$HOME/.zshrc_user
+# local_config_files['gitconfig']=$HOME/.gitconfig
+LOCAL_CONFIGS=$HOME/.local_configs
+function local_configs() {
+if [[ ! -d $LOCAL_CONFIGS ]]; then
   CUR=$(pwd)
-  mkdir $SSHCONF
-  cd $SSHCONF
-  echo "creating sshconf git repo and adding symbolic link"
+  mkdir "$LOCAL_CONFIGS"
+  cd "$LOCAL_CONFIGS" || exit 1
+  echo "creating local configs git repo and adding symbolic links"
   git init
-  touch config
+  links "${1[@]}"
   git add config
-  git commit config --message "Adding empty config file"
+  git commit config --message "Adding empty config files"
   cd $CUR
 
 fi
+#function_body
+}
+local_configs "${local_config_files[@]}"
 # create symlinks
 
 source $P/links.sh
@@ -51,4 +63,4 @@ function links() {
 }
 links
 
-source $HOME/.zshrc
+source "$HOME/.zshrc"

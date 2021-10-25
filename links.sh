@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 #prepwork due to tmuxconfailure
