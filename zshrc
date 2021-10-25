@@ -43,7 +43,6 @@ SPACESHIP_AWS_REGION_SHOW=true
 SPACESHIP_AWS_PREFIX=" "
 
 plugins=(
-  os
   ansible
   aws
   branch
@@ -66,11 +65,12 @@ plugins=(
   kubectl
   man
   minikube
+  os
+  os
   pip
   rsync
   terraform
   vi-mode
-  os
 )
 ZSH_DISABLE_COMPFIX=true
 source $ZSH/oh-my-zsh.sh
