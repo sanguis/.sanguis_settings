@@ -157,7 +157,7 @@ alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split t
 alias reload_zsh="source $HOME/.zshrc"
 alias profile_zsh="$PROFILE=true source $HOME/.zshrc"
 alias sshconfig_edit="f_edit $HOME/.local_configs/ssh_config"
-alias zshrc_user_edit="f_editi -r $HOME/.local_configs/.zshrc_user"
+alias zshrc_user_edit="f_edit -r $HOME/.local_configs/.zshrc_user"
 alias tmuxconfig_edit="f_edit $HOME/.sanguis_settings/tmux.conf && tmux source-file ~/.tmux.conf"
 alias gmain="git checkout main && git pull"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
