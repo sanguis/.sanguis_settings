@@ -23,7 +23,7 @@ ecr_login() {
     esac    # --- end of case ---
   done
   shift $(($OPTIND-1))
-  if [[ -z $1]]; then
+  if [[ -z $1 ]]; then
     _ACCOUNT_NUMBER=$(aws sts get-caller-identity --output text --query 'Account')
   else
     _ACCOUNT_NUMBER=$1
