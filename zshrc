@@ -66,7 +66,6 @@ plugins=(
   man
   minikube
   os
-  os
   pip
   rsync
   terraform
@@ -207,24 +206,6 @@ function docker-kill-all() {
   docker stop $(docker ps -a -q)
   docker rm $(docker ps -a -q)
 }
-
-# AWS stuff
-complete -C '/usr/local/bin/aws_completer' aws
-alias aws-id="aws sts get-caller-identity"
-alias aws_region_eu1="export AWS_DEFAULT_REGION=eu-west-1"
-alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
-alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
-
-aws-profile() {
-  #echo "switching aws profile to $1"
-  export AWS_DEFAULT_PROFILE=$1
-  export AWS_PROFILE=$1
-  #aws-id
-}
-aws_profile() {
-  compadd $(aws configure list-profiles)
-}
-compdef _aws_profile aws_profile
 
 # Terraform stuff
 tf-log-debug() {
