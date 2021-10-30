@@ -6,16 +6,12 @@ alias aws_region_eu1="export AWS_DEFAULT_REGION=eu-west-1"
 alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
 
-aws-profile() {
+aws_profile() {
   #echo "switching aws profile to $1"
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
   #aws-id
 }
-_aws_profile() {
-  compadd $(aws configure list-profiles)
-}
-compdef _aws_profile aws_profile
 
 ecr_login() {
   _USAGE="Usage : ecr_login  [-hr:] [--] {2:inputs}
