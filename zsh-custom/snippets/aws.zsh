@@ -12,7 +12,7 @@ aws-profile() {
   export AWS_PROFILE=$1
   #aws-id
 }
-aws_profile() {
+_aws_profile() {
   compadd $(aws configure list-profiles)
 }
 compdef _aws_profile aws_profile
