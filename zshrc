@@ -159,9 +159,9 @@ alias sshconfig_edit="f_edit $HOME/.local_configs/ssh_config"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tmuxconfig_edit="f_edit $HOME/.sanguis_settings/tmux.conf && tmux source-file ~/.tmux.conf"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
-alias pre-commit-init="echo -e "\\033[32;1m[INFO]\\033[0m Creating pre-commit-config.yaml" &&
+alias pre-commit-init='echo -e "\\033[32;1m[INFO]\\033[0m Creating pre-commit-config.yaml" &&
   pre-commit sample-config > .pre-commit-config.yaml &&
-  f_edit .precommit-config.yaml"
+  f_edit .pre-commit-config.yaml'
 alias zshrc_user_edit="f_edit -r $HOME/.local_configs/.zshrc_user"
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
