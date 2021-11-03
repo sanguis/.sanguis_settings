@@ -2,8 +2,19 @@
 # Path to your oh-my-zsh installation.
 # export DOTFILEDIR=$(realpath)
 
-[[ $PROFILE ]] && echo -e "\033[32;1m[INFO]\033[0m Profileing On" && zmodload zsh/zprof
-export ZSH=$HOME/.sanguis_settings/oh-my-zsh
+# EDITING THIS FILE
+#  - when creating variables for a global path please do not use
+
+# when sourced with $PROFILE=true profieling is turned on
+[[ $PROFILE ]] && ech  -e "\033[32;1m[INFO]\033[0m Profileing On" && zmodload zsh/zprof
+# Global Variables
+
+
+# TODO figure out  why this does not work in an rcfile export _DOT_FILES_REPO==${0:A:h}
+export _DOT_FILES_REPO=$HOME/.sanguis_settings
+export _LOCAL_CONFIG_FILES_REPO=$HOME/.local_configs
+export ZSH=$_DOT_FILES_REPO/oh-my-zsh
+export ZSH_CUSTOM=$_DOT_FILES_REPO/zsh-custom
 
 export UPDATE_ZSH_DAYS=13
 
@@ -22,8 +33,6 @@ COMPLETION_WAITING_DOTS="true"
 # ZSH_TMUX_AUTOQUIT="true"
 # ZSH_TMUX_ITERM2="true"
 
-# Would you like to use another custom folder than $ZSH/custom?
-export ZSH_CUSTOM=$HOME/.sanguis_settings/zsh-custom
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
@@ -161,7 +170,7 @@ alias reload_zsh="source $HOME/.zshrc"
 alias reload_tmux="tmux source-file path $HOME/.tmux.conf"
 alias sshconfig_edit="f_edit $HOME/.local_configs/ssh_config"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
-alias tmuxconfig_edit="f_edit $HOME/.sanguis_settings/tmux.conf && tmux source-file ~/.tmux.conf"
+alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.tmux.conf"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias pre-commit-init='echo -e "\\033[32;1m[INFO]\\033[0m Creating pre-commit-config.yaml" &&
   pre-commit sample-config > .pre-commit-config.yaml &&
@@ -172,11 +181,38 @@ export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to P
 
 # edit and commit changed to zshrc (this file).
 zshrc_edit() {
-  REPO=$HOME/.sanguis_settings
-  ZSHRC=$REPO/zshrc
-  vim $ZSHRC
-  git -C $REPO commit $ZSHRC
-  [ -z $? ] && git push || echo "no commit. no push"
+  local  _MAIN_REPO=$_DOT_FILES_REPO
+  local  _MAIN_ZSHRC=${_MAIN_REPO}/zshrc
+  local  _USER_REPO=$_LOCAL_CONFIG_FILES_REPO
+  local  _USER_RC=${_USER_REPO}/.zshrc_user
+  _USAGE="Usage :  zshrc_edit  [options]]
+
+Options:
+-a|all        Open both .zshrc and .zshrc_user in split window
+-h|help       Display this message
+"
+IN
+  while getopts 'hr' opt
+  do
+    case $opt in
+      h|help     )  echo $_USAGE; return 0   ;;
+
+      a|all 		) local _ALL=true 		;;
+
+      * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo "$_USAGE"; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+
+  [[ ${_ALL} ]] && vim -o ${_MAIN_ZSHRC} ${_USER_RC} || vim ${_MAIN_ZSHRC}
+  vared -p "What CHhanges did you make?" -c MESSAGE
+  if [[ -z $MESSAGE ]]; then
+    git -C ${_MAIN_REPO} commit ${_MAIN_ZSHRC} -m "$MESSAGE"
+    git -C ${_MAIN_REPO} push || echo "no commit. no push"
+    [[ ${_ALL} ]] && git -C ${_USER_REPO} commit ${_USER_RC} -m "$MESSAGE"
+  fi
   source $ZSHRC
 }
 
@@ -294,7 +330,7 @@ source $ZSH_CUSTOM/snippets/*.zsh
 # mac osX
 if [[ $(uname) == "Darwin" ]]
 then
-  source $HOME/.sanguis_settings/zshrc_mac
+  source $_DOT_FILES_REPO/zshrc_mac
 fi
 # include local overrides
 
