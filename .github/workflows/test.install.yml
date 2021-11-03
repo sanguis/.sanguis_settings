@@ -12,10 +12,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  issues:
-    - name: TODO to Issue
-      uses: alstr/todo-to-issue-action@v4.3
 
   build:
     # The type of runner that the job will run on
@@ -25,6 +21,8 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+    - name: TODO to Issue
+      uses: alstr/todo-to-issue-action@v4.3
 
     # Runs a single command using the runners shell
     - name: install requiemnts
