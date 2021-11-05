@@ -6,7 +6,8 @@
 #  - when creating variables for a global path please do not use
 
 # when sourced with $PROFILE=true profieling is turned on
-[[ $PROFILE ]] && ech  -e "\033[32;1m[INFO]\033[0m Profileing On" && zmodload zsh/zprof
+[[ $PROFILE ]] && echo  -e "\033[32;1m[INFO]\033[0m Profileing On" && zmodload zsh/zprof
+
 # Global Variables
 
 
@@ -157,26 +158,28 @@ Options:
 
 # aliases
 ## spelling mistakes
-alias tf="terraform"
-alias got="git"
 alias dicker="docker"
+alias got="git"
+alias tf="terraform"
 
 ## App aliases
 alias gmain="git checkout main && git pull"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
 alias mk="minikube"
-alias profile_zsh="$PROFILE=true source $HOME/.zshrc"
-alias reload_zsh="source $HOME/.zshrc"
-alias reload_tmux="tmux source-file path $HOME/.tmux.conf"
-alias sshconfig_edit="f_edit $HOME/.local_configs/ssh_config"
-alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
-alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.tmux.conf"
-alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias pre-commit-init='echo -e "\\033[32;1m[INFO]\\033[0m Creating pre-commit-config.yaml" &&
   pre-commit sample-config > .pre-commit-config.yaml &&
   f_edit .pre-commit-config.yaml &&
   pre-commit install --install-hooks'
+alias profile_zsh="$PROFILE=true source $HOME/.zshrc"
+alias reload_tmux="tmux source-file path $HOME/.tmux.conf"
+alias reload_zsh="source $HOME/.zshrc"
+alias sshconfig_edit="f_edit $HOME/.local_configs/ssh_config"
+alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
+alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.tmux.conf"
+alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias zshrc_user_edit="f_edit -r $HOME/.local_configs/.zshrc_user"
+
+
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
 # edit and commit changed to zshrc (this file).
@@ -207,12 +210,12 @@ IN
   shift $(($OPTIND-1))
 
   [[ ${_ALL} ]] && vim -o ${_MAIN_ZSHRC} ${_USER_RC} || vim ${_MAIN_ZSHRC}
-  vared -p "What CHhanges did you make?" -c MESSAGE
-  if [[ -z $MESSAGE ]]; then
+  vared -p "What Changes did you make? (leave blank for none)" -c MESSAGE
+  [[ -z $MESSAGE ]] && return 1
+  [[ ${DEBUG} ]] && echo -e "\033[34;1m[DEBUG]\033[0m Committing: $MESSAGE"
     git -C ${_MAIN_REPO} commit ${_MAIN_ZSHRC} -m "$MESSAGE"
     git -C ${_MAIN_REPO} push || echo "no commit. no push"
     [[ ${_ALL} ]] && git -C ${_USER_REPO} commit ${_USER_RC} -m "$MESSAGE"
-  fi
   source $ZSHRC
 }
 
@@ -248,7 +251,7 @@ newgit () {
 ## docker functions
 function docker-kill-all() {
   docker stop $(docker ps -a -q)
-  docker rm $(docker ps -a -q)
+c docker rm $(docker ps -a -q)
 }
 
 # Terraform stuff
