@@ -15,7 +15,7 @@ aws_profile() {
 _aws_profile() {
   compadd "$(aws configure list-profiles)"
 }
-compdef _aws-profile aws_profile
+compdef _aws_profile aws_profile
 
 ecr_login() {
   _USAGE="Usage : ecr_login  [-hr:] [--] {2:inputs}
