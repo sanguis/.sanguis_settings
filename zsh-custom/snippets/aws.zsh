@@ -13,7 +13,10 @@ aws_profile() {
   #aws-id
 }
 _aws_profile() {
-  compadd "$(aws configure list-profiles)"
+# TODO: Figure out partial completion
+  local profiles=($(aws configure list-profiles))
+  [[ ${DEBUG} ]] && echo -e "\033[34;1m[DEBUG]\033[0m ${profiles}"
+  compadd ${profiles}
 }
 compdef _aws_profile aws_profile
 
