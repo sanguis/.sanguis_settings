@@ -12,6 +12,10 @@ aws_profile() {
   export AWS_PROFILE=$1
   #aws-id
 }
+_aws_profile() {
+  compadd "$(aws configure list-profiles)"
+}
+compdef _aws-profile aws_profile
 
 ecr_login() {
   _USAGE="Usage : ecr_login  [-hr:] [--] {2:inputs}
