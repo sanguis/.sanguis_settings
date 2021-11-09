@@ -164,6 +164,7 @@ alias tf="terraform"
 
 ## App aliases
 alias gmain="git checkout main && git pull"
+alias grep="grep --exclude-dir='.git;.svn'"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
 alias mk="minikube"
 alias pre-commit-init='echo -e "\\033[32;1m[INFO]\\033[0m Creating pre-commit-config.yaml" &&
