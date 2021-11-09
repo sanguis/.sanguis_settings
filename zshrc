@@ -217,7 +217,7 @@ IN
     git -C ${_MAIN_REPO} commit ${_MAIN_ZSHRC} -m "$MESSAGE"
     git -C ${_MAIN_REPO} push || echo "no commit. no push"
     [[ ${_ALL} ]] && git -C ${_USER_REPO} commit ${_USER_RC} -m "$MESSAGE"
-  source $ZSHRC
+  source ~/.zshrc
 }
 
 # Vim functions
