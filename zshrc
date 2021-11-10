@@ -175,6 +175,7 @@ alias profile_zsh="$PROFILE=true source $HOME/.zshrc"
 alias reload_tmux="tmux source-file path $HOME/.tmux.conf"
 alias reload_zsh="source $HOME/.zshrc"
 alias sshconfig_edit="f_edit $HOME/.local_configs/ssh_config"
+alias stern="stern -s5m" #stern defaults to 5 minutes
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.tmux.conf"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
