@@ -1,4 +1,4 @@
-# vim: set ft=zsh.sh
+c vim: set ft=zsh.sh
 # Path to your oh-my-zsh installation.
 # export DOTFILEDIR=$(realpath)
 
@@ -140,7 +140,7 @@ Options:
       * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
         echo "$_USAGE"; return 1   ;;
 
-    esac    # --- end of case ---
+    esac    # --- enc of case ---
   done
   shift $(($OPTIND-1))
  [[ -z $1 ]] && echo $_USAGE && return 1
@@ -218,7 +218,7 @@ IN
     git -C ${_MAIN_REPO} commit ${_MAIN_ZSHRC} -m "$MESSAGE"
     git -C ${_MAIN_REPO} push || echo "no commit. no push"
     [[ ${_ALL} ]] && git -C ${_USER_REPO} commit ${_USER_RC} -m "$MESSAGE"
-  source ~/.zshrc
+  source $HOME/.zshrc
 }
 
 # Vim functions
