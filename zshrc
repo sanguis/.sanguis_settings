@@ -1,4 +1,4 @@
-c vim: set ft=zsh.sh
+# vim: set ft=zsh.sh
 # Path to your oh-my-zsh installation.
 # export DOTFILEDIR=$(realpath)
 
@@ -71,7 +71,6 @@ plugins=(
   golang
   helm
   history
-  iterm2
   kubectl
   man
   minikube
@@ -166,6 +165,7 @@ alias tf="terraform"
 alias gmain="git checkout main && git pull"
 alias grep="grep --exclude-dir='.git;.svn'"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
+alias less="cless"
 alias mk="minikube"
 alias pre-commit-init='echo -e "\\033[32;1m[INFO]\\033[0m Creating pre-commit-config.yaml" &&
   pre-commit sample-config > .pre-commit-config.yaml &&
@@ -180,6 +180,7 @@ alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.tmux.conf"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias zshrc_user_edit="f_edit -r $HOME/.local_configs/.zshrc_user"
+
 
 
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
