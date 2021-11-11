@@ -125,6 +125,7 @@ Options:
 -r|reload     Relaod zshrc after editing
 -g|open       Open Vim in GUI mode (detached from shell)
 -h|help       Display this message
+-a|commit-all add the --all flag to the git commit after file edit
 "
 
   while getopts 'hr' opt
@@ -135,6 +136,7 @@ Options:
       r|reload   ) _RELAOD=true ;;
       s|split 		 ) _SPLIT=true 		;;
       v|vertical-split 		 ) _VSPLIT=true 		;;
+      a|commit-all  ) local _COMMIT_ALL=true  ;;
 
       * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
         echo "$_USAGE"; return 1   ;;
@@ -145,12 +147,14 @@ Options:
  [[ -z $1 ]] && echo $_USAGE && return 1
 
   FULL_PATH=$(realpath $1)
-  FILE=$(basename $FULL_PATH)
   DIRECTORY=$(dirname $FULL_PATH)
 
   vim $FULL_PATH
+
   git -C $DIRECTORY add $FILE
-  git -C $DIRECTORY commit $FILE
+
+  [[ ${_COMMIT_ALL }]] && git -C $DIRECTORY --all || git -C $DIRECTORY commit $FILE
+
   [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $HOME/.zshrc
 #  return 0
 }
@@ -162,6 +166,7 @@ alias got="git"
 alias tf="terraform"
 
 ## App aliases
+# TODO: Create `aliases` function that allows for an array of alias names to a single command.
 alias gmain="git checkout main && git pull"
 alias grep="grep --exclude-dir='.git;.svn'"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
@@ -175,6 +180,7 @@ alias profile_zsh="$PROFILE=true source $HOME/.zshrc"
 alias reload_tmux="tmux source-file path $HOME/.tmux.conf"
 alias reload_zsh="source $HOME/.zshrc"
 alias sshconfig_edit="f_edit $HOME/.local_configs/ssh_config"
+alias sshc_onfig_edit="sshconfig_edit"
 alias stern="stern -s5m" #stern defaults to 5 minutes
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.tmux.conf"
@@ -197,7 +203,6 @@ Options:
 -a|all        Open both .zshrc and .zshrc_user in split window
 -h|help       Display this message
 "
-IN
   while getopts 'hr' opt
   do
     case $opt in
