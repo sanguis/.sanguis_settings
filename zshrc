@@ -25,15 +25,11 @@ autoload bashcompinit && bashcompinit
 # Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
 # Tumx settings see ./oh-my-zsh/plugins/tmux/README.md
 # ZSH_TMUX_AUTOSTART_ONCE="true"
 # ZSH_TMUX_AUTOCONNECT="true"
 # ZSH_TMUX_AUTOQUIT="true"
 # ZSH_TMUX_ITERM2="true"
-
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
@@ -79,6 +75,7 @@ plugins=(
   rsync
   terraform
   vi-mode
+  zsh-syntax-highlighting
 )
 ZSH_DISABLE_COMPFIX=true
 source $ZSH/oh-my-zsh.sh
@@ -153,7 +150,7 @@ Options:
 
   git -C $DIRECTORY add $FILE
 
-  [[ ${_COMMIT_ALL }]] && git -C $DIRECTORY --all || git -C $DIRECTORY commit $FILE
+  [[ ${_COMMIT_ALL } ]] && git -C $DIRECTORY --all || git -C $DIRECTORY commit $FILE
 
   [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $HOME/.zshrc
 #  return 0
@@ -187,8 +184,7 @@ alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias zshrc_user_edit="f_edit -r $HOME/.local_configs/.zshrc_user"
 
-
-
+# Add ruby gems to path
 export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
 # edit and commit changed to zshrc (this file).
@@ -311,7 +307,6 @@ Host $1
 #export GEM_PATH=$HOME/.gem
 #
 # per os settings.
-
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
