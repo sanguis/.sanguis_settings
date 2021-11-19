@@ -86,8 +86,11 @@ export EDITOR=/usr/local/bin/vim
 export VISUAL=/usr/local/bin/vim
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
+#Path stuff
 export PATH=$PATH:~/.composer/vendor/bin:$HOME/Library/Python/2.7/bin
 export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:$(go env GOPATH)/bin
+export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
 
 if ([[ "$TERM_PROGRAM" = 'iTerm.app' ]]); then
@@ -184,8 +187,6 @@ alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias zshrc_user_edit="f_edit -r $HOME/.local_configs/.zshrc_user"
 
-# Add ruby gems to path
-export PATH="$HOME/.rvm/bin:$HOME/.rvm/rubies/default/bin:$PATH:" # Add RVM to PATH for scripting
 
 # edit and commit changed to zshrc (this file).
 zshrc_edit() {
