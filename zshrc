@@ -168,7 +168,7 @@ alias tf="terraform"
 ## App aliases
 # TODO: Create `aliases` function that allows for an array of alias names to a single command.
 alias gmain="git checkout main && git pull"
-alias grep="grep --exclude-dir='.git;.svn'"
+alias grep="grep --exclude-dir='.git;.svn;.terraform'"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
 alias less="cless"
 alias mk="minikube"
