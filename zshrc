@@ -119,7 +119,7 @@ export HISTCONTROL=ignoreboth:erasedups
 # generic file edit pattern
 f_edit() {
 
-  _USAGE="Usage :  f_edit  [options] [--] {files to edit}
+  local _USAGE="Usage :  f_edit  [options] [--] {files to edit}
 
 Options:
 -r|reload     Relaod zshrc after editing
@@ -133,8 +133,8 @@ Options:
     case $opt in
       h|help     )  echo $_USAGE; return 0   ;;
 
-      r|reload   ) _RELAOD=true ;;
-      s|split 		 ) _SPLIT=true 		;;
+      r|reload   ) local _RELAOD=true ;;
+      s|split 		 ) local _SPLIT=true 		;;
       v|vertical-split 		 ) _VSPLIT=true 		;;
       a|commit-all  ) local _COMMIT_ALL=true  ;;
 
@@ -146,14 +146,14 @@ Options:
   shift $(($OPTIND-1))
  [[ -z $1 ]] && echo $_USAGE && return 1
 
-  FULL_PATH=$(realpath $1)
-  DIRECTORY=$(dirname $FULL_PATH)
+  local FULL_PATH=$(realpath $1)
+  local DIRECTORY=$(dirname $FULL_PATH)
 
   vim $FULL_PATH
 
   git -C $DIRECTORY add $FILE
 
-  [[ ${_COMMIT_ALL } ]] && git -C $DIRECTORY --all || git -C $DIRECTORY commit $FILE
+  [[ $_COMMIT_ALL ]] && git -C $DIRECTORY --all || git -C $DIRECTORY commit $FILE
 
   [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $HOME/.zshrc
 #  return 0
