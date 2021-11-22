@@ -20,6 +20,19 @@ _aws_profile() {
 }
 compdef _aws_profile aws_profile
 
+
+aws_mfa_session_token() {
+  [[ -z $AWS_DEVICE_ARN ]] && echo -e "\033[31;1m[ERROR]\033[0m \$AWS_DEVICE_ARN note set please set this as a global before using" && return 1
+  [[ -z $1 ]] && echo -e "\033[31;1m[ERROR]\033[0m mfa input code required" && return 1
+  local device_arn=$AWS_DEVICE_ARN
+  local mfa_code=$1
+  local json_command="aws sts get-session-token --serial-number $device_arn --token-code $mfa_code"
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Getting json with:\n $json_command"
+  local json=$(eval $json_command)
+  export AWS_SESSION_TOKEN=$(echo $json |jq --raw-output ".Credentials.SessionToken" )
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m AWS_SESSION_TOKEN set to: \n $AWS_SESSION_TOKEN"
+}
+
 ecr_login() {
   _USAGE="Usage : ecr_login  [-hr:] [--] {2:inputs}
       logs into aws ecr based on the account id and default region.

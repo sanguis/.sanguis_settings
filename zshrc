@@ -140,13 +140,13 @@ Options:
 
       * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
         echo "$_USAGE"; return 1   ;;
-
     esac    # --- enc of case ---
   done
   shift $(($OPTIND-1))
  [[ -z $1 ]] && echo $_USAGE && return 1
 
   local FULL_PATH=$(realpath $1)
+  local FILE=$(basename $FULL_PATH)
   local DIRECTORY=$(dirname $FULL_PATH)
 
   vim $FULL_PATH
@@ -187,7 +187,38 @@ alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
 alias zshrc_user_edit="f_edit -r $HOME/.local_configs/.zshrc_user"
 
+#local_config stuff
+#.local_config is a locally created .git repo that allows for one to keep grach onf changes on sensitive files like ssh config or AWS credentails.
+move_to_local_config() {
+local _USAGE="Usage : move_to_local_config  [- flags] [--] move_to_local_config FILENAME SYMLINK_FILE (optional)
+  Moves a file to local configs, addts it to version control and creates a symlink.
+      Options:
+      -h|help       Display this message
+  "
+  while getopts ": flags" opt
+  do
+    case $opt in
 
+    h|help     )  echo $_USAGE; return 0   ;;
+
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+
+        echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+  [[ -z $1 ]] && echo -e "\033[31;1m[ERROR]\033[0m Requires fine name and path to run"
+  local ORIGINAL_PATH=$(realpath $1)
+  [[ -z $2 ]] && local LN_LINK=$2 || local LN_LINK=$(basename $ORIGINAL_PATH)
+  local LN_TARGET=$_LOCAL_CONFIG_FILES_REPO/$LN_LINK
+  local COMMIT_MESSAGE="Initial add  of $ORIGINAL_PATH to $_LOCAL_CONFIG_FILES_REPOi as $LN_LINK"
+  echo -e "\033[32;1m[INFO]\033[0m Moving $ORIGINAL_PATH to $LN_TARGET and creating a symlink back to it"
+  mv $ORIGINAL_PATH $LN_TARGET
+  ln -s $LN_TARGET $ORIGINAL_PATH
+  git -C _LOCAL_CONFIG_FILES_REPO add $LN_LINK
+  git -C _LOCAL_CONFIG_FILES_REPO commit $LN_LINK -m "$COMMIT_MESSAGE"
+}
 # edit and commit changed to zshrc (this file).
 zshrc_edit() {
   local  _MAIN_REPO=$_DOT_FILES_REPO
