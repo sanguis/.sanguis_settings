@@ -362,8 +362,10 @@ function jen-lib-var() {
   vi -O $1.txt $1.groovy
 
 }
-# Other functions
-source $ZSH_CUSTOM/snippets/*.zsh
+# Per language or application settings that are not quite right for oh_my_zsh
+for file in $ZSH_CUSTOM/snippets/*.zsh; do
+  source "$file"
+done
 ### Local overrides this should always be at the bottom of the rcfile
 # mac osX
 if [[ $(uname) == "Darwin" ]]
