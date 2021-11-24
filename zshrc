@@ -73,7 +73,6 @@ plugins=(
   os
   pip
   rsync
-  terraform
   vi-mode
   zsh-syntax-highlighting
 )
@@ -116,7 +115,11 @@ fi
 
 # history -  ignore searched for duplicates
 export HISTCONTROL=ignoreboth:erasedups
-# generic file edit pattern
+
+# @description vi and git wrapper for opening editing and then committing changes to files
+# @example f_edit .zshrc
+# @exitcode 0 if successful
+# @exitcode 1 if missing input files
 f_edit() {
 
   local _USAGE="Usage :  f_edit  [options] [--] {files to edit}
@@ -167,6 +170,7 @@ alias tf="terraform"
 
 ## App aliases
 # TODO: Create `aliases` function that allows for an array of alias names to a single command.
+alias fedit="f_edit"
 alias gmain="git checkout main && git pull"
 alias grep="grep --exclude-dir='.git;.svn;.terraform'"
 alias java8="export PATH='/usr/local/opt/openjdk@8/bin:$PATH' && CPPFLAGS='-I/usr/local/opt/openjdk@8/include'"
