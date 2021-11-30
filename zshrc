@@ -259,6 +259,20 @@ Options:
   source $HOME/.zshrc
 }
 
+# misc tools.
+# @description shortcut for envs grepping
+#
+#  @example
+#     envgrep $PATTERN
+#
+#  @arg $1 Pattern to search
+#
+#  @exitcode 0 If successful.
+#  @exitcode 1 If an empty string passed.)
+grepenv() {
+  [[ -z $1 ]] && echo -e "\033[31;1m[ERROR]\033[0m Np pattern input" && return 1
+  env | grep $1
+}
 # Vim functions
 source $HOME/.vim/vim-shell-utils.zsh
 
