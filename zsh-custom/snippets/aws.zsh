@@ -1,13 +1,16 @@
 #!/bin/zsh
+
+## Aliases
 alias aws_envs="env |grep AWS"
 complete -C '/usr/local/bin/aws_completer' aws
 alias aws-id="aws sts get-caller-identity"
 alias aws_region_eu1="export AWS_DEFAULT_REGION=eu-west-1"
 alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
+alias aws-account-number="aws sts get-caller-identity --query Account --output text"
 
 aws_profile() {
-  #echo "switching aws profile to $1"
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m switching aws profile to $1"
   export AWS_DEFAULT_PROFILE=$1
   export AWS_PROFILE=$1
   #aws-id
