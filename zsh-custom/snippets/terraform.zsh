@@ -3,7 +3,7 @@
 
 # # Aliases
 
-alais tf-state='terraform state pull | less'
+alias tf-state='terraform state pull | less'
 
 # @description call the current state of https://github.com/Diehlabs/terraform-module-scaffolding and addit it as a squashed subtree
 tf_new_module() {
