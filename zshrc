@@ -166,7 +166,6 @@ Options:
 ## spelling mistakes
 alias dicker="docker"
 alias got="git"
-alias tf="terraform"
 
 ## App aliases
 # TODO: Create `aliases` function that allows for an array of alias names to a single command.
@@ -186,6 +185,8 @@ alias reload_zsh="source $HOME/.zshrc"
 alias sshconfig_edit="f_edit $HOME/.local_configs/ssh_config"
 alias sshc_onfig_edit="sshconfig_edit"
 alias stern="stern -s5m" #stern defaults to 5 minutes
+alias tf="terraform"
+alias tg="terragrunt"
 alias tmuxa="tmux $_tmux_iterm_integration new-session -A"
 alias tmuxconfig_edit="f_edit $_DOT_FILES_REPO/tmux.conf && tmux source-file ~/.tmux.conf"
 alias vi="vim -Og --servername VIM4" #open vi in gvim, always vertically split the files
