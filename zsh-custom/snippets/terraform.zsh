@@ -12,10 +12,18 @@ tf_new_module() {
  git subtree add --prefix $1 https://github.com/Diehlabs/terraform-module-scaffolding.git main --squash
 }
 
+# @description Generate pricing information for a terraform deployment
 tf_cost() {
-local planfile=/tmp/tf-cost-${date +"%s"}
+  local PLAN_FILE=/tmp/tf-cost-${date +"%s"}
 	terraform plan -out $(PLAN_FILE).binary
 	terraform show -json $(PLAN_FILE).binary > $(PLAN_FILE).json
 	infracost breakdown --path $(PLAN_FILE).json
 	infracost diff --path $(PLAN_FILE).json
+}
+
+# @description Generate a plan file and open it in vi
+tf_plan_json() {
+  local PLAN_FILE=/tmp/tf-plan${date +"%s"}a.json
+  terraform state pull > $PLAN_FILE
+  vi $PLAN_FILE
 }
