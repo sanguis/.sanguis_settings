@@ -14,7 +14,7 @@ tf_new_module() {
 
 # @description Generate pricing information for a terraform deployment
 tf_cost() {
-  local PLAN_FILE=/tmp/tf-cost-${date +"%s"}
+local PLAN_FILE=/tmp/tf-cost-$(date +"%s")
 	terraform plan -out $(PLAN_FILE).binary
 	terraform show -json $(PLAN_FILE).binary > $(PLAN_FILE).json
 	infracost breakdown --path $(PLAN_FILE).json
@@ -23,7 +23,7 @@ tf_cost() {
 
 # @description Generate a plan file and open it in vi
 tf_plan_json() {
-  local PLAN_FILE=/tmp/tf-plan${date +"%s"}a.json
+  local PLAN_FILE=/tmp/tf-plan-$($PWD:t)-$(date +"%s").json
   terraform state pull > $PLAN_FILE
   vi $PLAN_FILE
 }
