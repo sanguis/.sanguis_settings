@@ -7,5 +7,5 @@ function terraform-compliance {
 }
 
 shdoc() {
-  docker run --rm -v $(pwd):$(pwd) -it sanguis/shdoc "$@";
+  docker run --rm -v $(pwd):$(pwd) -w $(pwd) -it sanguis/shdoc "$@";
 }
