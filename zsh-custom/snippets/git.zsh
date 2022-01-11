@@ -16,10 +16,12 @@ git fetch --all && git checkout $1
 #  @exitcode 0 If successful.
 #  @exitcode 1 If an empty string passed.)
 gup () {
-i
+  local USAGE='USAGE:
+  gup DIR DEPTHj (Optional)'
+  [[ -z $1 ]] && echo -e "\033[31;1m[ERROR]\033[0m Directory input required" && echo $USAGE && return 1
+  [[ -z $2 ]] && local DEPTH=3 || local DEPTH=$2
 
-  [[ -z $1 ]] &&
-  for i in $(find ~/Desktop/Repos -name .git -type d -maxdepth 3 | cut -f1 -d.)
+  for i in $(find $1 -name .git -type d -maxdepth $DEPTH | cut -f1 -d.)
   do cd $i
     echo $i
     git branch
