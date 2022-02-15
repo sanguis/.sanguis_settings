@@ -95,3 +95,56 @@ vpc_nuke(){
   aws ec2 describe-vpn-gateways --filters 'Name=attachment.vpc-id,Values='$vpc | grep VpnGatewayId
   aws ec2 describe-network-interfaces --filters 'Name=vpc-id,Values='$vpc | grep NetworkInterfaceId
 }
+
+certbot_to_aws () {
+
+_USAGE="Usage : certbot_to_aws  [-h:e:d:] [--] primary_domain
+Creates cert and addts it to aws cert manager
+Options:
+-h|help       Display this message
+-e|email      Emaill address for cert
+-d|domain     Additional domains Can be multiple, put in quotes for wildcards
+
+example:
+
+certbot_to_aws -d \"*.foo.bar\" foo.com
+"
+
+_EMAIL="devops@maark.com"
+_DOMAINS=""
+while getopts ":he:d:" opt
+do
+  case $opt in
+
+    h|help     )  echo $_USAGE; return 0   ;;
+    e|email   ) _EMAIL="${OPTARG}"       ;;
+    d|domain 		) _DOMAINS="$_DOMAINS -d ${OPTARG}" 		;;
+
+
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+      echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+
+  [[ -z $1 ]]  && echo -e "\033[31;1m[ERROR]\033[0m At least one domain reqired. \n $_USAGE" && return 1
+
+  local PRIMARY=$1
+  local CERT_PATH="/tmp/live/$PRIMARY"
+  _DOMAINS="-d $PRIMARY $_DOMAINS"
+  # TODO: Check for existing cert and prompt for reimport
+
+  echo -e "\033[32;1m[INFO]\033[0m Generating ceret for $1"
+  certbot certonly -n --config-dir /tmp/ --work-dir /tmp/ --logs-dir /tmp \
+    -m $_EMAIL \
+    --agree-tos \
+    --dns-route53 --server https://acme-v02.api.letsencrypt.org/directory \
+    $_DOMAINS
+
+
+  echo -e "\033[32;1m[INFO]\033[0m Adding Generated cert to AWS"
+  aws acm import-certificate --certificate fileb://$CERT_PATH/cert.pem \
+    --certificate-chain fileb://$CERT_PATH/fullchain.pem \
+    --private-key fileb://$CERT_PATH/privkey.pem
+}
