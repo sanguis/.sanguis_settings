@@ -1,31 +1,35 @@
-# vim: set ft=zsh.sh
+# vim: set ft=zsh.shell
 # Path to your oh-my-zsh installation.
 # export DOTFILEDIR=$(realpath)
 
 # EDITING THIS FILE
 #  - when creating variables for a global path please do not use
 
-# when sourced with $PROFILE=true profieling is turned on
+# when sourced with $PROFILE=true profiling is turned on
+
 [[ $PROFILE ]] && echo  -e "\033[32;1m[INFO]\033[0m Profileing On" && zmodload zsh/zprof
 
 # Global Variables
 
 
-# TODO figure out  why this does not work in an rcfile export _DOT_FILES_REPO==${0:A:h}
+## TODO figure out  why this does not work in an rcfile export _DOT_FILES_REPO==${0:A:h}
 export _DOT_FILES_REPO=$HOME/.sanguis_settings
 export _LOCAL_CONFIG_FILES_REPO=$HOME/.local_configs
 export ZSH=$_DOT_FILES_REPO/oh-my-zsh
 export ZSH_CUSTOM=$_DOT_FILES_REPO/zsh-custom
 
+## Don't ask just update.
+export DISABLE_UPDATE_PROMPT=true
 export UPDATE_ZSH_DAYS=13
 
 # enable auto-completeing
 autoload bashcompinit && bashcompinit
 
-# Uncomment the following line to enable command auto-correction.
+## Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
 
-# Tumx settings see ./oh-my-zsh/plugins/tmux/README.md
+# Tmux settings
+[[ -z $TMUX_SESSION_NAME ]] && TMUX_SESSION_NAME="JOsh World"
 # ZSH_TMUX_AUTOSTART_ONCE="true"
 # ZSH_TMUX_AUTOCONNECT="true"
 # ZSH_TMUX_AUTOQUIT="true"
@@ -60,7 +64,6 @@ plugins=(
   docker
   docker-compose
   dotenv
-  fancy-ctrl-z
   git
   git-auto-fetch
   git-extras
@@ -103,10 +106,9 @@ then
 
   # Create a  session if no session has been defined in tmux.conf.
   if ! tmux has-session 2> /dev/null; then
-    tmux_session="JOsh-World"
     tmux \
-      new-session -d -s "$tmux_session" \; \
-      set-option -t "$tmux_session" destroy-unattached off &> /dev/null
+      new-session -d -s "$TMUX_SESSION_NAME" \; \
+      set-option -t "$TMUX_SESSION_NAME" destroy-unattached off &> /dev/null
   fi
 
   # Attach to the Last section used
@@ -403,3 +405,7 @@ then
   export PATH="/usr/local/opt/openjdk@11/bin:$PATH"
   export GROOVY_HOME=/usr/local/opt/groovy/libexec
 fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
