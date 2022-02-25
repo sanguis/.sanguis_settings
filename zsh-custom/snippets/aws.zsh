@@ -148,3 +148,34 @@ do
     --certificate-chain fileb://$CERT_PATH/fullchain.pem \
     --private-key fileb://$CERT_PATH/privkey.pem
 }
+
+aws_instance_id_by_project_env(){
+
+local _USAGE="Usage: aws_instance_id_by_project_env [-hc] <NAME> <ENVIRONMENT>
+Options:
+-c|connect   Connect with SSM"
+
+while getopts ":hc" opt
+do
+  case $opt in
+
+    h|help     )  echo $_USAGE; return 0   ;;
+    c|connect  )  local connect=TRUE       ;;
+
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+      echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+  local project=$1
+  local env=$2
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Project is $project
+  Environment is $env"
+  shift $(($OPTIND[-2]))
+  local id_command="aws ec2 describe-instances --filters=Name=tag:Project,Values=$project --filters=Name=tag:Environment,Values=$env --query 'Reservations[].Instances[].InstanceId' --output=text"
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Getting id command: \n $id_command"
+  local id=$(eval $id_command)
+  [[ -z $connect ]] && echo $id && return 0
+  aws ssm start-session --target $id
+}
