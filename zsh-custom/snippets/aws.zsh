@@ -179,3 +179,39 @@ do
   [[ -z $connect ]] && echo $id && return 0
   aws ssm start-session --target $id
 }
+
+assume_role() {
+  _USAGE="Usage : assume_role  [-h] [--] <role arn>
+      Assumes a role setting session data as envs
+      Options:
+      -h|help            Display this messagae
+      -s|session-name    (optional) Session Name. Defaults to, '$USER'
+
+  "
+
+  while getopts ":hs:" opt
+  do
+    case $opt in
+
+    h|help     )  echo $_USAGE; return 0   ;;
+    s|session-name  ) local SESSION_NAME=${OPTARG} ;;
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+  [[ -z $1 ]] && echo -e "\033[31;1m[ERROR]\033[0m Please add a role arn to assume" && return 1
+  [[ -z $SESSION_NAME ]] && local SESSION_NAME=$USER
+
+  local GET_SESSION="aws sts assume-role \
+    --role-arn $1 \
+    --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
+    --output text   --role-session-name $SESSION_NAME"\
+
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Get Session Command:\n $GET_SESSION"
+
+  export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" \
+    $(eval $GET_SESSION))
+
+}
