@@ -32,6 +32,8 @@ aws_mfa_session_token() {
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Getting json with:\n $json_command"
   local json=$(eval $json_command)
   export AWS_SESSION_TOKEN=$(echo $json |jq --raw-output ".Credentials.SessionToken" )
+  export AWS_ACCESS_KEY_ID=$(echo $json |jq --raw-output ".Credentials.AccessKeyId" )
+  export AWS_SECRET_ACCESS_KEY=$(echo $json |jq --raw-output ".Credentials.SecretAccessKey" )
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m AWS_SESSION_TOKEN set to: \n $AWS_SESSION_TOKEN"
 }
 
@@ -147,6 +149,33 @@ do
   aws acm import-certificate --certificate fileb://$CERT_PATH/cert.pem \
     --certificate-chain fileb://$CERT_PATH/fullchain.pem \
     --private-key fileb://$CERT_PATH/privkey.pem
+}
+aws_instance_id_by_name () {
+local _USAGE="Usage: aws_instance_id_by_project_env [-hc] <NAME> <ENVIRONMENT>
+Options:
+-c|connect   Connect with SSM"
+
+while getopts ":hc" opt
+do
+  case $opt in
+
+    h|help     )  echo $_USAGE; return 0   ;;
+    c|connect  )  local connect=TRUE       ;;
+
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+      echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+  local name=$1
+  local env=$2
+  shift $(($OPTIND[-2]))
+  local id_command="aws ec2 describe-instances --filters=Name=tag:Name,Values=$name --query 'Reservations[].Instances[].InstanceId' --output=text"
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Getting id command: \n $id_command"
+  local id=$(eval $id_command)
+  [[ -z $connect ]] && echo $id && return 0
+  aws ssm start-session --target $id
 }
 
 aws_instance_id_by_project_env(){
