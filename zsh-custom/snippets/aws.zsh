@@ -5,6 +5,7 @@ alias aws_envs="env |grep AWS"
 complete -C '/usr/local/bin/aws_completer' aws
 alias aws-id="aws sts get-caller-identity"
 alias aws_region_eu1="export AWS_DEFAULT_REGION=eu-west-1"
+alias aws_region_eu_w2="export AWS_DEFAULT_REGION=eu-west-2"
 alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
 alias aws-account-number="aws sts get-caller-identity --query Account --output text"
@@ -24,7 +25,33 @@ _aws_profile() {
 compdef _aws_profile aws_profile
 
 aws_mfa_session_token() {
-  [[ -z $AWS_DEVICE_ARN ]] && echo -e "\033[31;1m[ERROR]\033[0m \$AWS_DEVICE_ARN note set please set this as a global before using" && return 1
+  _USAGE="Usage : aws_mfa_session_token [-hmd:] [--] MFACODE
+      Adds ENVs for MFA validation.
+      Options:
+      -h|help       Display this message
+      -d|debug      Debug output
+      -m|mfa        mfa device arn
+  "
+
+  while getopts ":hd:m" opt
+  do
+    case $opt in
+
+    h|help      ) echo $_USAGE; return 0   ;;
+    d|debug 		) DEBUG=true 		;;
+    m|mfa       ) AWS_SESSION_TOKEN="${OPTARG}" ;;
+
+
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+
+  [[ -z $AWS_DEVICE_ARN ]]  && AWS_DEVICE_ARN=$(aws iam list-mfa-devices --query "MFADevices[].SerialNumber" --output text)
+  [[ -z $AWS_DEVICE_ARN ]]  && echo -e "\033[31;1m[ERROR]\033[0m \$AWS_DEVICE_ARN unable to retrieve MFA device.
+  PLease set $AWS_DEVICE_ARN or use -m flag to set" && return 1
   [[ -z $1 ]] && echo -e "\033[31;1m[ERROR]\033[0m mfa input code required" && return 1
   local device_arn=$AWS_DEVICE_ARN
   local mfa_code=$1
@@ -32,8 +59,8 @@ aws_mfa_session_token() {
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Getting json with:\n $json_command"
   local json=$(eval $json_command)
   export AWS_SESSION_TOKEN=$(echo $json |jq --raw-output ".Credentials.SessionToken" )
-  export AWS_ACCESS_KEY_ID=$(echo $json |jq --raw-output ".Credentials.AccessKeyId" )
-  export AWS_SECRET_ACCESS_KEY=$(echo $json |jq --raw-output ".Credentials.SecretAccessKey" )
+ ## export AWS_ACCESS_KEY_ID=$(echo $json |jq --raw-output ".Credentials.AccessKeyId" )
+ ##  export AWS_SECRET_ACCESS_KEY=$(echo $json |jq --raw-output ".Credentials.SecretAccessKey" )
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m AWS_SESSION_TOKEN set to: \n $AWS_SESSION_TOKEN"
 }
 
@@ -177,6 +204,15 @@ do
   [[ -z $connect ]] && echo $id && return 0
   aws ssm start-session --target $id
 }
+_aws_instance_by_name() {
+# TODO: Figure out partial completion
+local profiles=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].{Name:Tags[?Key=='Name']|[0].Value}" --output text)
+  [[ ${DEBUG} ]] && echo -e "\033[34;1m[DEBUG]\033[0m ${profiles}"
+  compadd ${profiles}
+}
+compdef _aws_instance_by_name aws_instance_id_by_name
+
+
 
 aws_instance_id_by_project_env(){
 
