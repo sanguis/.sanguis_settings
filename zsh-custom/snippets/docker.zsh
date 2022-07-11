@@ -1,3 +1,4 @@
+alias docker_kill_all="docker kill $(docker container ls -q)"
 docker_run() {
   DIR=$(pwd)
   DOCKER=""
@@ -7,7 +8,7 @@ docker_run() {
   Runs dokcker condocker_runh volume mounts for the current dir and optiopnally mounts ssh or docker connections
   Options:dock
   -h|help       Display this message
-  -d|docker     Mounts docker unix socker from parrent machine
+  -d|docker     Mounts docker unix socker from parent machine
   -s/ssh        Mounts $HOME/.ssh to /root/.ssh
   "
 
