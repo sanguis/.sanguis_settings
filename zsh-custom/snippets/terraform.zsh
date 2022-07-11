@@ -27,3 +27,18 @@ tf_plan_json() {
   terraform state pull > $PLAN_FILE
   vi $PLAN_FILE
 }
+#
+# @description  set terraform log debugging
+#
+#  @example
+#     tf-log-debug
+#
+#  @exitcode 0 If successful.
+#  @exitcode 1 If an empty string passed.)
+tf-log-debug() {
+[[ -z $1 ]] && LEVEL=TRACE
+export TF_LOG=$LEVEL
+export TF_LOG_PATH=/tmp/tf_debug.log
+echo -e  "\033[32;1m[INFO]\033[0m Terraform log level set to debug.  Log output at $TF_LOG_PATH"
+}
+alias tf-log-tail="tail -f $TF_LOG_PATH"

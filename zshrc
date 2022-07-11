@@ -179,7 +179,10 @@ alias less="cless"
 alias mk="minikube"
 alias pre-commit-init='echo -e "\\033[32;1m[INFO]\\033[0m Creating pre-commit-config.yaml" &&
   pre-commit sample-config > .pre-commit-config.yaml &&
-  f_edit .pre-commit-config.yaml &&
+  vim .pre-commit-config.yaml &&
+  pre-commit autoupdate &&
+  git add .pre-commit-config.yaml &&
+  git commit -m "Adding git Precommit" &&
   pre-commit install --install-hooks'
 alias profile_zsh="$PROFILE=true source $HOME/.zshrc"
 alias reload_tmux="tmux source-file path $HOME/.tmux.conf"
@@ -308,17 +311,9 @@ newgit () {
 ## docker functions
 function docker-kill-all() {
   docker stop $(docker ps -a -q)
-c docker rm $(docker ps -a -q)
+  docker rm $(docker ps -a -q)
 }
 
-# Terraform stuff
-tf-log-debug() {
-[[ -z $1 ]] && LEVEL=TRACE
-export TF_LOG=$LEVEL
-export TF_LOG_PATH=/tmp/tf_debug.log
-echo -e  "\033[32;1m[INFO]\033[0m Terraform log level set to debug.  Log output at $TF_LOG_PATH"
-}
-alias tf-log-tail="tail -f $TF_LOG_PATH"
 
 # update kubeconfig with new cluster
 eks_config() {
