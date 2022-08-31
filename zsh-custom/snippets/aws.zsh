@@ -177,7 +177,11 @@ do
     --certificate-chain fileb://$CERT_PATH/fullchain.pem \
     --private-key fileb://$CERT_PATH/privkey.pem
 }
-aws_instance_id_by_name () {
+
+# by making this an alis and not a fuctiun it's eaier to pass extra flags from the function, also it can override flags set in the alais
+
+alias ec2-ls="aws ec2 describe-instances --output table --query \"Reservations[].Instances[].{Name: Tags[?Key == 'Name'].Value | [0], Id: InstanceId, State: State.Name, Type: InstanceType, Placement: Placement.AvailabilityZone}\""
+ssm_by_name () {
 local _USAGE="Usage: aws_instance_id_by_project_env [-hc] <NAME> <ENVIRONMENT>
 Options:
 -c|connect   Connect with SSM"
@@ -204,15 +208,26 @@ do
   [[ -z $connect ]] && echo $id && return 0
   aws ssm start-session --target $id
 }
-_aws_instance_by_name() {
+_ssm_by_name() {
 # TODO: Figure out partial completion
-local profiles=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].{Name:Tags[?Key=='Name']|[0].Value}" --output text)
-  [[ ${DEBUG} ]] && echo -e "\033[34;1m[DEBUG]\033[0m ${profiles}"
-  compadd ${profiles}
+local instances=($(aws ec2 describe-instances --query "Reservations[*].Instances[*].{Name:Tags[?Key=='Name']|[0].Value}" --output text))
+  [[ ${DEBUG} ]] && echo -e "\033[34;1m[DEBUG]\033[0m ${instances}"
+  compadd -a ${instances}
 }
-compdef _aws_instance_by_name aws_instance_id_by_name
+compdef _ssm_by_name ssm_by_name
 
+ssm-connect() {
+  local id=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" --output text --query 'Reservations[*].Instances[*].InstanceId')
+  aws ssm start-session --target $id
+}
+compdef _aws_ssm ssm-connect
+  _aws_ssm() {
+  local name=($(aws ec2 describe-instances --output text  --filters "Name=instance-state-name,Values=running" --query
+  "Reservations[].Instances[].{Name: Tags[?Key == 'Name'].Value | [0] }"))
+  compadd ${name}
+}
 
+compdef _aws_ssm aws_ssm
 
 aws_instance_id_by_project_env(){
 
