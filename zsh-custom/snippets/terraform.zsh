@@ -9,7 +9,7 @@ alias tf-state='terraform state pull | less'
 tf_new_module() {
  local usage="tf_new_module module_name"
  [[ -z $1 ]] && echo -e "\033[31;1m[ERROR]\033[0m Needs a module name. \n $usage" $$ return 1
- git subtree add --prefix $1 https://github.com/Diehlabs/terraform-module-scaffolding.git main --squash
+ git subtree add --prefix $1 https://github.com/sanguis/terraform-module-scaffolding.git main --squash
 }
 
 # @description Generate pricing information for a terraform deployment
@@ -42,3 +42,16 @@ export TF_LOG_PATH=/tmp/tf_debug.log
 echo -e  "\033[32;1m[INFO]\033[0m Terraform log level set to debug.  Log output at $TF_LOG_PATH"
 }
 alias tf-log-tail="tail -f $TF_LOG_PATH"
+
+# detects if its a terragrunt dir or normal terraform and runs the right exe
+t() {
+[[ -f ./terragrunt.hcl ]] && local exe=terragrunt
+[[ ! -f ./terragrunt.hcl ]] && local exe=terraform
+
+[[ ! $exe ]] && echo -e "\033[31;1m[ERROR]\033[0m Can't figure out what to run. Please run manually"
+local cmd=($exe $@)
+[[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m executable is $exe.
+Args are $@
+Command to be run: $cmd"
+$cmd
+}

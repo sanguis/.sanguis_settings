@@ -9,6 +9,7 @@ alias aws_region_eu_w2="export AWS_DEFAULT_REGION=eu-west-2"
 alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
 alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
 alias aws-account-number="aws sts get-caller-identity --query Account --output text"
+alias ssm="aws ssm start-session --target"
 
 aws_profile() {
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m switching aws profile to $1"
