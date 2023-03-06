@@ -296,3 +296,37 @@ assume_role() {
     $(eval $GET_SESSION))
 
 }
+
+ssm-connect() {
+local id=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=$1" --output text --query 'Reservations[*].Instances[*].InstanceId')
+match="^[a-zA-Z0-9_:-]+$"
+if [[ $id =~ $match ]]; then
+  aws ssm start-session --target $id
+else
+  echo "Multiple IDs returned:"
+  echo "$id"
+fi
+}
+compdef _aws_ssm ssm-connect
+
+_aws_ssm() {
+  local name=($(aws ec2 describe-instances --output text  --filters "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].{Name: Tags[?Key == 'Name'].Value | [0] }"))
+  compadd ${name}
+}
+compdef _aws_ssm aws_ssm
+
+ssm-ls() {
+#local region="default"
+[[ $1 ]] && local region=$1
+aws ssm get-inventory --region $1
+}
+compdef _aws_region ssm-ls
+
+aws-ls() {
+#local profile="default"
+#local region="us-east-1"
+[[ $1 ]] && local profile=$1
+[[ $2 ]] && local region=$2
+aws ec2 describe-instances --output table --query "Reservations[].Instances[].{Name: Tags[?Key == 'Name'].Value | [0], Id: InstanceId, State: State.Name, Type: InstanceType, Placement: Placement.AvailabilityZone}" --profile $profile
+}
+compdef _aws_profile aws-ls
