@@ -217,19 +217,6 @@ local instances=($(aws ec2 describe-instances --query "Reservations[*].Instances
 }
 compdef _ssm_by_name ssm_by_name
 
-ssm-connect() {
-  local id=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" --output text --query 'Reservations[*].Instances[*].InstanceId')
-  aws ssm start-session --target $id
-}
-compdef _aws_ssm ssm-connect
-  _aws_ssm() {
-  local name=($(aws ec2 describe-instances --output text  --filters "Name=instance-state-name,Values=running" --query
-  "Reservations[].Instances[].{Name: Tags[?Key == 'Name'].Value | [0] }"))
-  compadd ${name}
-}
-
-compdef _aws_ssm aws_ssm
-
 aws_instance_id_by_project_env(){
 
 local _USAGE="Usage: aws_instance_id_by_project_env [-hc] <NAME> <ENVIRONMENT>
@@ -316,17 +303,36 @@ _aws_ssm() {
 compdef _aws_ssm aws_ssm
 
 ssm-ls() {
-#local region="default"
-[[ $1 ]] && local region=$1
-aws ssm get-inventory --region $1
+
+[[ ! -z $1 ]] && local region=" --region $1"
+aws ssm get-inventory ${region}
 }
 compdef _aws_region ssm-ls
 
 aws-ls() {
-#local profile="default"
-#local region="us-east-1"
-[[ $1 ]] && local profile=$1
-[[ $2 ]] && local region=$2
-aws ec2 describe-instances --output table --query "Reservations[].Instances[].{Name: Tags[?Key == 'Name'].Value | [0], Id: InstanceId, State: State.Name, Type: InstanceType, Placement: Placement.AvailabilityZone}" --profile $profile
+  _USAGE="Usage: aws-ls [-hrp] [--region --profile] <role arn>
+      Assumes a role setting session data as envs
+      Options:
+      -h|help            Display this messagae
+      -p|profile         Set the AWS profile
+      -r|region          Set the AWS region to ls
+  "
+
+  while getopts ":hr:p:" opt
+  do
+    case $opt in
+
+    h|help     )  echo $_USAGE; return 0   ;;
+    r|region  ) local $AWS_DEFAULT_REGION=${OPTARG} ;;
+    p|profile  ) local $AWS_DEFAULT_PROFILE=${OPTARG} ;;
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+aws ec2 describe-instances \
+	--output table \
+	--query "Reservations[].Instances[].{Name: Tags[?Key == 'Name'].Value | [0], Id: InstanceId, State: State.Name, Type: InstanceType, Placement: Placement.AvailabilityZone}" \
 }
 compdef _aws_profile aws-ls
