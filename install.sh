@@ -99,33 +99,28 @@ local_configs(){
 
 get_links() {
 	local csv_file=$1
-	local column1_name=$2
-	local column2_name=$3
 
-	[[ ! -f $csv_file ]] && echo "links file not found." && return
-	[[ $DEBUG ]] && echo "inputs:
+	[[ ! -f $csv_file ]] && echo -e "\033[31;1m[ERROR]\033[0m links file not found." && return
+	[[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Inputs:
 	csv_file=$csv_file
-	column1_name=$column1_name
-	column2_name=$column2_name
 	"
 
-	declare -A assoc_array
 	local header_line=1
-	while IFS=, read -r $column1_name $column2_name; do
+	while IFS=", " read -r target link; do
 		if [[ "$header_line" == "1"  ]]; then
 			header_line=0
 			continue
 		fi
-		$assoc_array["${column1_name}"]="${column2_name}"
+		[[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Adding $target to associative array with value $link"
+		assoc_array["${target}"]="${link}"
 	done < $csv_file
 
 	if [[ $DEBUG  ]]; then
-		#echo "CSV file '$csv_file' has been converted to associative array '$assoc_array_name'"
-		for k in "${assoc_array[@]}"; do
-			echo "Key: $k, Value: ${assoc_array_name[$key]}"
+	echo -e "\033[34;1m[DEBUG]\033[0m CSV file '$csv_file' has been converted to associative array '$assoc_array'"
+		for k in "${(@k)assoc_array}"; do
+			echo "Key: $k, Value: ${assoc_array[$k]}"
 		done
 	fi
-	return $associative_array
 }
 
 create_links() {
@@ -143,8 +138,10 @@ create_links() {
 			mv $link $backup_loc
 		fi
 		#create symlinks
-		[[ $DEBUG ]] && echo "ln -s ${target} ${link}"
-	#	ln -s ${target} ${link}
+    ln_command="ln -s ${target} ${link}"
+    [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Command to be run:
+    $ln_command"
+    eval $ln_command
 	done
 }
 
@@ -155,8 +152,9 @@ if [[ ! $DEBUG ]]; then
 	packages
 	mac
 	local_configs
-	symlinks=$(get_links "$P/links.csv" "symlinks" "target" "link")
-	create_links $symlinks
+	typeset -A symlinks
+	get_links "$P/symlinks.csv" "symlinks"
+#	create_links $symlinks
 	# source zshrc to start
 	source "$HOME/.zshrc"
 fi
