@@ -342,6 +342,5 @@ aws_env_reset() {
   unset AWS_SECRET_ACCESS_KEY
   unset AWS_SESSION_TOKEN
   unset AWS_DEFAULT_REGION
-  unset AWS_DEFAULT_PROFILE
   $(aws configure export-credentials --format env)
 }
