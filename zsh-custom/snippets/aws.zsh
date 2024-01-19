@@ -336,3 +336,12 @@ aws ec2 describe-instances \
 	--query "Reservations[].Instances[].{Name: Tags[?Key == 'Name'].Value | [0], Id: InstanceId, State: State.Name, Type: InstanceType, Placement: Placement.AvailabilityZone}" \
 }
 compdef _aws_profile aws-ls
+
+aws_env_reset() {
+  unset AWS_ACCESS_KEY_ID
+  unset AWS_SECRET_ACCESS_KEY
+  unset AWS_SESSION_TOKEN
+  unset AWS_DEFAULT_REGION
+  unset AWS_DEFAULT_PROFILE
+  $(aws configure export-credentials --format env)
+}
