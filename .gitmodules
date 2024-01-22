@@ -12,7 +12,7 @@
 	url = https://github.com/tmux-plugins/tpm.git
 [submodule "zsh-custom/themes/spaceship-prompt"]
 	path = zsh-custom/themes/spaceship-prompt
-	url = https://github.com/denysdovhan/spaceship-prompt.git
+	url = https://github.com/spaceship-prompt/spaceship-prompt.git
 [submodule "/Users/joshbeauregard/.sanguis_settings/zsh-custom/plugins/zsh-syntax-highlighting"]
 	path = /Users/joshbeauregard/.sanguis_settings/zsh-custom/plugins/zsh-syntax-highlighting
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
