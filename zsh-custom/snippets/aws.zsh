@@ -6,8 +6,9 @@ complete -C '/usr/local/bin/aws_completer' aws
 alias aws-id="aws sts get-caller-identity"
 alias aws_region_eu1="export AWS_DEFAULT_REGION=eu-west-1"
 alias aws_region_eu_w2="export AWS_DEFAULT_REGION=eu-west-2"
-alias aws_region_us1="export AWS_DEFAULT_REGION=us-east-1"
-alias aws_region_us2="export AWS_DEFAULT_REGION=us-east-2"
+alias aws_region_us-e1="export AWS_DEFAULT_REGION=us-east-1"
+alias aws_region_us-e2="export AWS_DEFAULT_REGION=us-east-2"
+alias aws_region_us-w1="export AWS_DEFAULT_REGION=us-west-1"
 alias aws-account-number="aws sts get-caller-identity --query Account --output text"
 alias ssm="aws ssm start-session --target"
 
