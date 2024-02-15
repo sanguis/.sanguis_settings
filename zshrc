@@ -135,7 +135,7 @@ Options:
 -a|commit-all add the --all flag to the git commit after file edit
 "
 
-  while getopts 'hr' opt
+  while getopts 'rgha' opt
   do
     case $opt in
       h|help     )  echo $_USAGE; return 0   ;;
@@ -162,7 +162,7 @@ Options:
 
   [[ $_COMMIT_ALL ]] && git -C $DIRECTORY --all || git -C $DIRECTORY commit $FILE
 
-  [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $HOME/.zshrc
+  [[ $_RELOAD ]] && echo -e "\033[32;1m[INFO]\033[0m Reloading .zshrc" && source $FULL_PATH
 #  return 0
 }
 
