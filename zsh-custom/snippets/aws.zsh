@@ -10,7 +10,7 @@ alias aws_region_us-e2="export AWS_DEFAULT_REGION=us-east-2"
 alias aws_region_us-w1="export AWS_DEFAULT_REGION=us-west-1"
 alias aws-account-number="aws sts get-caller-identity --query Account --output text"
 alias ssm="aws ssm start-session --target"
-alias aso="aws sso login"
+alias asl="aws sso login"
 
 complete -C '/usr/local/bin/aws_completer' aws
 aws_profile() {
