@@ -13,10 +13,57 @@ alias ssm="aws ssm start-session --target"
 alias asl="aws sso login"
 
 complete -C '/usr/local/bin/aws_completer' aws
+
 aws_profile() {
-  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m switching aws profile to $1"
-  export AWS_DEFAULT_PROFILE=$1
-  export AWS_PROFILE=$1
+  _USAGE="Usage : aws_profile [-h] [--] <profile>
+      Switches the AWS profile to input value.
+
+      If ALready set use '-' to switch to previous profile.
+
+      Options:
+      -h|help       Display this message
+      -d|debug      Debug output"
+
+  while getopts ":hd:" opt
+  do
+    case $opt in
+
+    h|help      )  echo $_USAGE; return 0   ;;
+    d|debug 		) DEBUG=true 		;;
+
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  local OLD_PROFILE=$OLD_AWS_DEFAULT_PROFILE
+  local INPUT=$1
+  local CURRENT_PROFILE=$AWS_DEFAULT_PROFILE
+
+  if [[ $DEBUG ]]; then
+    echo -e "\033[34;1m[DEBUGING INFO]:
+    INPUT VALUE:      $INPUT
+    Previous Profile: $OLD_PROFILE
+    Current Profile:  $AWS_DEFAULT_PROFILE
+    \033[0m"
+  fi
+
+  [[ -z ${INPUT} ]] && echo -e "\033[31;1m[ERROR]\033[0m No profile set" && return 1
+
+  [[ ! -z ${CURRENT_PROFILE} ]] && export OLD_AWS_DEFAULT_PROFILE=${CURRENT_PROFILE}
+
+  if [[ $1 == "-" ]]; then
+    [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Switching to previous profile: $OLD_AWS_DEFAULT_PROFILE"
+    local NEW_PROFILE=${OLD_PROFILE}
+  else
+    local NEW_PROFILE=${INPUT}
+  fi
+
+  # TODO: Check if profile exists. error if does not.
+
+  export AWS_DEFAULT_PROFILE=${NEW_PROFILE}
+  export AWS_PROFILE=${NEW_PROFILE}
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m AWS_PROFILE set to $AWS_PROFILE"
   #aws-id
 }
 _aws_profile() {
