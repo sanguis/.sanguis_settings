@@ -393,3 +393,26 @@ aws_env_reset() {
   unset AWS_DEFAULT_REGION
   $(aws configure export-credentials --format env)
 }
+asg_suspend() {
+  _USAGE="Usage : asg_suspend  [-h] [--] <ASG_NAME>
+      Suspends autoscaling group
+      Options:
+      -h|help            Display this messagae
+  "
+
+  while getopts ":h" opt
+  do
+    case $opt in
+
+    h|help     )  echo $_USAGE; return 0   ;;
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+  aws autoscaling suspend-processes --auto-scaling-group-name $1
+  ## TODO:  put function into background and ping once every 5 minutes to restart process
+  ##aws autoscaling resume-processes --auto-scaling-group-name $1
+
+}
