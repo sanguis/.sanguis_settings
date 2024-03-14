@@ -386,11 +386,15 @@ aws ec2 describe-instances \
 }
 compdef _aws_profile aws-ls
 
-aws_env_reset() {
+aws_env_unset() {
   unset AWS_ACCESS_KEY_ID
   unset AWS_SECRET_ACCESS_KEY
   unset AWS_SESSION_TOKEN
   unset AWS_DEFAULT_REGION
+  unset AWS_DEFAULT_PROFILE
+}
+aws_env_reset() {
+  aws_env_unset
   $(aws configure export-credentials --format env)
 }
 asg_suspend() {
