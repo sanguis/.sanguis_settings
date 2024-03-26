@@ -420,3 +420,32 @@ asg_suspend() {
   ##aws autoscaling resume-processes --auto-scaling-group-name $1
 
 }
+
+aws_update_iam_policy() {
+  _USAGE="Usage : aws_update_iam_policy  [-h] [--] <policy_arn> <policy_document>
+      Updates an IAM policy
+      Options:
+      -h|help            Display this messagae
+  "
+
+  while getopts ":h" opt
+  do
+    case $opt in
+      h|help     )  echo $_USAGE; return 0   ;;
+      * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo $_USAGE; return 1   ;;
+
+    esac
+      done
+      shift $(($OPTIND-1))
+      local ARN=$1
+      local DOC=$2
+      local VER=$(aws iam list-policy-versions --policy-arn $ARN | jq -r '.Versions[-1:][].VersionId')
+
+      [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Deleteing policy version: $VER"
+
+      [[ -z $VER ]] && echo -e "\033[31;1m[ERROR]\033[0m No version to delete" && return 1
+
+      aws iam delete-policy-version --policy-arn $ARN --version-id $VER
+      aws iam create-policy-version --policy-arn $ARN --policy-document file://$DOC --set-as-default
+    }
