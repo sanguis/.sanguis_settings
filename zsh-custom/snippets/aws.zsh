@@ -420,6 +420,46 @@ asg_suspend() {
   ##aws autoscaling resume-processes --auto-scaling-group-name $1
 
 }
+asg_resume() {
+  _USAGE="Usage : asg_suspend  [-h] [--] <ASG_NAME>
+      Suspends autoscaling group
+      Options:
+      -h|help            Display this messagae
+  "
+
+  while getopts ":h" opt
+  do
+    case $opt in
+
+    h|help     )  echo $_USAGE; return 0   ;;
+    * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo $_USAGE; return 1   ;;
+
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+  aws autoscaling resume-processes --auto-scaling-group-name $1
+  ## TODO:  put function into background and ping once every 5 minutes to restart process
+  ##aws autoscaling resume-processes --auto-scaling-group-name $1
+
+}
+
+_asg_list() {
+  # TODO: Only list unsuspended groups
+    local asgs=($(aws autoscaling describe-auto-scaling-groups  --query "AutoScalingGroups[*].AutoScalingGroupName" --output text))
+  # list on only unsuspended groups
+  [[ ${DEBUG} ]] && echo -e "\033[34;1m[DEBUG]\033[0m ${asgs}"
+  compadd ${asgs}
+}
+_asg_list_sus() {
+    local asgs=($(aws autoscaling describe-auto-scaling-groups  --query "AutoScalingGroups[?SuspendedProcesses].AutoScalingGroupName" --output text))
+  # list on only unsuspended groups
+  [[ ${DEBUG} ]] && echo -e "\033[34;1m[DEBUG]\033[0m ${asgs}"
+  compadd ${asgs}
+}
+
+compdef _asg_list asg_suspend
+compdef _asg_list_sus asg_resume
 
 aws_update_iam_policy() {
   _USAGE="Usage : aws_update_iam_policy  [-h] [--] <policy_arn> <policy_document>
@@ -449,3 +489,40 @@ aws_update_iam_policy() {
       aws iam delete-policy-version --policy-arn $ARN --version-id $VER
       aws iam create-policy-version --policy-arn $ARN --policy-document file://$DOC --set-as-default
     }
+
+id_center_add_user_to_group () {
+  _USAGE="Usage : id_center_add_user_to_group  [-h] [--] <identitty_store_id> <user_name> <group_name>
+      Adds a user to a group
+      Options:
+      -h|help            Display this messagae
+
+      Idenetity Store ID can be found on the settings poage  on the lower part of the console. and looks like d-1234567890
+  "
+
+  while getopts ":h" opt
+  do
+    case $opt in
+      h|help     )  echo $_USAGE; return 0   ;;
+      * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
+        echo $_USAGE; return 1   ;;
+
+    esac
+  done
+  shift $(($OPTIND-1))
+  local IDENTITY_STORE_ID=$1
+  local USER=$2
+  local GROUP=$3
+
+  local USER_ID=$(aws identitystore list-users --identity-store-id $IDENTITY_STORE_ID --query "Users[?UserName=='$USER'].UserId" --output text)
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m USER ID FOR $USER is $USER_ID"
+
+  local GROUP_ID=$(aws identitystore list-groups --identity-store-id $IDENTITY_STORE_ID --query "Groups[?DisplayName=='$GROUP'].GroupId" --output text)
+  echo $DEBUG && echo -e "\033[34;1m[DEBUG]\033[0m GROUP ID FOR $GROUP is $GROUP_ID"
+
+  [[ -z $USER_ID ]] && echo -e "\033[31;1m[ERROR]\033[0m User not found" && return 1
+  [[ -z $GROUP_ID ]] && echo -e "\033[31;1m[ERROR]\033[0m Group not found" && return 1
+  local COMMAND="aws identitystore create-group-membership --identity-store-id $IDENTITY_STORE_ID --group-id=$GROUP_ID --member-id UserId=$USER_ID"
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Running command: \n $COMMAND"
+
+  eval $COMMAND
+}
