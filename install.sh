@@ -46,6 +46,14 @@ shift $(($OPTIND-1))
 
 
 OS=$(uname)
+if test "$(uname)" = "Darwin" ; then
+  # MacOS
+  font_dir="$HOME/Library/Fonts"
+else
+  # Linux
+  font_dir="$HOME/.local/share/fonts"
+  mkdir -p $font_dir
+fi
 
 clone() {
 	if [[ ! -d $P ]]
@@ -62,12 +70,15 @@ update() {
 }
 
 	## install powerline fonts
-	packages() {
-		bash ./fonts/install.sh
+packages() {
+	echo "----------- INstalling needed packages -----------" 
+	if [[  ! -f $font_dir/Hack-Bold.ttf ]]; then
+	bash ./fonts/install.sh
 
-		pip3 install powerline-status
+//	pip3 install powerline-status
+fi
 
-	}
+}
 
 # setup localfiles to be symbolic links and kept in local version control
 # ~/.zshrc_user
@@ -98,12 +109,14 @@ local_configs(){
 }
 
 get_links() {
+	echo "_________ Getting list of symlynks ________"
 	local csv_file=$1
 
 	[[ ! -f $csv_file ]] && echo -e "\033[31;1m[ERROR]\033[0m links file not found." && return
 	[[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Inputs:
-	csv_file=$csv_file
+	csv_file:              $csv_file
 	"
+	if [[ -z $symlinks ]] && typeset -A symlinks
 
 	local header_line=1
 	while IFS=", " read -r target link; do
@@ -112,24 +125,21 @@ get_links() {
 			continue
 		fi
 		[[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Adding $target to associative array with value $link"
-		assoc_array["${target}"]="${link}"
+		symlinks[${target}]="${link}"
 	done < $csv_file
 
 	if [[ $DEBUG  ]]; then
-	echo -e "\033[34;1m[DEBUG]\033[0m CSV file '$csv_file' has been converted to associative array '$assoc_array'"
-		for k in "${(@k)assoc_array}"; do
-			echo "Key: $k, Value: ${assoc_array[$k]}"
+	echo -e "\033[34;1m[DEBUG]\033[0m CSV file '$csv_file' has been converted to associative array '$symlinks'"
+		for k in "${(@k)symlinks}"; do
+			echo "Key: $k, Value: ${symlinks[$k]}"
 		done
 	fi
-}
+	
+	 echo "_________ Creating symlinks ________ "
 
-create_links() {
-	[[ -z $1 ]] && echo "symlinks is empty or missing cant contunue" && return
-	local symlinks=$1
-
-	for k in $(symlinks[@]); do
+	for k in "${(@k)symlinks}"; do
 		local target=$P/${k}
-		local link=$(symlinks[${k}])
+		local link=${symlinks[${k}]}
 		#backup files
 		if [ -f $link ]; then
 			[ ! -d $BACKUP_DIR ] && mkdir $BACKUP_DIR
@@ -152,7 +162,6 @@ if [[ ! $DEBUG ]]; then
 	packages
 	mac
 	local_configs
-	typeset -A symlinks
 	get_links "$P/symlinks.csv" "symlinks"
 #	create_links $symlinks
 	# source zshrc to start
