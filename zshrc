@@ -75,9 +75,11 @@ plugins=(
   minikube
   os
   pip
+  terraform
   rsync
   vi-mode
-  zsh-syntax-highlighting
+  vscode
+
   ## Custom Plugins
   zsh-autosuggestions
 )
