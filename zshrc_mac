@@ -15,10 +15,10 @@ if [[ -d /usr/local/opt/coreutils/libexec/gnubin ]]; then
   export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 fi
 
-#syntax hilight in less
-if [[ -x /usr/local/bin/src-hilite-lesspipe.sh ]];
+#syntax highlight in less
+if [[ -x /opt/homebrew/Cellar/source-highlight/3.1.9_5/bin/src-hilite-lesspipe.sh ]];
 then
-  export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
+  export LESSOPEN="| /opt/homebrew/Cellar/source-highlight/3.1.9_5/bin/src-hilite-lesspipe.sh %s"
 else
   echo "source-highlight not installed or executable."
   echo "brew install source-highlight; to install"

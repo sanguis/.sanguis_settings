@@ -9,3 +9,7 @@ function terraform-compliance {
 shdoc() {
   docker run --rm -v $(pwd):$(pwd) -w $(pwd) -it sanguis/shdoc "$@";
 }
+
+terraspace() {
+  docker run --rm -v $(pwd):$(pwd) -w $(pwd) -it ghcr.io/boltops-tools/terraspace:alpine "$@";
+}
