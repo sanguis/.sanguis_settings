@@ -9,4 +9,4 @@ fi
 brew install bash zsh tmux source-highlight
 xcode-select --install
 
-brew install tmux python3 macvim bash coreutils grep gnu-sed gnu-indent checkov pre-commit fzf chroma
+brew install tmux python3 macvim bash coreutils grep gnu-sed gnu-indent checkov pre-commit fzf chroma zsh-autosuggestions
