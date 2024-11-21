@@ -175,6 +175,7 @@ alias got="git"
 
 ## App aliases
 # TODO: Create `aliases` function that allows for an array of alias names to a single command.
+alias c="code ."
 alias fedit="f_edit"
 alias gmain="git checkout main && git pull"
 alias grep="grep --exclude-dir={.git,.svn} --exclude-dir=.terraform --exclude-dir=.terragrunt-cache"
@@ -409,3 +410,6 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Created by `pipx` on 2024-10-15 18:48:42
+export PATH="$PATH:/Users/joshb/.local/bin"
