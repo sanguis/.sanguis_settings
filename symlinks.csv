@@ -2,7 +2,6 @@ target, link
 vim, $HOME/.vim
 zshrc, $HOME/.zshrc
 tmux.conf, $HOME/.tmux.conf
-gitconfig, $HOME/.gitconfig
 ctags.d, $HOME/.ctags.d
 app_configs/kitty.conf, $HOME/.config/kitty/kitty.conf
 zsh-custom/plugins/zsh-autosuggestions $P/oh-my-zsh/custom/plugins/zsh-autosuggestions

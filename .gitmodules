@@ -16,6 +16,6 @@
 [submodule "zsh-syntax-highlighting"]
 	path = zsh-custom/plugins/zsh-syntax-highlighting
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
-[submodule "/Users/joshb/.sanguis_settings/zsh-custom/plugins/zsh-autosuggestions"]
-	path = /Users/joshb/.sanguis_settings/zsh-custom/plugins/zsh-autosuggestions
+[submodule "zsh-custom/plugins/zsh-autosuggestions"]
+	path = zsh-custom/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
