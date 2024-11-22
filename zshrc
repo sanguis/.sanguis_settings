@@ -88,9 +88,13 @@ source $ZSH/oh-my-zsh.sh
 
 
 # set vi as the default cli editor
-export EDITOR=/usr/local/bin/vim
-export VISUAL=/usr/local/bin/vim
-export SSH_KEY_PATH="~/.ssh/rsa_id"
+if [[ ! -f /opt/homebrew/bin/vim ]]; then
+  export EDITOR=/usr/local/bin/vim
+  export VISUAL=/usr/local/bin/vim
+else
+  export EDITOR=/opt/homebrew/bin/vim
+  export VISUAL=/opt/homebrew/bin/vim
+fi
 
 #Path stuff
 export PATH=$PATH:~/.composer/vendor/bin:$HOME/Library/Python/2.7/bin

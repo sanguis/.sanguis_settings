@@ -1,7 +1,5 @@
 [user]
 	name = Beauregard, Josh
-	email = josh.beauregard@wizehive.com
-  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKie5n5D38vc9EHnpzBOh2HJZMemAXXSK5GSIIQYolFb
 
 [gpg]
   format = ssh

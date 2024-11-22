@@ -155,6 +155,12 @@ get_links() {
 	done
 }
 
+fancy_git(){
+	echo "
+[include]
+	path = ./.sanguis_settings/gitconfig
+  " >> $HOME/.gitconfig
+}
 # Run all this if not debugging
 if [[ ! $DEBUG ]]; then
 	clone
@@ -165,5 +171,6 @@ if [[ ! $DEBUG ]]; then
 	get_links "$P/symlinks.csv" "symlinks"
 #	create_links $symlinks
 	# source zshrc to start
+	facy_git
 	source "$HOME/.zshrc"
 fi
