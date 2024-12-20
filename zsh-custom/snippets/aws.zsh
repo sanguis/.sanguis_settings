@@ -1,5 +1,6 @@
 #!/bin/zsh
-
+#AWS settings
+export AWS_PAGER=""
 ## Aliases
 alias aws_envs="env |grep AWS"
 alias aws-id="aws sts get-caller-identity"
