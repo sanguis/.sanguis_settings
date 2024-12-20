@@ -370,10 +370,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # Python settings
 # maing brew installed python3 default.
-export PATH=/usr/local/opt/python/libexec/bin:$PATH
-# vim: set ft=zsh
-export PATH="/usr/local/opt/node@12/bin:$PATH"
-export AWS_PAGER=""
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/kustomize kustomize
 
