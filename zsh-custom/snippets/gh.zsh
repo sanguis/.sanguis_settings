@@ -15,6 +15,15 @@ _gh_reqs() {
   done
 }
 
+# curl looping through all pages of results and returning the results as a total value
+_gh_pages_curl() {
+
+  local curl_command=$@
+  echo $curl_command
+  local results=$(curl $curl_command)
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG:curl command]\033[0m \n $(echo results| jq)"
+}
+
 # List all users in the enterprise
 gh_org_users() {
   local USAGE="Usage: gh_org_users ORG
@@ -44,7 +53,11 @@ gh_org_users() {
   local org=$1
   # Iterate through each organization and list members
   [[ -z $flag_no_headers ]] && echo "Organization: \033[32;1m$org\033[0m"
-  local members=$(curl -s -H "Authorization: token $GH_TOKEN" "$GITHUB_API_URL/orgs/$org/members" | jq -r '.[].login')
+  declare -a members
+  # loop through all pages of members and add to members array
+  local get_members =$(curl -s -H "Authorization: token $GH_TOKEN" "$GITHUB_API_URL/orgs/$org/members" | jq -r '.[].login')
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG:members_raw]\033[0m $members_raw"
+
   echo "$members"
   [[ ! -z $flag_count ]] && echo "Total members: $(echo $members | wc -l)"
 }
