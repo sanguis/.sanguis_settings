@@ -1,12 +1,6 @@
 [user]
 	name = Beauregard, Josh
 
-[gpg]
-  format = ssh
-
-[gpg "ssh"]
-  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
-
 [commit]
 	gpgsign = true
 [color]
@@ -14,7 +8,7 @@
   interactive= true
 [core]
   whitespace= fix,-indent-with-non-tab,-indent-with-tab,trailing-space
-	excludesfile = ~/.gitignore
+	excludesfile = ~/.sanguis_settings/gitignore_global
   autocrlf=input
 	pager = less -XF
 
