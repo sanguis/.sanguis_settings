@@ -19,18 +19,20 @@ aws_profile() {
   _USAGE="Usage : aws_profile [-h] [--] <profile>
       Switches the AWS profile to input value.
 
-      If ALready set use '-' to switch to previous profile.
+      If Already set use '-' to switch to previous profile.
 
       Options:
       -h|help       Display this message
-      -d|debug      Debug output"
+      -d|debug      Debug output
+      -u|unset      Unsets the AWS_PROFILE and AWS_DEFAULT_PROFILE"
 
-  while getopts ":hd:" opt
+  while getopts ":hd:u" opt
   do
     case $opt in
 
     h|help      )  echo $_USAGE; return 0   ;;
     d|debug 		) DEBUG=true 		;;
+    u|unset     ) unset AWS_PROFILE; unset AWS_DEFAULT_PROFILE; echo -e "\033[32;1m[INFO]\033[0m Unset AWS_PROFILE and AWS_DEFAULT_PROFILE" && return 0 ;;
 
     * ) echo -e "\033[31;1m[ERROR]\033[0m Option does not exist : $OPTARG\n"
         echo $_USAGE; return 1   ;;

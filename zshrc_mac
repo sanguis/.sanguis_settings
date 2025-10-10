@@ -16,7 +16,7 @@ if [[ -d /usr/local/opt/coreutils/libexec/gnubin ]]; then
 fi
 
 #syntax highlight in less
-if [[ -x /opt/homebrew/Cellar/source-highlight/3.1.9_5/bin/src-hilite-lesspipe.sh ]];
+if [[ ! -x source-highlight ]];
 then
   export LESSOPEN="| /opt/homebrew/Cellar/source-highlight/3.1.9_5/bin/src-hilite-lesspipe.sh %s"
 else

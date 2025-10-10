@@ -1,14 +1,14 @@
+#vi :ft=gitconfig
+
 [user]
 	name = Beauregard, Josh
 
-[commit]
-	gpgsign = true
 [color]
   ui = on
   interactive= true
 [core]
   whitespace= fix,-indent-with-non-tab,-indent-with-tab,trailing-space
-	excludesfile = ~/.sanguis_settings/gitignore_global
+	excludesfile = $HOME/.sanguis_settings/gitignore_global
   autocrlf=input
 	pager = less -XF
 
@@ -25,6 +25,7 @@
   br = branch
   ls =  branch -a
   goingon = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+
 [mergetool]
   keepBackup = FALSE
 [push]
