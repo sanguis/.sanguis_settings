@@ -7,7 +7,7 @@
 
 # when sourced with $PROFILE=true profiling is turned on
 
-[[ $PROFILE ]] && echo  -e "\033[32;1m[INFO]\033[0m Profileing On" && zmodload zsh/zprof
+[[ $PROFILE ]] && echo  -e "\033[32;1m[INFO]\033[0m Profiling On" && zmodload zsh/zprof
 
 # Global Variables
 
@@ -22,7 +22,7 @@ export ZSH_CUSTOM=$_DOT_FILES_REPO/zsh-custom
 export DISABLE_UPDATE_PROMPT=true
 export UPDATE_ZSH_DAYS=13
 
-# enable auto-completeing
+# enable auto-completion
 autoload bashcompinit && bashcompinit
 
 ## Uncomment the following line to enable command auto-correction.
@@ -35,23 +35,16 @@ ENABLE_CORRECTION="true"
 # ZSH_TMUX_AUTOQUIT="true"
 # ZSH_TMUX_ITERM2="true"
 
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="spaceship"
 VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 VI_MODE_SET_CURSOR=true
 
 #Spaceship theme options. (https://github.com/spaceship-prompt/spaceship-prompt/blob/master/docs/options.md)
-SPACESHIP_KUBECTL_SHOW=true
-SPACESHIP_TERRAFORM_SHOW=true
-SPACESHIP_AWS_REGION_SHOW=true
-SPACESHIP_DOCKER_SHOW=false
+export SPACESHIP_CONFIG="$_DOT_FILES_REPO/spaceshiprc.zsh"
 
+# Oh My ZSH Plugins
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 plugins=(
   1password
   ansible
