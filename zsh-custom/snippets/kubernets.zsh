@@ -4,9 +4,9 @@
 #
 alias kgpo="kubectl get pods -o wide"
 alias kgp="kubectl get pods"
-alias kdp="kubectl describe pod"
+alias kdep="kubectl describe pod"
 alias keti="kubectl exec -ti"
-alias kdp="kubectl delete pod"
+alias kdlp="kubectl delete pod"
 
 # add https://krew.sigs.k8s.io/ to PATH
 if [[ -d '$HOME/.krew' ]]; then
@@ -52,7 +52,7 @@ compdef _k_all k_all
 ko () {
   export k_type=$2
   export k_ob=$3
-  echo -e "\033[32;1m[Working with Set to ]\033[0m $k_type $k_ob"
+  echo -e "\033[32;1m Persistent object set to:\033[0m $k_type $k_ob"
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m $@"
   kubectl $1 $k_type $k_ob
 }
