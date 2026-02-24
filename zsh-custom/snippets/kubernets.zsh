@@ -7,6 +7,8 @@ alias kgp="kubectl get pods"
 alias kdep="kubectl describe pod"
 alias keti="kubectl exec -ti"
 alias kdlp="kubectl delete pod"
+alias rollout="kubectl rollout restart deployment"
+alias rollStatus="kubectl rollout status deployment"
 
 # add https://krew.sigs.k8s.io/ to PATH
 if [[ -d '$HOME/.krew' ]]; then
