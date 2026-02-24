@@ -1,6 +1,13 @@
 #!/bin/zsh
 #
 #
+#
+alias kgpo="kubectl get pods -o wide"
+alias kgp="kubectl get pods"
+alias kdp="kubectl describe pod"
+alias keti="kubectl exec -ti"
+alias kdp="kubectl delete pod"
+
 # add https://krew.sigs.k8s.io/ to PATH
 if [[ -d '$HOME/.krew' ]]; then
   export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
@@ -49,6 +56,35 @@ ko () {
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m $@"
   kubectl $1 $k_type $k_ob
 }
+
+# auto complete for ko to complete object type and object name
+_ko() {
+  local state
+  _arguments \
+    '1: :->action' \
+    '2: :->object_type' \
+    '3: :->object_name'
+  case $state in
+    action)
+      local -a actions
+      actions=($(kubectl 2>&1 | awk '/^  [a-z]/ {print $1}'))
+      _describe 'action' actions
+      ;;
+    object_type)
+      local -a object_types
+      object_types=($(kubectl api-resources --no-headers 2>/dev/null | awk '{print $1}'))
+      _describe 'object type' object_types
+      ;;
+    object_name)
+      if [[ -n $k_type ]]; then
+        local -a object_names
+        object_names=($(kubectl get $k_type --no-headers 2>/dev/null | awk '{print $1}'))
+        _describe 'object name' object_names
+      fi
+      ;;
+  esac
+  }
+compdef _ko ko
 
 _ko_eval () {
   [[ -z $k_type ]] && echo "Please set the object type using ko" && return 1
