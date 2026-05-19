@@ -25,9 +25,9 @@ export UPDATE_ZSH_DAYS=13
 # enable auto-completion
 autoload bashcompinit && bashcompinit
 
-## Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
-CORRECT_IGNORE="git|docker|kubectl|helm|minikube|terragrunt|terraform|template"
+## enable command auto-correction.
+setopt CORRECT
+CORRECT_IGNORE="template"
 
 # Tmux settings
 [[ -z $TMUX_SESSION_NAME ]] && TMUX_SESSION_NAME="JOsh World"

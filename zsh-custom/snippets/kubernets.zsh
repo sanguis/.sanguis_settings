@@ -9,6 +9,10 @@ alias keti="kubectl exec -ti"
 alias kdlp="kubectl delete pod"
 alias rollout="kubectl rollout restart deployment"
 alias rollStatus="kubectl rollout status deployment"
+alias kdes="kubectl describe"
+alias kgs="kubectl get secrets"
+alias kvs="kubectl get secret -o yaml"
+alias kgsb="kubectl get secret -o jsonpath='{.data}'"
 
 # add https://krew.sigs.k8s.io/ to PATH
 if [[ -d '$HOME/.krew' ]]; then
@@ -52,6 +56,24 @@ _k_all() {
 compdef _k_all k_all
 
 ko () {
+  local USEAGE="Usage: ko <action> <object_type> <object_name>
+  Example: ko get pod my-pod-1234
+  Follow Up commands:
+   \033[32;1mk_ed\033[0m  to edit the object
+   \033[32;1mk_des\033[0m to describe the object
+   \033[32;1mk_dl\033[0m  to delete the object"
+  zmodload zsh/zutil
+  zparseopts -D -F -K -- \
+    h=help -HELP=help \
+    d=debug -DEBUG=debug ||
+    return 1
+
+  [[ $HELP == true ]] && echo -e "\033[33;1m[USAGE]\033[0m $USEAGE" && return 0
+  if [[ $# -ne 3 ]]; then
+    echo -e "\033[31;1m[ERROR]\033[0m Invalid number of arguments"
+    echo -e "\033[33;1m[USAGE]\033[0m $USEAGE"
+    return 1
+  fi
   export k_type=$2
   export k_ob=$3
   echo -e "\033[32;1m Persistent object set to:\033[0m $k_type $k_ob"
@@ -104,4 +126,12 @@ k_ed () {
 k_des () {
   _ko_eval
   kubectl describe $k_type $k_ob
+}
+
+k_dl () {
+  _ko_eval
+  local cmd="kubectl delete $k_type $k_ob"
+  echo -e "\033[31;1m[Deleting ]\033[0m $k_type $k_ob"
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG ]\033[0m $cmd"
+  eval $cmd
 }
