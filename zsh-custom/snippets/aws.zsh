@@ -529,3 +529,9 @@ id_center_add_user_to_group () {
 
   eval $COMMAND
 }
+
+aws_account_switch() {
+[ -z $1 ] && echo "Usage: aws_account_switcher <profile_name>" && return 1
+  aws_profile $1
+  kubectx $2
+}
