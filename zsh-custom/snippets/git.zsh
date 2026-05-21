@@ -6,6 +6,7 @@
 
 alias main='git checkout main && git pull'
 alias stash_pull='git stash && git pull && git stash pop'
+alias groot="cd $(git rev-parse --show-toplevel)"
 
 fetch_and_checkout() {
 git fetch --all && git checkout $1

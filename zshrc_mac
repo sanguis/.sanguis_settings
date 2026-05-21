@@ -23,3 +23,5 @@ else
   echo "source-highlight not installed or executable."
   echo "brew install source-highlight; to install"
 fi
+
+alias sed="gsed"
