@@ -186,3 +186,58 @@ $changes"
 
   gh pr create --title "$title" --body "$body" "$@"
 }
+
+gha_cancel_workflow() {
+  local USAGE="Usage: cancel_workflow [OWNER] [REPO] [RUN_ID]
+   Input values:
+     GITHUB_TOKEN - personal access token with repo:workflow scope (or set inline)
+     OWNER         - repo owner or org
+     REPO          - repo name
+     WORKFLOW_ID   - optional workflow file name or ID to narrow search
+   "
+  [[ -z "$GITHUB_TOKEN" ]] && GITHUB_TOKEN=$(gh auth token 2>/dev/null)
+  [[ -z "$GITHUB_TOKEN" ]] && echo "GITHUB_TOKEN not set and 'gh auth token' returned nothing — run 'gh auth login'" && return 1
+  local OWNER=$1
+  local REPO=$2
+  local WORKFLOW_ID=$3
+
+  [[ -z $3 ]] && echo "Missing required arguments" && echo "$USAGE" && return 1
+
+
+  set -euo pipefail
+
+  if [[ -z "${4}" ]]; then
+    RUN_ID="$4"
+  else
+    if [[ -n "$WORKFLOW_ID" ]]; then
+      echo "Finding latest run for workflow: $WORKFLOW_ID"
+      RUN_ID=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
+        "https://api.github.com/repos/$OWNER/$REPO/actions/workflows/$WORKFLOW_ID/runs?per_page=1" \
+        | grep -oP '"id":\s*\K[0-9]+' | head -n1)
+    else
+      echo "Finding latest run for repo: $OWNER/$REPO"
+      RUN_ID=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
+        "https://api.github.com/repos/$OWNER/$REPO/actions/runs?per_page=1" \
+        | grep -oP '"id":\s*\K[0-9]+' | head -n1)
+    fi
+  fi
+
+  if [[ -z "$RUN_ID" ]]; then
+    echo "Could not determine RUN_ID." >&2
+    return 1
+  fi
+
+  echo "Cancelling run ID: $RUN_ID"
+
+  curl -sS -X POST -H "Authorization: token $GITHUB_TOKEN" \
+    -H "Accept: application/vnd.github+json" \
+    "https://api.github.com/repos/$OWNER/$REPO/actions/runs/$RUN_ID/cancel" \
+    -o /tmp/cancel_response.json -w "\nHTTP status: %{http_code}\n"
+
+  echo "Response preview:"
+  if command -v jq >/dev/null 2>&1; then
+    jq -r 'to_entries|map("\(.key): \(.value|tostring)")|.[]' /tmp/cancel_response.json 2>/dev/null || cat /tmp/cancel_response.json
+  else
+    cat /tmp/cancel_response.json
+  fi
+}
