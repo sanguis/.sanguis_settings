@@ -190,54 +190,89 @@ $changes"
 gha_cancel_workflow() {
   local USAGE="Usage: cancel_workflow [OWNER] [REPO] [RUN_ID]
    Input values:
-     GITHUB_TOKEN - personal access token with repo:workflow scope (or set inline)
      OWNER         - repo owner or org
      REPO          - repo name
      WORKFLOW_ID   - optional workflow file name or ID to narrow search
    "
+  local flag_help flag_verbose
+  zmodload zsh/zutil
+  zparseopts -D -K -- \
+    {h,-help}=flag_help \
+    {d,-debug}=flag_verbose ||
+    return 1
+
+  [[ ! -z $flag_help ]] && echo $USAGE && return 0
+  [[ ! -z $flag_verbose ]] && echo "DEBUG mode enabled" && DEBUG=true
   [[ -z "$GITHUB_TOKEN" ]] && GITHUB_TOKEN=$(gh auth token 2>/dev/null)
   [[ -z "$GITHUB_TOKEN" ]] && echo "GITHUB_TOKEN not set and 'gh auth token' returned nothing — run 'gh auth login'" && return 1
   local OWNER=$1
   local REPO=$2
-  local WORKFLOW_ID=$3
+  local RUN_ID=$3
+  local WORKFLOW_ID=$4
 
   [[ -z $3 ]] && echo "Missing required arguments" && echo "$USAGE" && return 1
 
 
-  set -euo pipefail
+#  if [[ -z "${3}" ]]; then
+#    RUN_ID="$3"
+#  else
+#    if [[ -n "$WORKFLOW_ID" ]]; then
+#      echo "Finding latest run for workflow: $WORKFLOW_ID"
+#      RUN_ID=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
+#        "https://api.github.com/repos/$OWNER/$REPO/actions/workflows/$WORKFLOW_ID/runs?per_page=1" \
+#        | grep -oP '"id":\s*\K[0-9]+' | head -n1)
+#    else
+#      echo "Finding latest run for repo: $OWNER/$REPO"
+#      RUN_ID=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
+#        "https://api.github.com/repos/$OWNER/$REPO/actions/runs?per_page=1" \
+#        | grep -oP '"id":\s*\K[0-9]+' | head -n1)
+#    fi
+#  fi
+#
+#  if [[ -z "$RUN_ID" ]]; then
+#    echo "Could not determine RUN_ID." >&2
+#    return 1
+#  fi
 
-  if [[ -z "${4}" ]]; then
-    RUN_ID="$4"
-  else
-    if [[ -n "$WORKFLOW_ID" ]]; then
-      echo "Finding latest run for workflow: $WORKFLOW_ID"
-      RUN_ID=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
-        "https://api.github.com/repos/$OWNER/$REPO/actions/workflows/$WORKFLOW_ID/runs?per_page=1" \
-        | grep -oP '"id":\s*\K[0-9]+' | head -n1)
-    else
-      echo "Finding latest run for repo: $OWNER/$REPO"
-      RUN_ID=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
-        "https://api.github.com/repos/$OWNER/$REPO/actions/runs?per_page=1" \
-        | grep -oP '"id":\s*\K[0-9]+' | head -n1)
-    fi
-  fi
+  echo -e "\033[32;1mCancelling run ID:\033[0m $RUN_ID for $OWNER/$REPO"
 
-  if [[ -z "$RUN_ID" ]]; then
-    echo "Could not determine RUN_ID." >&2
-    return 1
-  fi
-
-  echo "Cancelling run ID: $RUN_ID"
-
-  curl -sS -X POST -H "Authorization: token $GITHUB_TOKEN" \
+  # Append HTTP status on its own trailing line so we can split it off the body.
+  local cancel_response=$(curl -sS -X POST \
+    -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github+json" \
-    "https://api.github.com/repos/$OWNER/$REPO/actions/runs/$RUN_ID/cancel" \
-    -o /tmp/cancel_response.json -w "\nHTTP status: %{http_code}\n"
+    "https://api.github.com/repos/$OWNER/$REPO/actions/runs/$RUN_ID/force-cancel" \
+    -w $'\n%{http_code}')
+  local http_status=${cancel_response##*$'\n'}
+  local cancel_body="${cancel_response%$'\n'*}"
+
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Raw response:\n$cancel_body"
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m HTTP status: $http_status"
 
   echo "Response preview:"
   if command -v jq >/dev/null 2>&1; then
-    jq -r 'to_entries|map("\(.key): \(.value|tostring)")|.[]' /tmp/cancel_response.json 2>/dev/null || cat /tmp/cancel_response.json
+    echo "$cancel_body" | jq -r 'to_entries|map("\(.key): \(.value|tostring)")|.[]' 2>/dev/null || echo "$cancel_body"
   else
-    cat /tmp/cancel_response.json
+    echo "$cancel_body"
+  fi
+  if [[ $http_status -ne 409 ]]; then
+    local message=$(echo "$cancel_body" | jq -r '.message' 2>/dev/null)
+    if [[ "$message" == "Cannot cancel a workflow re-run that has not yet queued." ]]; then
+      echo -e "\033[32;1m[INFO]\033[0m Cancel request rejected because run is not yet queued. Attempting to delete run $RUN_ID instead."
+      local delete_response=$(curl -sS -X DELETE \
+        -H "Authorization: token $GITHUB_TOKEN" \
+        -H "Accept: application/vnd.github+json" \
+        "https://api.github.com/repos/$OWNER/$REPO/actions/runs/$RUN_ID" \
+        -w $'\n%{http_code}')
+      local delete_http_status="${delete_response##*$'\n'}"
+      local delete_body="${delete_response%$'\n'*}"
+      [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Raw delete response:\n$delete_body"
+      [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m HTTP status: $delete_http_status"
+      if [[ "$delete_http_status" -eq 204 ]]; then
+        echo -e "\033[32;1m[INFO]\033[0m Run $RUN_ID has been successfully deleted."
+      else
+        echo -e "\033[31;1m[ERROR]\033[0m Failed to delete run $RUN_ID."
+      fi
+      return 0
+    fi
   fi
 }

@@ -58,3 +58,76 @@ helm_replace_in_templates() {
   #[[ -z $1 || ! -v $2 ]] && { echo -e "\033[31;1m[ERROR]\033[0m Both \033[34m<search_pattern>\033[0m and \033[34m<replacement_pattern>\033[0m are required."; echo $_USAGE; return 1; }
   find templates -type f -name '*.yaml' -exec gsed -i -E "s/$1/$2/g" {} +
 }
+
+helm_inflate() {
+  local _USAGE="Usage : helm_inflate \033[34m[<input_yaml>] [<output_dir>]\033[0m
+       Inflate a Helm-rendered multi-document YAML file by splitting each
+       document into a separate file at the path declared in its
+       '# Source: next/templates/<path>' marker, recreating the chart layout.
+
+       Repeated sources (same path) are concatenated into the same file as
+       multiple YAML documents separated by '---'.
+
+       \033[34m<input_yaml>\033[0m  File to read (default: ./next.full.yaml)
+       \033[34m<output_dir>\033[0m  Directory to write into (default: ./inflated)
+
+      Options:
+      -h|--help     Display this message"
+
+  zmodload zsh/zutil
+  local -a help
+  zparseopts -D -F -K -- \
+    h=help -help=help ||
+  return 1
+
+  [[ -n $help ]] && { echo -e $_USAGE; return 0; }
+
+  [[ -z $1 ]] && echo -e "\033[31;1m[ERROR]\033[0m Input File is required.\n" && echo -e $_USAGE && return 1
+  local input=${1}
+  local outdir=${2:-./}
+
+  if [[ ! -f $input ]]; then
+    echo -e "\033[31;1m[ERROR]\033[0m Input file not found: $input" >&2
+    return 1
+  fi
+
+  mkdir -p -- $outdir
+
+  awk -v outdir="$outdir" '
+    BEGIN { state = "init"; target = "" }
+
+    /^---$/ {
+      state = "expect_source"
+      target = ""
+      next
+    }
+
+    state == "expect_source" {
+      if ($0 ~ /^# Source: next\/templates\//) {
+        rel = $0
+        sub(/^# Source: next\/templates\//, "", rel)
+        target = outdir "/" rel
+        dir = target
+        sub(/\/[^\/]+$/, "", dir)
+        if (!(dir in dirs_made)) {
+          system("mkdir -p \"" dir "\"")
+          dirs_made[dir] = 1
+        }
+        print "---" >> target
+        print $0 >> target
+        state = "in_block"
+        next
+      } else {
+        state = "init"
+        target = ""
+      }
+    }
+
+    state == "in_block" && target != "" {
+      print $0 >> target
+    }
+  ' "$input"
+
+  local n=$(grep -c "^# Source: next/templates/" "$input")
+  echo "helm_inflate: wrote $n document(s) from \"$input\" into \"$outdir\""
+}
