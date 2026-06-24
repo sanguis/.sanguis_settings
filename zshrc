@@ -410,3 +410,8 @@ if [[ -f /opt/homebrew/opt/nvm/nvm.sh ]]; then
 fi
 # Created by `pipx` on 2024-10-15 18:48:42
 export PATH="$PATH:/Users/joshb/.local/bin"
+
+complete -o nospace -C /opt/homebrew/bin/vault vault
+
+# if op is installed then load completion
+[[ -f /opt/homebrew/bin/op ]] && eval "$(op completion zsh)"
