@@ -111,15 +111,17 @@ gh_pr_create() {
   Body:  Jira link (if branch starts with PROJ-123-) + commit subjects since fork from main.
   Find addtional args with 'gh pr create --help' or 'gh pr create -- <extra args>'"
 
-  local flag_help flag_verbose
+  local flag_help flag_verbose flag_base
   zmodload zsh/zutil
   zparseopts -D -K -- \
+    {h-base}=flag_base \
     {h,-help}=flag_help \
     {d,-debug}=flag_verbose ||
     return 1
 
   [[ ! -z $flag_help ]] && echo $USAGE && return 0
   [[ ! -z $flag_verbose ]] && echo "DEBUG mode enabled" && DEBUG=true
+  local base="${flag_base:-main}"
 
   if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     echo -e "\033[31;1m[ERROR]\033[0m Not inside a git repository"
@@ -183,11 +185,11 @@ $changes"
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG] PR create Parameters \033[0m
   --body: $body
   --title: $title
-  --base: $merge_base
+  --base: $base
   Additional args: $@
   "
 
-  gh pr create --title "$title"  --body "$body" "$@" --base $merge_base
+  gh pr create --title "$title"  --body "$body" "$@" --base $base
 }
 
 gha_cancel_workflow() {
