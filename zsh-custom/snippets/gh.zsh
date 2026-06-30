@@ -183,7 +183,8 @@ $changes"
   fi
 
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG] PR create Parameters \033[0m
-  --body: $body
+  --body:
+  $body
   --title: $title
   --base: $base
   Additional args: $@
