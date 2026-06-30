@@ -104,14 +104,12 @@ gh_ent_users() {
   echo $members
 }
 
-# Create a PR via `gh pr create`. Title defaults to a humanized branch name.
-# Body: Jira link (inferred from branch prefix, e.g. INFRA-324-...) + commit subjects
-# since fork from main, merge commits excluded.
 gh_pr_create() {
   local USAGE="Usage: gh_pr_create [-d|--debug] [-h|--help] [-- <extra gh pr create args>]
   Creates a PR via 'gh pr create'.
   Title: prompted; default is a humanized version of the current branch name.
-  Body:  Jira link (if branch starts with PROJ-123-) + commit subjects since fork from main."
+  Body:  Jira link (if branch starts with PROJ-123-) + commit subjects since fork from main.
+  Find addtional args with 'gh pr create --help' or 'gh pr create -- <extra args>'"
 
   local flag_help flag_verbose
   zmodload zsh/zutil
@@ -150,12 +148,12 @@ gh_pr_create() {
   else
     read "jira_id?Jira ticket ID (blank to skip): "
   fi
-  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m jira_id: $jira_id"
-  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m remainder: $remainder"
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]: Auto Jira ticket and title serach resuts \033[0m jira_id: $jira_id
+    Title: $remainder"
 
   local default_title="${remainder//[-_\/]/ }"
   default_title="${(C)default_title}"
-  local title="$default_title"
+  local titli="$default_title"
   vared -p "PR Title: " -c title
   [[ -z "$title" ]] && title="$default_title"
 
@@ -182,9 +180,14 @@ $changes"
 $changes"
   fi
 
-  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m body:\n$body"
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG] PR create Parameters \033[0m
+  --body: $body
+  --title: $title
+  --base: $merge_base
+  Additional args: $@
+  "
 
-  gh pr create --title "$title" --body "$body" "$@"
+  gh pr create --title "$title"  --body "$body" "$@" --base $merge_base
 }
 
 gha_cancel_workflow() {
