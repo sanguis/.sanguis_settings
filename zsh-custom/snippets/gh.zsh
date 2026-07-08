@@ -122,7 +122,7 @@ gh_pr_create() {
   [[ ! -z $flag_help ]] && echo $USAGE && return 0
   [[ ! -z $flag_verbose ]] && echo "DEBUG mode enabled" && DEBUG=true
   local base="${flag_base:-main}"
-
+  local repo="$(git remote get-url origin)"
   if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     echo -e "\033[31;1m[ERROR]\033[0m Not inside a git repository"
     return 1
@@ -187,6 +187,7 @@ $changes"
   $body
   --title: $title
   --base: $base
+  --repo: $repo
   Additional args: $@
   "
 

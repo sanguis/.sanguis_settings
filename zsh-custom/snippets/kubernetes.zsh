@@ -134,3 +134,42 @@ k_dl () {
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG ]\033[0m $cmd"
   eval $cmd
 }
+
+kust_init_recursive() {
+  local _USAGE="Usage: kust_init_recursive [options]
+  Recursively creates a kustomization.yaml in the current directory and every
+  subdirectory. Each kustomization.yaml lists every file and subdirectory in
+  its directory (excluding the kustomization.yaml itself) as a resource.
+  Options:
+   -h|--HELP   Display this message
+   -d|--DEBUG  Enable debug output"
+
+  zmodload zsh/zutil
+  zparseopts -D -F -K -- \
+    h=help -HELP=help \
+    d=debug -DEBUG=debug ||
+    return 1
+
+  [[ $HELP == true ]] && echo -e "\033[33;1m[USAGE]\033[0m $_USAGE" && return 0
+
+  local dir entry name
+  local -a dirs
+  dirs=(. **/*(/N))
+
+  for dir in $dirs; do
+    local kust="$dir/kustomization.yaml"
+    [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Writing $kust"
+    {
+      echo "---"
+      echo "apiVersion: kustomize.config.k8s.io/v1beta1"
+      echo "kind: Kustomization"
+      echo "resources:"
+      for entry in $dir/*(N); do
+        name="${entry:t}"
+        [[ "$name" == "kustomization.yaml" ]] && continue
+        echo "- $name"
+      done
+    } > "$kust"
+    echo -e "\033[32;1m[Created]\033[0m $kust"
+  done
+}
