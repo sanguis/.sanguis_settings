@@ -1,7 +1,5 @@
 #!/bin/zsh
 #
-#
-#
 alias kgpo="kubectl get pods -o wide"
 alias kgp="kubectl get pods"
 alias kdep="kubectl describe pod"
@@ -13,6 +11,7 @@ alias kdes="kubectl describe"
 alias kgs="kubectl get secrets"
 alias kvs="kubectl get secret -o yaml"
 alias kgsb="kubectl get secret -o jsonpath='{.data}'"
+alias kg1p="k get onepassworditems.onepassword.com -o custom-columns='NAME:.metadata.name,STATUS:.status.conditions[0].status,MESSAGE:.status.conditions[0].message'"
 
 # add https://krew.sigs.k8s.io/ to PATH
 if [[ -d '$HOME/.krew' ]]; then
