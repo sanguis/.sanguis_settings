@@ -14,3 +14,11 @@ repos:
     rev: v2.1.0
     hooks:
       - id: codespell
+  - repo: local
+    hooks:
+      - id: generate-snippets-readme
+        name: Generate zsh snippets README
+        entry: zsh -c 'cd zsh-custom/snippets && ./generate_readme.zsh'
+        language: system
+        files: ^zsh-custom/snippets/.*\.zsh$
+        pass_filenames: false
