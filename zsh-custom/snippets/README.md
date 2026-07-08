@@ -33,21 +33,18 @@
 - [kubernetes.zsh](#kuberneteszsh)
   - [Aliases](#aliases-9)
   - [Functions](#functions-9)
-- [kubernets.zsh](#kubernetszsh)
+- [kustomize.zsh](#kustomizezsh)
   - [Aliases](#aliases-10)
   - [Functions](#functions-10)
-- [kustomize.zsh](#kustomizezsh)
+- [minikube.zsh](#minikubezsh)
   - [Aliases](#aliases-11)
   - [Functions](#functions-11)
-- [minikube.zsh](#minikubezsh)
+- [onepass.zsh](#onepasszsh)
   - [Aliases](#aliases-12)
   - [Functions](#functions-12)
-- [onepass.zsh](#onepasszsh)
+- [terraform.zsh](#terraformzsh)
   - [Aliases](#aliases-13)
   - [Functions](#functions-13)
-- [terraform.zsh](#terraformzsh)
-  - [Aliases](#aliases-14)
-  - [Functions](#functions-14)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -76,20 +73,25 @@ AWS CLI helpers: profile/region switching, MFA and role assumption, SSM session 
 
 ## Functions
 - `aws_profile <profile>` — switch `AWS_PROFILE`/`AWS_DEFAULT_PROFILE`; `-` restores previous, `-u` unsets (has completion)
+- `_aws_profile`
 - `aws_mfa_session_token <MFACODE>` — export an MFA session token (`-m` sets the device ARN)
 - `ecr_login [-r region] [account]` — docker login to ECR for the account/region
 - `vpc_nuke <VPC-ID>` — list all resources attached to a VPC (for teardown)
 - `certbot_to_aws [-e email] [-d domain] <primary_domain>` — issue a Let's Encrypt cert via DNS-01 and import into ACM
 - `ssm_by_name [-c] <NAME>` — get instance ID by Name tag, `-c` to connect via SSM (has completion)
+- `_ssm_by_name`
 - `aws_instance_id_by_project_env [-c] <PROJECT> <ENV>` — get instance ID by Project/Environment tags, `-c` to connect
 - `assume_role [-s session] <role-arn>` — assume a role and export the credentials
 - `ssm-connect <name>` — start an SSM session to a running instance by Name tag (has completion)
+- `_aws_ssm`
 - `ssm-ls [region]` — `aws ssm get-inventory`
 - `aws-ls [-r region] [-p profile]` — describe EC2 instances as a table (has completion)
 - `aws_env_unset` — unset AWS credential/region/profile env vars
 - `aws_env_reset` — unset then re-export credentials from `aws configure export-credentials`
 - `asg_suspend <ASG_NAME>` — suspend an Auto Scaling group's processes (has completion)
 - `asg_resume <ASG_NAME>` — resume an Auto Scaling group's processes (completes suspended groups)
+- `_asg_list`
+- `_asg_list_sus`
 - `aws_update_iam_policy <policy_arn> <policy_document>` — replace the latest policy version with a new default
 - `id_center_add_user_to_group <identity_store_id> <user> <group>` — add an Identity Center user to a group
 - `aws_account_switch <profile> <kube_context>` — switch AWS profile and `kubectx` together
@@ -128,7 +130,7 @@ Completion stub.
 None.
 
 ## Functions
-None. (Contains only a `#compdef aws-profle` directive.)
+None.
 
 ---
 
@@ -207,7 +209,7 @@ None.
 
 # kubernetes.zsh
 
-kubectl aliases and generic object helpers, plus krew PATH setup and a base64 decoder. (Note: a similarly named `kubernets.zsh` also exists.)
+kubectl aliases and generic object helpers, krew PATH setup, a base64 decoder, and a recursive kustomization generator.
 
 ## Aliases
 - `kgpo` — get pods (wide)
@@ -226,22 +228,13 @@ kubectl aliases and generic object helpers, plus krew PATH setup and a base64 de
 ## Functions
 - `64d <string>` — base64 decode a string
 - `k_all <action> <object_type>` — run an action on all objects of a type (has completion)
+- `_k_all`
 - `ko <action> <object_type> <object_name>` — run a command and persist type/name for follow-ups (has completion)
+- `_ko` — auto complete for ko to complete object type and object name
 - `_ko_eval` — (internal) verify persisted object type/name are set
 - `k_ed` — edit the persisted object
 - `k_des` — describe the persisted object
 - `k_dl` — delete the persisted object
-
----
-
-# kubernets.zsh
-
-Kustomize helper (filename is a typo of "kubernetes").
-
-## Aliases
-None.
-
-## Functions
 - `kust_init_recursive [-d]` — recursively create a `kustomization.yaml` in every directory listing its files/subdirs as resources
 
 ---
@@ -256,7 +249,6 @@ None.
 ## Functions
 - `_create_kust` — (internal) create `kustomize.yaml` if missing
 - `kust_add_base <files...>` — add bases to the kustomization and git-add it
-- (`kust_add_patch_dir` is present but commented out)
 
 ---
 
