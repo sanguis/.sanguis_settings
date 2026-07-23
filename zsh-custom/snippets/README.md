@@ -166,7 +166,7 @@ Docker helpers.
 GitHub helpers using the API and `gh` CLI: enterprise/org user listing, PR creation, and workflow-run cancellation. Requires `GITHUB_API_URL`, `GH_ENTERPRISE`, `GH_TOKEN` for the org/enterprise functions.
 
 ## Aliases
-None.
+- `gh_token` — `$(gh auth token)`
 
 ## Functions
 - `_gh_reqs` — (internal) verify required GitHub env vars are set

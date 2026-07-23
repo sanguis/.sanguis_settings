@@ -16,21 +16,47 @@
 #   Finally, if `doctoc` is installed the table of contents is regenerated.
 #
 # @example
-#   ./generate_readme.zsh          # rewrite README.md in place
-#   ./generate_readme.zsh -h       # help
+#   ./generate_readme.zsh                 # rewrite README.md in place
+#   ./generate_readme.zsh -d ~/snippets   # target another directory
+#   ./generate_readme.zsh -h              # help
 
 emulate -L zsh
 setopt extended_glob
 
-local DIR=${0:A:h}
 local SELF=${0:t}
+
+# ---------------------------------------------------------------------------
+# 0. Parse options.
+#    -h/--help  show usage
+#    -d/--dir   directory whose README.md should be (re)generated
+#               (defaults to this script's own directory)
+# ---------------------------------------------------------------------------
+local -a o_help o_dir
+zparseopts -D -E -F -- \
+  {h,-help}=o_help \
+  {d,-dir}:=o_dir \
+  || { print -ru2 -- "Usage: $SELF [-h] [-d DIR]"; return 1 2>/dev/null || exit 1; }
+
+local DIR=${0:A:h}
+if (( ${#o_dir} )); then
+  DIR=${o_dir[-1]:A}
+fi
 local README="$DIR/README.md"
 
-if [[ $1 == (-h|--help) ]]; then
-  print -r -- "Usage: $SELF [-h]
-  Regenerates $README from the *.zsh files in $DIR, preserving existing
-  descriptions and re-running doctoc for the table of contents."
+if (( ${#o_help} )); then
+  print -r -- "Usage: $SELF [-h] [-d DIR]
+  Regenerates \$DIR/README.md from the *.zsh files in DIR, preserving existing
+  descriptions and re-running doctoc for the table of contents.
+
+  -d, --dir DIR   directory to scan (default: the script's own directory,
+                  currently $DIR)
+  -h, --help      show this help"
   return 0 2>/dev/null || exit 0
+fi
+
+if [[ ! -d $DIR ]]; then
+  print -ru2 -- "\033[31;1m[ERROR]\033[0m Not a directory: $DIR"
+  return 1 2>/dev/null || exit 1
 fi
 
 # ---------------------------------------------------------------------------

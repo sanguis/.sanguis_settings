@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+# Sets GH_TOKEN as an env
+alias gh_token=$(gh auth token)
+
 _gh_reqs() {
   #array of required variables
   declare -a reqs
@@ -109,7 +112,7 @@ gh_pr_create() {
   Creates a PR via 'gh pr create'.
   Title: prompted; default is a humanized version of the current branch name.
   Body:  Jira link (if branch starts with PROJ-123-) + commit subjects since fork from main.
-  Find addtional args with 'gh pr create --help' or 'gh pr create -- <extra args>'"
+  Find additional args with 'gh pr create --help' or 'gh pr create -- <extra args>'"
 
   local flag_help flag_verbose flag_base
   zmodload zsh/zutil
@@ -150,12 +153,12 @@ gh_pr_create() {
   else
     read "jira_id?Jira ticket ID (blank to skip): "
   fi
-  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]: Auto Jira ticket and title serach resuts \033[0m jira_id: $jira_id
+  [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]: Auto Jira ticket and title search results \033[0m jira_id: $jira_id
     Title: $remainder"
 
   local default_title="${remainder//[-_\/]/ }"
   default_title="${(C)default_title}"
-  local titli="$default_title"
+  local title="$default_title"
   vared -p "PR Title: " -c title
   [[ -z "$title" ]] && title="$default_title"
 
