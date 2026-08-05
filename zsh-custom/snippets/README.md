@@ -15,10 +15,10 @@
 - [completions.zsh](#completionszsh)
   - [Aliases](#aliases-3)
   - [Functions](#functions-3)
-- [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
+- [docker.zsh](#dockerzsh)
   - [Aliases](#aliases-4)
   - [Functions](#functions-4)
-- [docker.zsh](#dockerzsh)
+- [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
   - [Aliases](#aliases-5)
   - [Functions](#functions-5)
 - [gh.zsh](#ghzsh)
@@ -135,6 +135,18 @@ None.
 
 ---
 
+# docker.zsh
+
+Docker helpers.
+
+## Aliases
+- `docker_kill_all` — kill all running containers
+
+## Functions
+- `docker_run [-d] [-s] <image> [command]` — run a container mounting the current dir; `-d` mounts the Docker socket, `-s` mounts `~/.ssh`
+
+---
+
 # docker_based_applicatins.zsh
 
 Wrappers that run tools as one-off Docker containers, mounting the current directory.
@@ -146,18 +158,6 @@ None.
 - `terraform-compliance` — run `eerkunt/terraform-compliance` against the current dir
 - `shdoc` — run `sanguis/shdoc`
 - `terraspace` — run `ghcr.io/boltops-tools/terraspace:alpine`
-
----
-
-# docker.zsh
-
-Docker helpers.
-
-## Aliases
-- `docker_kill_all` — kill all running containers
-
-## Functions
-- `docker_run [-d] [-s] <image> [command]` — run a container mounting the current dir; `-d` mounts the Docker socket, `-s` mounts `~/.ssh`
 
 ---
 

@@ -190,10 +190,13 @@ $changes"
   $body
   --title: $title
   --base: $base
-  --repo: $repo
+  --repo \"$repo\"
   Additional args: $@
   "
 
+  # No --head: gh defaults the head to the current branch and pushes it to the
+  # remote automatically if it isn't there yet. Passing --head explicitly would
+  # make gh assume the ref already exists remotely and skip that push.
   gh pr create --title "$title"  --body "$body" "$@" --base $base
 }
 

@@ -38,15 +38,17 @@ gup_recursive() {
 }
 
 git_reclone() {
-
-repo=$1
-base=$(pwd)
-cd $repo
-git remote show origin
-git remote get-url origin
-remote-repo=$(git remote get-url origin)
-remote_repo=$(git remote get-url origin)
-cd $base
-rm -rf $repo
-git clone --recursive $remote_repo $repo
+ local USAGE="Deletes and reclones repo.
+ USAGE: git_reclone REPO_PATH"
+ [[ -z $1 ]] && echo -e "\033[31;1m[ERROR]\033[0m Path to repo required" && echo $USAGE && return 1
+  repo=$1
+  base=$(pwd)
+  cd $repo
+  git remote show origin
+  git remote get-url origin
+  remote-repo=$(git remote get-url origin)
+  remote_repo=$(git remote get-url origin)
+  cd $base
+  rm -rf $repo
+  git clone --recursive $remote_repo $repo
 }
