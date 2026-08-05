@@ -7,44 +7,35 @@
   - [Aliases](#aliases)
   - [Functions](#functions)
 - [azure.zsh](#azurezsh)
-  - [Aliases](#aliases-1)
   - [Functions](#functions-1)
 - [bitbucket.zsh](#bitbucketzsh)
-  - [Aliases](#aliases-2)
   - [Functions](#functions-2)
 - [completions.zsh](#completionszsh)
-  - [Aliases](#aliases-3)
-  - [Functions](#functions-3)
 - [docker.zsh](#dockerzsh)
-  - [Aliases](#aliases-4)
-  - [Functions](#functions-4)
+  - [Aliases](#aliases-1)
+  - [Functions](#functions-3)
 - [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
-  - [Aliases](#aliases-5)
-  - [Functions](#functions-5)
+  - [Functions](#functions-4)
 - [gh.zsh](#ghzsh)
-  - [Aliases](#aliases-6)
-  - [Functions](#functions-6)
+  - [Aliases](#aliases-2)
+  - [Functions](#functions-5)
 - [git.zsh](#gitzsh)
-  - [Aliases](#aliases-7)
-  - [Functions](#functions-7)
+  - [Aliases](#aliases-3)
+  - [Functions](#functions-6)
 - [helm.zsh](#helmzsh)
-  - [Aliases](#aliases-8)
-  - [Functions](#functions-8)
+  - [Functions](#functions-7)
 - [kubernetes.zsh](#kuberneteszsh)
-  - [Aliases](#aliases-9)
-  - [Functions](#functions-9)
+  - [Aliases](#aliases-4)
+  - [Functions](#functions-8)
 - [kustomize.zsh](#kustomizezsh)
-  - [Aliases](#aliases-10)
-  - [Functions](#functions-10)
+  - [Functions](#functions-9)
 - [minikube.zsh](#minikubezsh)
-  - [Aliases](#aliases-11)
-  - [Functions](#functions-11)
+  - [Functions](#functions-10)
 - [onepass.zsh](#onepasszsh)
-  - [Aliases](#aliases-12)
-  - [Functions](#functions-12)
+  - [Functions](#functions-11)
 - [terraform.zsh](#terraformzsh)
-  - [Aliases](#aliases-13)
-  - [Functions](#functions-13)
+  - [Aliases](#aliases-5)
+  - [Functions](#functions-12)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -103,9 +94,6 @@ AWS CLI helpers: profile/region switching, MFA and role assumption, SSM session 
 
 Azure CLI helpers.
 
-## Aliases
-None.
-
 ## Functions
 - `aks_session <cluster_name> <subscription_id>` — set the Azure subscription and switch kube context to the cluster
 
@@ -115,9 +103,6 @@ None.
 
 Bitbucket helpers.
 
-## Aliases
-None.
-
 ## Functions
 - `bb_open [-d] [-b browser]` — open the current git repo's remote URL in the browser (converts SSH remote to HTTPS)
 
@@ -126,12 +111,6 @@ None.
 # completions.zsh
 
 Completion stub.
-
-## Aliases
-None.
-
-## Functions
-None.
 
 ---
 
@@ -150,9 +129,6 @@ Docker helpers.
 # docker_based_applicatins.zsh
 
 Wrappers that run tools as one-off Docker containers, mounting the current directory.
-
-## Aliases
-None.
 
 ## Functions
 - `terraform-compliance` — run `eerkunt/terraform-compliance` against the current dir
@@ -198,9 +174,6 @@ Git aliases and multi-repo helpers.
 
 Helm chart helpers for templating and manipulating rendered manifests.
 
-## Aliases
-None.
-
 ## Functions
 - `helm_template <file>` — render the chart with `helm template` and open the output in vim
 - `helm_replace_in_templates <search> <replacement>` — `gsed` regex replace across all YAML in `templates/`
@@ -244,9 +217,6 @@ kubectl aliases and generic object helpers, krew PATH setup, a base64 decoder, a
 
 Kustomize edit helpers.
 
-## Aliases
-None.
-
 ## Functions
 - `_create_kust` — (internal) create `kustomize.yaml` if missing
 - `kust_add_base <files...>` — add bases to the kustomization and git-add it
@@ -257,9 +227,6 @@ None.
 
 Use minikube's Docker daemon.
 
-## Aliases
-None.
-
 ## Functions
 - `minikube_as_docker` — point the Docker env at a running minikube (`minikube docker-env`)
 - `minikube_unset_as_docker` — unset the Docker env vars set above
@@ -269,9 +236,6 @@ None.
 # onepass.zsh
 
 1Password CLI helper.
-
-## Aliases
-None.
 
 ## Functions
 - `k8s_to_onepass <src_secret> <op_secret> <vault>` — copy a Kubernetes secret's decoded keys into a 1Password item

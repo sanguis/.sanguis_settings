@@ -4,7 +4,9 @@
 # @description
 #   Scans every *.zsh file (except this generator) for aliases and function
 #   definitions and rebuilds README.md with a `# <filename>` section per file,
-#   each holding `## Aliases` and `## Functions` subsections.
+#   each holding `## Aliases` and `## Functions` subsections. Empty
+#   subsections are omitted entirely, and a file with no aliases, no functions
+#   and no existing blurb gets no section at all.
 #
 #   Existing hand-written descriptions are PRESERVED: for any alias/function
 #   already documented (matched by name) the current bullet line is kept
@@ -189,23 +191,27 @@ local TMP="$README.tmp.$$"
     done < $f
 
     # --- emit the section ---
+    b=$(_trim_blanks ${blurb[$base]})
+
+    # Nothing to document and nothing curated to preserve: skip the file.
+    (( ${#alias_list} + ${#funcs} == 0 )) && [[ -z $b ]] && continue
+
     print
     print -r -- "---"
     print
     print -r -- "# $base"
     print
-    b=${blurb[$base]}
     if [[ -n $b ]]; then
-      print -r -- "$(_trim_blanks $b)"
+      print -r -- "$b"
     else
       print -r -- "_TODO: describe this file._"
     fi
 
-    print
-    print -r -- "## Aliases"
-    if (( ${#alias_list} == 0 )); then
-      print -r -- "None."
-    else
+    # Subsections are only emitted when they have content; a file with no
+    # aliases (or no functions) simply has no such heading.
+    if (( ${#alias_list} )); then
+      print
+      print -r -- "## Aliases"
       for n in $alias_list; do
         aname=${n%%$'\t'*}; aval=${n#*$'\t'}
         key="$base::$aname"
@@ -217,11 +223,9 @@ local TMP="$README.tmp.$$"
       done
     fi
 
-    print
-    print -r -- "## Functions"
-    if (( ${#funcs} == 0 )); then
-      print -r -- "None."
-    else
+    if (( ${#funcs} )); then
+      print
+      print -r -- "## Functions"
       for n in $funcs; do
         aname=${n%%$'\t'*}; fdesc=${n#*$'\t'}
         key="$base::$aname"
