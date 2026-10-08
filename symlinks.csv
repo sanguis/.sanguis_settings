@@ -5,3 +5,4 @@ tmux.conf, $HOME/.tmux.conf
 ctags.d, $HOME/.ctags.d
 app_configs/kitty.conf, $HOME/.config/kitty/kitty.conf
 zsh-custom/plugins/zsh-autosuggestions $P/oh-my-zsh/custom/plugins/zsh-autosuggestions
+global_precommit_config.yaml, $HOME/.config/pre-commit/pre-push.yaml

@@ -2,6 +2,7 @@
 #
 alias kgpo="kubectl get pods -o wide"
 alias kgp="kubectl get pods"
+alias kgpy="kubectl get pods -o yaml |less"
 alias kdep="kubectl describe pod"
 alias keti="kubectl exec -ti"
 alias kdlp="kubectl delete pod"
@@ -55,7 +56,7 @@ _k_all() {
 compdef _k_all k_all
 
 ko () {
-  local USEAGE="Usage: ko <action> <object_type> <object_name>
+  local USAGE="Usage: ko <action> <object_type> <object_name>
   Example: ko get pod my-pod-1234
   Follow Up commands:
    \033[32;1mk_ed\033[0m  to edit the object
@@ -67,10 +68,10 @@ ko () {
     d=debug -DEBUG=debug ||
     return 1
 
-  [[ $HELP == true ]] && echo -e "\033[33;1m[USAGE]\033[0m $USEAGE" && return 0
+  [[ $HELP == true ]] && echo -e "\033[33;1m[USAGE]\033[0m $USAGE" && return 0
   if [[ $# -ne 3 ]]; then
     echo -e "\033[31;1m[ERROR]\033[0m Invalid number of arguments"
-    echo -e "\033[33;1m[USAGE]\033[0m $USEAGE"
+    echo -e "\033[33;1m[USAGE]\033[0m $USAGE"
     return 1
   fi
   export k_type=$2

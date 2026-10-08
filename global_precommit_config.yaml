@@ -1,0 +1,43 @@
+default_stages: [pre-push]        # nothing here ever runs on commit
+repos:
+  - repo: local
+    hooks:
+      - id: helm-lint
+        name: helm lint
+        entry: helm lint
+        language: system
+        files: ^charts/[^/]+/Chart\.yaml$
+        pass_filenames: false
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        exclude: '^charts/.*/templates/.*'  # Exclude Helm templates (they have Go templating)
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: detect-private-key
+  # YAML linting (excluding Helm templates)
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        args: ['-c', '.yamllint.yaml']
+        exclude: '^charts/.*/templates/.*'
+
+  # Helm specific hooks
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.30
+    hooks:
+      - id: helmlint
+        language: system
+        files: ^charts/[^/]+/Chart\.yaml$
+        pass_filenames: false
+  # GitHub Actions workflow linting
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+        files: ^\.github/(workflows|actions)/.*\.ya?ml$

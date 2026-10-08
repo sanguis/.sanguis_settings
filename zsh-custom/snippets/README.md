@@ -11,10 +11,10 @@
 - [bitbucket.zsh](#bitbucketzsh)
   - [Functions](#functions-2)
 - [completions.zsh](#completionszsh)
+- [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
+  - [Functions](#functions-3)
 - [docker.zsh](#dockerzsh)
   - [Aliases](#aliases-1)
-  - [Functions](#functions-3)
-- [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
   - [Functions](#functions-4)
 - [gh.zsh](#ghzsh)
   - [Aliases](#aliases-2)
@@ -114,6 +114,17 @@ Completion stub.
 
 ---
 
+# docker_based_applicatins.zsh
+
+Wrappers that run tools as one-off Docker containers, mounting the current directory.
+
+## Functions
+- `terraform-compliance` — run `eerkunt/terraform-compliance` against the current dir
+- `shdoc` — run `sanguis/shdoc`
+- `terraspace` — run `ghcr.io/boltops-tools/terraspace:alpine`
+
+---
+
 # docker.zsh
 
 Docker helpers.
@@ -123,17 +134,6 @@ Docker helpers.
 
 ## Functions
 - `docker_run [-d] [-s] <image> [command]` — run a container mounting the current dir; `-d` mounts the Docker socket, `-s` mounts `~/.ssh`
-
----
-
-# docker_based_applicatins.zsh
-
-Wrappers that run tools as one-off Docker containers, mounting the current directory.
-
-## Functions
-- `terraform-compliance` — run `eerkunt/terraform-compliance` against the current dir
-- `shdoc` — run `sanguis/shdoc`
-- `terraspace` — run `ghcr.io/boltops-tools/terraspace:alpine`
 
 ---
 
@@ -188,6 +188,7 @@ kubectl aliases and generic object helpers, krew PATH setup, a base64 decoder, a
 ## Aliases
 - `kgpo` — get pods (wide)
 - `kgp` — get pods
+- `kgpy` — `kubectl get pods -o yaml |less`
 - `kdep` — describe pod
 - `keti` — exec into a pod interactively
 - `kdlp` — delete pod
