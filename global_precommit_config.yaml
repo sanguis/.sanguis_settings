@@ -41,3 +41,7 @@ repos:
     hooks:
       - id: actionlint
         files: ^\.github/(workflows|actions)/.*\.ya?ml$
+  - repo: https://github.com/codespell-project/codespell.git
+    rev: v2.4.3
+    hooks:
+      - id: codespell
