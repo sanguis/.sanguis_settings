@@ -4,16 +4,24 @@
 # @description
 #   Scans every *.zsh file (except this generator) for aliases and function
 #   definitions and rebuilds README.md with a `# <filename>` section per file,
-#   each holding `## Aliases` and `## Functions` subsections. Empty
-#   subsections are omitted entirely, and a file with no aliases, no functions
-#   and no existing blurb gets no section at all.
+#   each holding `## Aliases` and `## Functions` subsections. Blank sections
+#   are never written: a subsection with no entries is omitted, and a file
+#   with no aliases and no functions gets no section at all (even if the old
+#   README had a blurb for it).
 #
-#   Existing hand-written descriptions are PRESERVED: for any alias/function
-#   already documented (matched by name) the current bullet line is kept
-#   verbatim. Newly discovered items get an auto-generated description (the
-#   alias target, or the comment immediately above a function). Items removed
-#   from the source files are dropped. Per-file blurbs and the top intro
-#   paragraph are also carried over.
+#   Function descriptions come from, in order of precedence:
+#     1. A `USAGE="..."` (also `_USAGE`/`usage`, single- or multi-line) string
+#        defined inside the function. The `Usage: name ARGS` line becomes the
+#        backticked signature (the first word is replaced by the real function
+#        name), the next line becomes the one-line description, and any
+#        remaining lines are emitted as an indented code block under the
+#        bullet. Literal ANSI escapes (\033[..m) are stripped.
+#     2. The existing bullet line in README.md (matched by name), kept
+#        verbatim so hand-written descriptions survive regeneration.
+#     3. The comment immediately above the function definition.
+#   Aliases use the existing README line if present, else the alias target.
+#   Items removed from the source files are dropped. Per-file blurbs and the
+#   top intro paragraph are also carried over.
 #
 #   Finally, if `doctoc` is installed the table of contents is regenerated.
 #
@@ -47,8 +55,11 @@ local README="$DIR/README.md"
 
 if (( ${#o_help} )); then
   print -r -- "Usage: $SELF [-h] [-d DIR]
-  Regenerates \$DIR/README.md from the *.zsh files in DIR, preserving existing
-  descriptions and re-running doctoc for the table of contents.
+  Regenerates \$DIR/README.md from the *.zsh files in DIR and re-runs doctoc
+  for the table of contents. Files with no aliases or functions get no
+  section. A function's USAGE string (if it defines one) is used as its
+  description; otherwise the existing README line, then the comment above
+  the function, are used.
 
   -d, --dir DIR   directory to scan (default: the script's own directory,
                   currently $DIR)
@@ -86,6 +97,8 @@ if [[ -f $README ]]; then
     fi
     case $cursub in
       aliases|functions)
+        # Only top-level bullets are curated text; indented continuation
+        # lines (USAGE code blocks) are regenerated from source every run.
         if [[ $line == '- `'* ]]; then
           rest=${line#'- `'}
           name=${rest%%\`*}      # up to closing backtick
@@ -118,6 +131,106 @@ _clean_comment() {
   print -r -- "$c"
 }
 
+# Strip the common leading indentation from the caller's `dlines` array.
+_dedent_dlines() {
+  local l ind minind=-1 i
+  for l in "${(@)dlines}"; do
+    [[ -z $l ]] && continue
+    ind=${#${l%%[^[:space:]]*}}
+    (( minind < 0 || ind < minind )) && minind=$ind
+  done
+  if (( minind > 0 )); then
+    for (( i = 1; i <= ${#dlines}; i++ )); do
+      dlines[i]=${dlines[i]:$minind}
+    done
+  fi
+}
+
+# Render a function's USAGE string as README bullet line(s).
+#   $1 function name, $2 raw USAGE text (may be multi-line)
+# The "Usage: cmd ARGS" line (or a line whose first word is the function
+# name) supplies the signature; the first other line is the inline
+# description; any further lines go into an indented fenced block.
+_usage_bullet() {
+  local name=$1 raw=$2
+  local -a lines dlines
+  local l tok sig="" first="" i
+  lines=("${(@f)raw}")
+
+  for (( i = 1; i <= ${#lines}; i++ )); do
+    l=${lines[i]}
+    l=${l//\\033\[[0-9;]#m/}       # literal ANSI colour escapes
+    l=${l//\\e\[[0-9;]#m/}
+    l=${l//\\\"/\"}                # unescape \" and \'
+    l=${l//\\\'/\'}
+    l=${l//\`/\'}                  # backticks would break the markdown
+    l=${l%%[[:space:]]#}           # trailing whitespace
+    lines[i]=$l
+  done
+
+  for l in "${(@)lines}"; do
+    tok=${${l##[[:space:]]#}%%[[:space:]]*}
+    if [[ -z $sig && $l == (#i)[[:space:]]#usage[[:space:]]#:* ]]; then
+      sig=${l#*:}
+    elif [[ -z $sig && $tok == "$name" ]]; then
+      sig=$l
+    else
+      dlines+=("$l")
+    fi
+  done
+
+  if [[ -n $sig ]]; then
+    sig=${${sig##[[:space:]]#}%%[[:space:]]#}
+    sig=${sig//[[:space:]]##/ }
+    # Always lead with the real function name (USAGE strings go stale).
+    if [[ $sig == *' '* ]]; then sig="$name ${sig#* }"; else sig=$name; fi
+  else
+    sig=$name
+  fi
+
+  # Drop surrounding blank lines, then dedent by the common indentation.
+  while (( ${#dlines} )) && [[ -z ${dlines[1]} ]]; do shift dlines; done
+  while (( ${#dlines} )) && [[ -z ${dlines[-1]} ]]; do dlines[-1]=(); done
+  _dedent_dlines
+
+  # Inline description = the first paragraph: consecutive lines up to a blank
+  # line, an option line (`-x`), a short `Label:` line (Options:, Example:,
+  # Note: ...) or a line indented deeper than the paragraph's first line.
+  # Wrapped prose is re-joined into one line.
+  local -a para
+  local pl ind base_ind=-1
+  while (( ${#dlines} )); do
+    l=${dlines[1]}
+    [[ -z ${l//[[:space:]]/} ]] && break
+    ind=${#${l%%[^[:space:]]*}}
+    (( base_ind < 0 )) && base_ind=$ind
+    (( ind > base_ind )) && break
+    pl=${${l##[[:space:]]#}%%[[:space:]]#}
+    [[ $pl == -* ]] && break
+    [[ $pl == [[:alpha:]]##([[:space:]]##[[:alpha:]]##)(#c0,2):* ]] && break
+    para+=("$pl")
+    shift dlines
+  done
+  first=${(j: :)para}
+
+  # Whatever is left becomes the code block; dedent it on its own.
+  while (( ${#dlines} )) && [[ -z ${dlines[1]} ]]; do shift dlines; done
+  _dedent_dlines
+
+  if [[ -n $first ]]; then
+    print -r -- "- \`$sig\` — $first"
+  else
+    print -r -- "- \`$sig\`"
+  fi
+  if (( ${#dlines} )); then
+    print -r -- '  ```'
+    for l in "${(@)dlines}"; do
+      if [[ -n $l ]]; then print -r -- "  $l"; else print; fi
+    done
+    print -r -- '  ```'
+  fi
+}
+
 # ---------------------------------------------------------------------------
 # 2. Emit the new README (without TOC; doctoc adds it afterwards).
 #    Written to a temp file first, then moved into place, so a mid-run error
@@ -138,15 +251,31 @@ local TMP="$README.tmp.$$"
 
   local f base b
   local -a alias_list funcs
+  local -A fusage
   local prev_comment block_first t ctext aname aval fdesc key n
+  local curfunc in_usage ubuf uquote rtrim
   for f in $files; do
     base=${f:t}
     [[ $base == $SELF ]] && continue   # never document the generator itself
 
-    # --- scan this file for aliases and functions (in order) ---
-    alias_list=(); funcs=()
+    # --- scan this file for aliases, functions and USAGE strings (in order) ---
+    alias_list=(); funcs=(); fusage=()
     prev_comment=0; block_first=""
+    curfunc=""; in_usage=0; ubuf=""; uquote=""
     while IFS= read -r line || [[ -n $line ]]; do
+      # inside a multi-line USAGE string: accumulate until the closing quote
+      if (( in_usage )); then
+        rtrim=${line%%[[:space:]]#}
+        if [[ $rtrim == *$uquote && $rtrim != *\\$uquote ]]; then
+          ubuf+=${rtrim%$uquote}
+          fusage[$curfunc]=$ubuf
+          in_usage=0; ubuf=""
+        else
+          ubuf+="$line"$'\n'
+        fi
+        continue
+      fi
+
       # shebang
       if [[ $line == '#!'* ]]; then prev_comment=1; continue; fi
 
@@ -166,14 +295,33 @@ local TMP="$README.tmp.$$"
       # blank line breaks comment adjacency
       if [[ -z $t ]]; then prev_comment=0; block_first=""; continue; fi
 
+      # unindented `}` closes the current top-level function
+      if [[ $line == '}'* ]]; then
+        curfunc=""; prev_comment=0; block_first=""; continue
+      fi
+
       # function: `function name ... {`
       if [[ $t == (#b)function[[:space:]]##([A-Za-z0-9_-]##)*'{'* ]]; then
         funcs+=("${match[1]}"$'\t'"$block_first")
+        curfunc=${match[1]}
         prev_comment=0; block_first=""; continue
       fi
       # function: `name() {` or `name () {`
       if [[ $t == (#b)([A-Za-z0-9_-]##)[[:space:]]#'()'[[:space:]]#'{'* ]]; then
         funcs+=("${match[1]}"$'\t'"$block_first")
+        curfunc=${match[1]}
+        prev_comment=0; block_first=""; continue
+      fi
+      # USAGE / _USAGE / usage="..." inside a function (first one wins)
+      if [[ -n $curfunc && -z ${fusage[$curfunc]} && \
+            $t == (#b)(local[[:space:]]##|)(_|)([Uu][Ss][Aa][Gg][Ee])=([\"\'])(*) ]]; then
+        uquote=${match[4]}; rest=${match[5]}
+        rtrim=${rest%%[[:space:]]#}
+        if [[ $rtrim == *$uquote && $rtrim != *\\$uquote ]]; then
+          fusage[$curfunc]=${rtrim%$uquote}
+        else
+          in_usage=1; ubuf="$rest"$'\n'
+        fi
         prev_comment=0; block_first=""; continue
       fi
       # alias: `alias name=value`
@@ -191,10 +339,10 @@ local TMP="$README.tmp.$$"
     done < $f
 
     # --- emit the section ---
-    b=$(_trim_blanks ${blurb[$base]})
+    # Nothing to document: no section at all, regardless of any old blurb.
+    (( ${#alias_list} + ${#funcs} == 0 )) && continue
 
-    # Nothing to document and nothing curated to preserve: skip the file.
-    (( ${#alias_list} + ${#funcs} == 0 )) && [[ -z $b ]] && continue
+    b=$(_trim_blanks ${blurb[$base]})
 
     print
     print -r -- "---"
@@ -229,7 +377,9 @@ local TMP="$README.tmp.$$"
       for n in $funcs; do
         aname=${n%%$'\t'*}; fdesc=${n#*$'\t'}
         key="$base::$aname"
-        if [[ -n ${desc[$key]} ]]; then
+        if [[ -n ${fusage[$aname]} ]]; then
+          _usage_bullet "$aname" "${fusage[$aname]}"
+        elif [[ -n ${desc[$key]} ]]; then
           print -r -- "${desc[$key]}"
         elif [[ -n $fdesc ]]; then
           print -r -- "- \`$aname\` — $fdesc"

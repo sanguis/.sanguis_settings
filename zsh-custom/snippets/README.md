@@ -10,7 +10,6 @@
   - [Functions](#functions-1)
 - [bitbucket.zsh](#bitbucketzsh)
   - [Functions](#functions-2)
-- [completions.zsh](#completionszsh)
 - [docker.zsh](#dockerzsh)
   - [Aliases](#aliases-1)
   - [Functions](#functions-3)
@@ -42,7 +41,6 @@
 # zsh-custom snippets
 
 Custom zsh aliases, functions, and completions grouped by tool. Each file is sourced into the shell to add helpers for a particular CLI or workflow.
-key=( [Backspace]=$'\C-H' [Delete]=$'\C-[[3~' [Down]=$'\C-[OB' [End]=$'\C-[[4~' [F1]=$'\C-[OP' [F10]=$'\C-[[21~' [F11]=$'\C-[[23~' [F12]=$'\C-[[24~' [F2]=$'\C-[OQ' [F3]=$'\C-[OR' [F4]=$'\C-[OS' [F5]=$'\C-[[15~' [F6]=$'\C-[[17~' [F7]=$'\C-[[18~' [F8]=$'\C-[[19~' [F9]=$'\C-[[20~' [Home]=$'\C-[[1~' [Insert]=$'\C-[[2~' [Left]=$'\C-[OD' [PageDown]=$'\C-[[6~' [PageUp]=$'\C-[[5~' [Right]=$'\C-[OC' [Up]=$'\C-[OA' )
 
 ---
 
@@ -64,28 +62,96 @@ AWS CLI helpers: profile/region switching, MFA and role assumption, SSM session 
 - `ec2-ls` — describe EC2 instances as a table (Name, Id, State, Type, AZ)
 
 ## Functions
-- `aws_profile <profile>` — switch `AWS_PROFILE`/`AWS_DEFAULT_PROFILE`; `-` restores previous, `-u` unsets (has completion)
+- `aws_profile [-h] [--] <profile>` — Switches the AWS profile to input value.
+  ```
+  If Already set use '-' to switch to previous profile.
+
+  Options:
+  -h|help       Display this message
+  -d|debug      Debug output
+  -u|unset      Unsets the AWS_PROFILE and AWS_DEFAULT_PROFILE
+  ```
 - `_aws_profile`
-- `aws_mfa_session_token <MFACODE>` — export an MFA session token (`-m` sets the device ARN)
-- `ecr_login [-r region] [account]` — docker login to ECR for the account/region
-- `vpc_nuke <VPC-ID>` — list all resources attached to a VPC (for teardown)
-- `certbot_to_aws [-e email] [-d domain] <primary_domain>` — issue a Let's Encrypt cert via DNS-01 and import into ACM
-- `ssm_by_name [-c] <NAME>` — get instance ID by Name tag, `-c` to connect via SSM (has completion)
+- `aws_mfa_session_token [-hmd:] [--] MFACODE` — Adds ENVs for MFA validation.
+  ```
+  Options:
+  -h|help       Display this message
+  -d|debug      Debug output
+  -m|mfa        mfa device arn
+  ```
+- `ecr_login [-hr:] [--] {2:inputs}` — logs into aws ecr based on the account id and default region.
+  ```
+  Defaults to account number of current aws cli profile
+
+  Options:
+  -h|help       Display this message
+  -r|region     AWS region
+  ```
+- `vpc_nuke <VPC-ID>`
+- `certbot_to_aws [-h:e:d:] [--] primary_domain` — Creates cert and addts it to aws cert manager
+  ```
+  Options:
+  -h|help       Display this message
+  -e|email      Emaill address for cert
+  -d|domain     Additional domains Can be multiple, put in quotes for wildcards
+
+  example:
+
+  certbot_to_aws -d "*.foo.bar" foo.com
+  ```
+- `ssm_by_name [-hc] <NAME> <ENVIRONMENT>`
+  ```
+  Options:
+  -c|connect   Connect with SSM
+  ```
 - `_ssm_by_name`
-- `aws_instance_id_by_project_env [-c] <PROJECT> <ENV>` — get instance ID by Project/Environment tags, `-c` to connect
-- `assume_role [-s session] <role-arn>` — assume a role and export the credentials
+- `aws_instance_id_by_project_env [-hc] <NAME> <ENVIRONMENT>`
+  ```
+  Options:
+  -c|connect   Connect with SSM
+  ```
+- `assume_role [-h] [--] <role arn>` — Assumes a role setting session data as envs
+  ```
+  Options:
+  -h|help            Display this messagae
+  -s|session-name    (optional) Session Name. Defaults to, '$USER'
+  ```
 - `ssm-connect <name>` — start an SSM session to a running instance by Name tag (has completion)
 - `_aws_ssm`
 - `ssm-ls [region]` — `aws ssm get-inventory`
-- `aws-ls [-r region] [-p profile]` — describe EC2 instances as a table (has completion)
+- `aws-ls [-hrp] [--region --profile] <role arn>` — Assumes a role setting session data as envs
+  ```
+  Options:
+  -h|help            Display this messagae
+  -p|profile         Set the AWS profile
+  -r|region          Set the AWS region to ls
+  ```
 - `aws_env_unset` — unset AWS credential/region/profile env vars
 - `aws_env_reset` — unset then re-export credentials from `aws configure export-credentials`
-- `asg_suspend <ASG_NAME>` — suspend an Auto Scaling group's processes (has completion)
-- `asg_resume <ASG_NAME>` — resume an Auto Scaling group's processes (completes suspended groups)
+- `asg_suspend [-h] [--] <ASG_NAME>` — Suspends autoscaling group
+  ```
+  Options:
+  -h|help            Display this messagae
+  ```
+- `asg_resume [-h] [--] <ASG_NAME>` — Suspends autoscaling group
+  ```
+  Options:
+  -h|help            Display this messagae
+  ```
 - `_asg_list`
 - `_asg_list_sus`
-- `aws_update_iam_policy <policy_arn> <policy_document>` — replace the latest policy version with a new default
-- `id_center_add_user_to_group <identity_store_id> <user> <group>` — add an Identity Center user to a group
+- `aws_update_iam_policy [-h] [--] <policy_arn> <policy_document>` — Updates an IAM policy
+  ```
+  Options:
+  -h|help            Display this messagae
+  ```
+- `id_center_add_user_to_group [-h] [--] <identitty_store_id> <user_name> <group_name>` — Adds a user to a group
+  ```
+  Options:
+  -h|help            Display this messagae
+
+  Idenetity Store ID can be found on the settings poage  on the lower part of the console. and looks like d-1234567890
+  ```
 - `aws_account_switch <profile> <kube_context>` — switch AWS profile and `kubectx` together
 
 ---
@@ -104,13 +170,13 @@ Azure CLI helpers.
 Bitbucket helpers.
 
 ## Functions
-- `bb_open [-d] [-b browser]` — open the current git repo's remote URL in the browser (converts SSH remote to HTTPS)
-
----
-
-# completions.zsh
-
-Completion stub.
+- `bb_open [-hdb:] [--] MFACODE` — Adds ENVs for MFA validation.
+  ```
+  Options:
+  -h|help       Display this message
+  -d|debug      Debug output
+  -b|browser    Browser to open
+  ```
 
 ---
 
@@ -122,7 +188,13 @@ Docker helpers.
 - `docker_kill_all` — kill all running containers
 
 ## Functions
-- `docker_run [-d] [-s] <image> [command]` — run a container mounting the current dir; `-d` mounts the Docker socket, `-s` mounts `~/.ssh`
+- `docker_run [options] [--] image command` — Runs dokcker condocker_runh volume mounts for the current dir and optiopnally mounts ssh or docker connections
+  ```
+  Options:dock
+  -h|help       Display this message
+  -d|docker     Mounts docker unix socker from parent machine
+  -s/ssh        Mounts $HOME/.ssh to /root/.ssh
+  ```
 
 ---
 
@@ -147,8 +219,11 @@ GitHub helpers using the API and `gh` CLI: enterprise/org user listing, PR creat
 ## Functions
 - `_gh_reqs` — (internal) verify required GitHub env vars are set
 - `_gh_pages_curl` — (internal) paginate through curl results
-- `gh_org_users [-n] [-c] <ORG>` — list members of an org (`-n` no header, `-c` count)
-- `gh_ent_users [ORG]` — list users across all orgs in the enterprise (or one org)
+- `gh_org_users ORG` — Github token must have read:org scope
+- `gh_ent_users ORG` — Gets list all users in a github enterprises organization
+  ```
+  Github token must have read:org and read:enterprise scope
+  ```
 - `_gh_pr_preflight` — Verify we're inside a git repo, gh is installed, and we're not on BASE.
 - `_gh_pr_jira_from_branch` — Print the Jira ID at the start of a branch name (PROJ-123-foo -> PROJ-123).
 - `_gh_pr_commits` — Print the hashes of non-merge commits since fork from BASE, oldest first.
@@ -158,9 +233,27 @@ GitHub helpers using the API and `gh` CLI: enterprise/org user listing, PR creat
 - `_gh_pr_body` — Build a PR body from an (optional) Jira ID and a block of change entries.
 - `_gh_pr_append_changes` — Read a PR body on stdin and print it with NEW_ENTRIES appended to the end of
 - `flush`
-- `gh_pr_create [-d] [--base branch]` — create a PR; title defaults from branch name, body auto-links Jira ticket and lists commits since fork from main
-- `gh_pr_update`
-- `gha_cancel_workflow <OWNER> <REPO> <RUN_ID>` — force-cancel (or delete) a GitHub Actions run
+- `gh_pr_create [-d|--debug] [-h|--help] [-b|--base BASE] [-a|--all-authors] [-- <extra gh pr create args>]` — Creates a PR via 'gh pr create'. Refuses if the branch already has an open PR.
+  ```
+  Title: prompted; default is a humanized version of the current branch name.
+  Body:  Jira link (if branch starts with PROJ-123-) + your commit messages since fork from BASE (default: main).
+         Only commits authored by the local git user are listed; -a includes commits pulled in from others.
+  Find additional args with 'gh pr create --help' or 'gh pr create -- <extra args>'
+  ```
+- `gh_pr_update [-d|--debug] [-h|--help] [-b|--base BASE] [-a|--all-authors] [-n|--no-commits] [-m|--message MSG]... [-- <extra gh pr edit args>]` — Appends new entries to the '## Changes:' section of the current branch's open PR. By default every non-merge commit authored by you since fork from BASE (default: main) that is not already listed in the PR body is appended. Commits pulled in from other authors (e.g. via merge/rebase of BASE) are skipped.
+  ```
+  -m MSG            append MSG as an extra entry (repeatable)
+  -n|--no-commits   don't scan commits; only append -m messages
+  -a|--all-authors  include commits from all authors, not just you
+  Find additional args with 'gh pr edit --help'
+  ```
+- `gha_cancel_workflow [OWNER] [REPO] [RUN_ID]`
+  ```
+  Input values:
+    OWNER         - repo owner or org
+    REPO          - repo name
+    WORKFLOW_ID   - optional workflow file name or ID to narrow search
+  ```
 
 ---
 
@@ -175,8 +268,8 @@ Git aliases and multi-repo helpers.
 
 ## Functions
 - `fetch_and_checkout <branch>` — fetch all remotes and checkout a branch
-- `gup_recursive <dir> [depth]` — recursively pull every git repo under a directory (default depth 3)
-- `git_reclone <repo>` — remove and re-clone a repo from its origin URL
+- `gup_recursive DIR DEPTH` — DEPTH defaults too 3 is optional
+- `git_reclone REPO_PATH` — Deletes and reclones repo.
 
 ---
 
@@ -185,9 +278,41 @@ Git aliases and multi-repo helpers.
 Helm chart helpers for templating and manipulating rendered manifests.
 
 ## Functions
-- `helm_template <file>` — render the chart with `helm template` and open the output in vim
-- `helm_replace_in_templates <search> <replacement>` — `gsed` regex replace across all YAML in `templates/`
-- `helm_inflate <input_yaml> [output_dir]` — split a rendered multi-doc YAML back into per-`# Source:` files, recreating the chart layout
+- `helm_template [-he] [--] {2:inputs}` — what it does
+  ```
+  Options:
+  -h|help       Display this message
+  ```
+- `helm_replace_in_templates <search_pattern> <replacement_pattern>` — Replace all occurrences of <search_pattern> with <replacement_pattern> in all YAML files within the 'templates' directory.
+  ```
+   Note: Search and replacement patterns should be provided as regular expressions, for the sed command.
+   sed regex doc: https://www.gnu.org/software/sed/manual/sed.html#Regular-Expressions
+
+   Common patterns that need escaping:
+     .  (dot)  - escape as \.
+     /  (slash)- escape as \/
+     *  (asterisk) - escape as \*
+     +  (plus) - escape as \+
+     ?  (question mark) - escape as \?
+     ( ) (parentheses) - escape as \( and \)
+     [ ] (brackets) - escape as \[ and \]
+     { } (curly braces) - escape as \{ and \}
+
+  Options:
+  -h|--help       Display this message
+  -d|--debug    Enable debug mode
+  ```
+- `helm_inflate [<input_yaml>] [<output_dir>]` — Inflate a Helm-rendered multi-document YAML file by splitting each document into a separate file at the path declared in its '# Source: next/templates/<path>' marker, recreating the chart layout.
+  ```
+   Repeated sources (same path) are concatenated into the same file as
+   multiple YAML documents separated by '---'.
+
+   <input_yaml>  File to read (default: ./next.full.yaml)
+   <output_dir>  Directory to write into (default: ./inflated)
+
+  Options:
+  -h|--help     Display this message
+  ```
 
 ---
 
@@ -214,13 +339,25 @@ kubectl aliases and generic object helpers, krew PATH setup, a base64 decoder, a
 - `64d <string>` — base64 decode a string
 - `k_all <action> <object_type>` — run an action on all objects of a type (has completion)
 - `_k_all`
-- `ko <action> <object_type> <object_name>` — run a command and persist type/name for follow-ups (has completion)
+- `ko <action> <object_type> <object_name>`
+  ```
+  Example: ko get pod my-pod-1234
+  Follow Up commands:
+   k_ed  to edit the object
+   k_des to describe the object
+   k_dl  to delete the object
+  ```
 - `_ko` — auto complete for ko to complete object type and object name
 - `_ko_eval` — (internal) verify persisted object type/name are set
 - `k_ed` — edit the persisted object
 - `k_des` — describe the persisted object
 - `k_dl` — delete the persisted object
-- `kust_init_recursive [-d]` — recursively create a `kustomization.yaml` in every directory listing its files/subdirs as resources
+- `kust_init_recursive [options]` — Recursively creates a kustomization.yaml in the current directory and every subdirectory. Each kustomization.yaml lists every file and subdirectory in its directory (excluding the kustomization.yaml itself) as a resource.
+  ```
+  Options:
+   -h|--HELP   Display this message
+   -d|--DEBUG  Enable debug output
+  ```
 
 ---
 
@@ -262,7 +399,7 @@ Terraform/Terragrunt helpers: modules, cost, plans, logging, and a smart wrapper
 - `tf-log-tail` — tail the terraform debug log
 
 ## Functions
-- `tf_new_module <name>` — add the terraform-module-scaffolding repo as a squashed subtree
+- `tf_new_module module_name`
 - `tf_cost` — generate a plan and run `infracost` breakdown/diff
 - `tf_plan_json` — pull state to a JSON file and open in vi
 - `tf-log-debug [level]` — enable terraform debug logging (default `TRACE`) to `/tmp/tf_debug.log`

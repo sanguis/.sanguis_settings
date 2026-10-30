@@ -44,7 +44,7 @@ aws_profile() {
   local CURRENT_PROFILE=$AWS_DEFAULT_PROFILE
 
   if [[ $DEBUG ]]; then
-    echo -e "\033[34;1m[DEBUGING INFO]:
+    echo -e "\033[34;1m[DEBUGGING INFO]:
     INPUT VALUE:      $INPUT
     Previous Profile: $OLD_PROFILE
     Current Profile:  $AWS_DEFAULT_PROFILE
@@ -120,7 +120,9 @@ aws_mfa_session_token() {
 ecr_login() {
   _USAGE="Usage : ecr_login  [-hr:] [--] {2:inputs}
       logs into aws ecr based on the account id and default region.
-      defaults to accunt number of current aws cli profile
+
+      Defaults to account number of current aws cli profile
+
       Options:
       -h|help       Display this message
       -r|region     AWS region
@@ -152,7 +154,7 @@ ecr_login() {
     _ACCOUNT_NUMBER=$1
   fi
 
-  [[ $DEBUG ]]  && echo -e "\033[34;1m[DEBUG]\033[0m AWS Accoount #: $_ACCOUNT_NUMBER"
+  [[ $DEBUG ]]  && echo -e "\033[34;1m[DEBUG]\033[0m AWS Account #: $_ACCOUNT_NUMBER"
   _COMMAND="aws ecr get-login-password --region $_REGION| docker login --username AWS --password-stdin $_ACCOUNT_NUMBER.dkr.ecr.$_REGION.amazonaws.com"
   [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Running command:
   $_COMMAND"
@@ -210,7 +212,7 @@ do
   done
   shift $(($OPTIND-1))
 
-  [[ -z $1 ]]  && echo -e "\033[31;1m[ERROR]\033[0m At least one domain reqired. \n $_USAGE" && return 1
+  [[ -z $1 ]]  && echo -e "\033[31;1m[ERROR]\033[0m At least one domain required. \n $_USAGE" && return 1
 
   local PRIMARY=$1
   local CERT_PATH="/tmp/live/$PRIMARY"
@@ -230,8 +232,6 @@ do
     --certificate-chain fileb://$CERT_PATH/fullchain.pem \
     --private-key fileb://$CERT_PATH/privkey.pem
 }
-
-# by making this an alis and not a fuctiun it's eaier to pass extra flags from the function, also it can override flags set in the alais
 
 alias ec2-ls="aws ec2 describe-instances --output table --query \"Reservations[].Instances[].{Name: Tags[?Key == 'Name'].Value | [0], Id: InstanceId, State: State.Name, Type: InstanceType, Placement: Placement.AvailabilityZone}\""
 ssm_by_name () {
@@ -485,7 +485,7 @@ aws_update_iam_policy() {
       local DOC=$2
       local VER=$(aws iam list-policy-versions --policy-arn $ARN | jq -r '.Versions[-1:][].VersionId')
 
-      [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Deleteing policy version: $VER"
+      [[ $DEBUG ]] && echo -e "\033[34;1m[DEBUG]\033[0m Deleting policy version: $VER"
 
       [[ -z $VER ]] && echo -e "\033[31;1m[ERROR]\033[0m No version to delete" && return 1
 
