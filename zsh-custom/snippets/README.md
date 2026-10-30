@@ -11,10 +11,10 @@
 - [bitbucket.zsh](#bitbucketzsh)
   - [Functions](#functions-2)
 - [completions.zsh](#completionszsh)
-- [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
-  - [Functions](#functions-3)
 - [docker.zsh](#dockerzsh)
   - [Aliases](#aliases-1)
+  - [Functions](#functions-3)
+- [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
   - [Functions](#functions-4)
 - [gh.zsh](#ghzsh)
   - [Aliases](#aliases-2)
@@ -114,17 +114,6 @@ Completion stub.
 
 ---
 
-# docker_based_applicatins.zsh
-
-Wrappers that run tools as one-off Docker containers, mounting the current directory.
-
-## Functions
-- `terraform-compliance` — run `eerkunt/terraform-compliance` against the current dir
-- `shdoc` — run `sanguis/shdoc`
-- `terraspace` — run `ghcr.io/boltops-tools/terraspace:alpine`
-
----
-
 # docker.zsh
 
 Docker helpers.
@@ -134,6 +123,17 @@ Docker helpers.
 
 ## Functions
 - `docker_run [-d] [-s] <image> [command]` — run a container mounting the current dir; `-d` mounts the Docker socket, `-s` mounts `~/.ssh`
+
+---
+
+# docker_based_applicatins.zsh
+
+Wrappers that run tools as one-off Docker containers, mounting the current directory.
+
+## Functions
+- `terraform-compliance` — run `eerkunt/terraform-compliance` against the current dir
+- `shdoc` — run `sanguis/shdoc`
+- `terraspace` — run `ghcr.io/boltops-tools/terraspace:alpine`
 
 ---
 
@@ -149,7 +149,17 @@ GitHub helpers using the API and `gh` CLI: enterprise/org user listing, PR creat
 - `_gh_pages_curl` — (internal) paginate through curl results
 - `gh_org_users [-n] [-c] <ORG>` — list members of an org (`-n` no header, `-c` count)
 - `gh_ent_users [ORG]` — list users across all orgs in the enterprise (or one org)
+- `_gh_pr_preflight` — Verify we're inside a git repo, gh is installed, and we're not on BASE.
+- `_gh_pr_jira_from_branch` — Print the Jira ID at the start of a branch name (PROJ-123-foo -> PROJ-123).
+- `_gh_pr_commits` — Print the hashes of non-merge commits since fork from BASE, oldest first.
+- `_gh_pr_find` — Print JSON {number,url,body} for the current branch's open PR, or nothing
+- `_gh_pr_commit_entry` — Print one "- <full commit message>" entry for HASH (trailing newlines trimmed).
+- `_gh_pr_changes` — Print "- <message>" entries for the local user's non-merge commits since fork
+- `_gh_pr_body` — Build a PR body from an (optional) Jira ID and a block of change entries.
+- `_gh_pr_append_changes` — Read a PR body on stdin and print it with NEW_ENTRIES appended to the end of
+- `flush`
 - `gh_pr_create [-d] [--base branch]` — create a PR; title defaults from branch name, body auto-links Jira ticket and lists commits since fork from main
+- `gh_pr_update`
 - `gha_cancel_workflow <OWNER> <REPO> <RUN_ID>` — force-cancel (or delete) a GitHub Actions run
 
 ---
