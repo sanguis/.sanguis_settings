@@ -10,7 +10,7 @@
   - [Functions](#functions-1)
 - [bitbucket.zsh](#bitbucketzsh)
   - [Functions](#functions-2)
-- [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
+- [docker_based_apps.zsh](#docker_based_appszsh)
   - [Functions](#functions-3)
 - [docker.zsh](#dockerzsh)
   - [Aliases](#aliases-1)
@@ -180,14 +180,14 @@ Bitbucket helpers.
 
 ---
 
-# docker_based_applicatins.zsh
+# docker_based_apps.zsh
 
-Wrappers that run tools as one-off Docker containers, mounting the current directory.
+_TODO: describe this file._
 
 ## Functions
-- `terraform-compliance` — run `eerkunt/terraform-compliance` against the current dir
-- `shdoc` — run `sanguis/shdoc`
-- `terraspace` — run `ghcr.io/boltops-tools/terraspace:alpine`
+- `terraform-compliance`
+- `shdoc`
+- `terraspace`
 
 ---
 
