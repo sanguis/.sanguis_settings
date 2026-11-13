@@ -10,10 +10,10 @@
   - [Functions](#functions-1)
 - [bitbucket.zsh](#bitbucketzsh)
   - [Functions](#functions-2)
+- [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
+  - [Functions](#functions-3)
 - [docker.zsh](#dockerzsh)
   - [Aliases](#aliases-1)
-  - [Functions](#functions-3)
-- [docker_based_applicatins.zsh](#docker_based_applicatinszsh)
   - [Functions](#functions-4)
 - [gh.zsh](#ghzsh)
   - [Aliases](#aliases-2)
@@ -161,7 +161,7 @@ AWS CLI helpers: profile/region switching, MFA and role assumption, SSM session 
 Azure CLI helpers.
 
 ## Functions
-- `aks_session <cluster_name> <subscription_id>` — set the Azure subscription and switch kube context to the cluster
+- `aks_session <cluster_name> <subscription_id>` — Switches context of 'az' and 'kubectl' to the specified AKS cluster and subscription.
 
 ---
 
@@ -180,6 +180,17 @@ Bitbucket helpers.
 
 ---
 
+# docker_based_applicatins.zsh
+
+Wrappers that run tools as one-off Docker containers, mounting the current directory.
+
+## Functions
+- `terraform-compliance` — run `eerkunt/terraform-compliance` against the current dir
+- `shdoc` — run `sanguis/shdoc`
+- `terraspace` — run `ghcr.io/boltops-tools/terraspace:alpine`
+
+---
+
 # docker.zsh
 
 Docker helpers.
@@ -195,17 +206,6 @@ Docker helpers.
   -d|docker     Mounts docker unix socker from parent machine
   -s/ssh        Mounts $HOME/.ssh to /root/.ssh
   ```
-
----
-
-# docker_based_applicatins.zsh
-
-Wrappers that run tools as one-off Docker containers, mounting the current directory.
-
-## Functions
-- `terraform-compliance` — run `eerkunt/terraform-compliance` against the current dir
-- `shdoc` — run `sanguis/shdoc`
-- `terraspace` — run `ghcr.io/boltops-tools/terraspace:alpine`
 
 ---
 

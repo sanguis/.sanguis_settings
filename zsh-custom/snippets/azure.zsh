@@ -1,8 +1,9 @@
 #!/bin/zsh
 
 aks_session() {
-  local USAAGE="Usage: aks_session <cluster_name> <subscription_id>"
-  [[ $# -ne 2 ]] && echo $USAAGE && return 1
+  local USAGE=" Switches context of `az` and `kubectl` to the specified AKS cluster and subscription.
+  Usage: aks_session <cluster_name> <subscription_id>"
+  [[ $# -ne 2 ]] && echo $USAGE && return 1
   local CLUSTER_NAME=$1
   local SUBSCRIPTION_ID=$2
 
