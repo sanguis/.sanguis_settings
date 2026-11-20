@@ -10,10 +10,10 @@
   - [Functions](#functions-1)
 - [bitbucket.zsh](#bitbucketzsh)
   - [Functions](#functions-2)
-- [docker_based_apps.zsh](#docker_based_appszsh)
-  - [Functions](#functions-3)
 - [docker.zsh](#dockerzsh)
   - [Aliases](#aliases-1)
+  - [Functions](#functions-3)
+- [docker_based_apps.zsh](#docker_based_appszsh)
   - [Functions](#functions-4)
 - [gh.zsh](#ghzsh)
   - [Aliases](#aliases-2)
@@ -161,7 +161,10 @@ AWS CLI helpers: profile/region switching, MFA and role assumption, SSM session 
 Azure CLI helpers.
 
 ## Functions
-- `aks_session <cluster_name> <subscription_id>` — Switches context of 'az' and 'kubectl' to the specified AKS cluster and subscription.
+- `aks_session <cluster_name> <subscription_id> [pim_resource]` — Switches context of \'az\' and \'kubectl\' to the specified AKS cluster and subscription.
+  ```
+  pim_resource  Optional. PIM resource to activate; requires \'az-pim-cli\'.
+  ```
 
 ---
 
@@ -180,17 +183,6 @@ Bitbucket helpers.
 
 ---
 
-# docker_based_apps.zsh
-
-_TODO: describe this file._
-
-## Functions
-- `terraform-compliance`
-- `shdoc`
-- `terraspace`
-
----
-
 # docker.zsh
 
 Docker helpers.
@@ -206,6 +198,17 @@ Docker helpers.
   -d|docker     Mounts docker unix socker from parent machine
   -s/ssh        Mounts $HOME/.ssh to /root/.ssh
   ```
+
+---
+
+# docker_based_apps.zsh
+
+_TODO: describe this file._
+
+## Functions
+- `terraform-compliance`
+- `shdoc`
+- `terraspace`
 
 ---
 
